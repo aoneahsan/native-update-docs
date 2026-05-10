@@ -1,0 +1,70 @@
+# native-update-docs
+
+Public documentation site for the [`native-update`](https://www.npmjs.com/package/native-update) Capacitor plugin.
+
+- **Live site (TBD, ships in Batch 10)**: https://docs.nativeupdate.aoneahsan.com
+- **Docs source**: this repo
+- **Plugin source (private)**: separate repo
+- **Marketing site**: https://nativeupdate.aoneahsan.com
+- **Author**: [Ahsan Mahmood](https://aoneahsan.com)
+
+Built with [Docusaurus 3](https://docusaurus.io/), deployed to Firebase Hosting.
+
+---
+
+## Local development
+
+```bash
+yarn install
+yarn start          # dev server at http://localhost:5960
+yarn build          # production build into ./build
+yarn serve          # preview the production build at http://localhost:5961
+yarn typecheck      # TypeScript-only check, no emit
+```
+
+The dev server is configured to bind on port **5960** (registered in `~/.dev-ports.json`).
+
+## Project structure
+
+```
+native-update-docs/
+├── docs/                    # Markdown content (the actual docs)
+│   ├── intro.md
+│   ├── getting-started/
+│   ├── reference/           # SDK, CLI, backend API (populated in Batches 2–6)
+│   ├── platforms/           # Android, iOS, Web (Batch 7)
+│   ├── tutorials/           # End-to-end walkthroughs (Batch 8)
+│   ├── how-to/              # Problem-oriented guides (Batch 8)
+│   ├── concepts/            # Explanations (Batch 9)
+│   └── about-the-author.md
+├── src/
+│   ├── css/custom.css       # Brand palette + dark mode tuning
+│   └── pages/index.tsx      # Homepage
+├── static/
+│   ├── img/                 # Logo, favicon, social-card SVGs
+│   └── robots.txt           # Skeleton — full AI-bot allow list in Batch 10
+├── docusaurus.config.ts
+├── sidebars.ts
+└── package.json
+```
+
+## Authoring conventions
+
+- **One H1 per page** — Docusaurus uses it for the page title and breadcrumbs.
+- **Frontmatter required** on every doc:
+  - `title`, `description` (40–160 chars, AI-extractable), `keywords`, `last_update.date`, `last_update.author`.
+  - Optional: `sidebar_position` for ordering.
+- **Author credit** at the bottom of every long page via the `.nu-author-card` div.
+- **Honesty over marketing** — say what the plugin does NOT do as clearly as what it does.
+- **No fabricated stats** — cite sources by name (Capacitor, Apple guidelines, etc.).
+- **Code blocks** must compile / run as written. Use TypeScript over JavaScript.
+
+## Contribution & status
+
+The site is built batch-by-batch following [`native-update/docs/docs-site/plan.md`](https://github.com/aoneahsan/native-update/blob/main/docs/docs-site/plan.md) (ten batches total, populated incrementally). Resumability state lives in [`tracker.json`](https://github.com/aoneahsan/native-update/blob/main/docs/docs-site/tracker.json).
+
+If you spot an error or want to suggest a topic, open an issue.
+
+## License
+
+MIT — same as the plugin. Built by [Ahsan Mahmood](https://aoneahsan.com) ([aoneahsan@gmail.com](mailto:aoneahsan@gmail.com), [LinkedIn](https://linkedin.com/in/aoneahsan)).

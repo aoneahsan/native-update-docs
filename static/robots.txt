@@ -1,0 +1,5 @@
+# Native Update Docs — robots.txt (skeleton; full AI-bot allow list shipped in Batch 10)
+User-agent: *
+Allow: /
+
+Sitemap: https://docs.nativeupdate.aoneahsan.com/sitemap.xml
