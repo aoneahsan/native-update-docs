@@ -28,7 +28,7 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Live Update (OTA)',
-          collapsed: false,
+          collapsed: true,
           items: [
             'reference/sdk/live-update/overview',
             'reference/sdk/live-update/methods',
@@ -38,6 +38,28 @@ const sidebars: SidebarsConfig = {
             'reference/sdk/live-update/config',
           ],
         },
+        {
+          type: 'category',
+          label: 'App Update',
+          collapsed: true,
+          items: [
+            'reference/sdk/app-update/overview',
+            'reference/sdk/app-update/methods',
+            'reference/sdk/app-update/types',
+            'reference/sdk/app-update/events',
+            'reference/sdk/app-update/config',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'App Review',
+          collapsed: true,
+          items: [
+            'reference/sdk/app-review/overview',
+            'reference/sdk/app-review/methods',
+            'reference/sdk/app-review/config',
+          ],
+        },
       ],
     },
     // {
@@ -45,25 +67,6 @@ const sidebars: SidebarsConfig = {
     //   label: 'SDK Reference (placeholder for later batches)',
     //   collapsed: true,
     //   items: [
-    //     {
-    //       type: 'category',
-    //       label: 'App Update',  // Batch 3
-    //       items: [
-    //         'reference/sdk/app-update/overview',
-    //         'reference/sdk/app-update/methods',
-    //         'reference/sdk/app-update/types',
-    //         'reference/sdk/app-update/events',
-    //       ],
-    //     },
-    //     {
-    //       type: 'category',
-    //       label: 'App Review',  // Batch 3
-    //       items: [
-    //         'reference/sdk/app-review/overview',
-    //         'reference/sdk/app-review/methods',
-    //         'reference/sdk/app-review/config',
-    //       ],
-    //     },
     //     {
     //       type: 'category',
     //       label: 'Background Update',  // Batch 4
