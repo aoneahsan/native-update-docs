@@ -20,23 +20,31 @@ const sidebars: SidebarsConfig = {
         // 'getting-started/configuration',  // Batch 4
       ],
     },
+    {
+      type: 'category',
+      label: 'SDK Reference',
+      collapsed: false,
+      items: [
+        {
+          type: 'category',
+          label: 'Live Update (OTA)',
+          collapsed: false,
+          items: [
+            'reference/sdk/live-update/overview',
+            'reference/sdk/live-update/methods',
+            'reference/sdk/live-update/types',
+            'reference/sdk/live-update/enums',
+            'reference/sdk/live-update/events',
+            'reference/sdk/live-update/config',
+          ],
+        },
+      ],
+    },
     // {
     //   type: 'category',
-    //   label: 'SDK Reference',
+    //   label: 'SDK Reference (placeholder for later batches)',
     //   collapsed: true,
     //   items: [
-    //     {
-    //       type: 'category',
-    //       label: 'Live Update (OTA)',  // Batch 2
-    //       items: [
-    //         'reference/sdk/live-update/overview',
-    //         'reference/sdk/live-update/methods',
-    //         'reference/sdk/live-update/types',
-    //         'reference/sdk/live-update/enums',
-    //         'reference/sdk/live-update/events',
-    //         'reference/sdk/live-update/config',
-    //       ],
-    //     },
     //     {
     //       type: 'category',
     //       label: 'App Update',  // Batch 3
