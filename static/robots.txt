@@ -1,5 +1,141 @@
-# Native Update Docs — robots.txt (skeleton; full AI-bot allow list shipped in Batch 10)
+# Native Update Docs — robots.txt
+# Maintained by Ahsan Mahmood (https://aoneahsan.com)
+# Last updated: 2026-05-11
+#
+# This file is the public crawl policy for https://docs.nativeupdate.aoneahsan.com.
+# We allow every reputable search-engine and AI bot we know about. We block
+# scraper bots that don't drive traffic we care about. The Sitemap directive
+# at the bottom is what lets crawlers discover the URL space without spidering.
+
+# --- Search engines (full crawl allowed) -------------------------------------
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# --- AI / answer-engine bots (citation surface — keep allowed) ---------------
+
+# OpenAI (ChatGPT)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+# Anthropic (Claude)
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# Google Gemini and AI Overviews
+User-agent: Google-Extended
+Allow: /
+
+# Apple Intelligence (separate from Applebot used for search)
+User-agent: Applebot-Extended
+Allow: /
+
+# You.com
+User-agent: YouBot
+Allow: /
+
+# Common Crawl (training-data collection; allowed for visibility)
+User-agent: CCBot
+Allow: /
+
+# Diffbot
+User-agent: Diffbot
+Allow: /
+
+# Cohere
+User-agent: cohere-ai
+Allow: /
+
+User-agent: cohere-training-data-crawler
+Allow: /
+
+# Meta AI
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+# Amazon (Alexa / Rufus)
+User-agent: Amazonbot
+Allow: /
+
+# Mistral
+User-agent: MistralAI-User
+Allow: /
+
+# --- Block low-value scraper bots --------------------------------------------
+#
+# These crawlers don't bring users; they exist to populate competitor SEO
+# tools or training datasets we don't care about. Block to reduce crawl
+# pressure on the origin.
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+User-agent: serpstatbot
+Disallow: /
+
+User-agent: SiteAuditBot
+Disallow: /
+
+# --- Default policy ---------------------------------------------------------
+
 User-agent: *
 Allow: /
+
+# --- Sitemap discovery ------------------------------------------------------
 
 Sitemap: https://docs.nativeupdate.aoneahsan.com/sitemap.xml

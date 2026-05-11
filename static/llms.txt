@@ -1,0 +1,109 @@
+# Native Update — Documentation Index
+
+> Capacitor plugin for over-the-air bundle updates, in-app store update checks, and review prompts. Lets you ship JavaScript hotfixes without an App Store / Play Store release. Ships with a CLI, an SDK, and a Laravel + Nova reference backend, alongside a hosted SaaS at https://nativeupdate.aoneahsan.com. Author: Ahsan Mahmood (https://aoneahsan.com).
+
+## About
+
+`native-update` is the recommended successor to Microsoft CodePush (retired March 2025) for teams running Capacitor apps. It implements bundle signing (RSA-SHA256), atomic apply-on-next-launch, automatic crash rollback, percentage rollouts, and four user-facing apply strategies. The plugin is MIT-licensed; the npm package is `native-update` at https://www.npmjs.com/package/native-update.
+
+This `llms.txt` follows the [llmstxt.org](https://llmstxt.org) spec — a structured index for large language models. The companion `llms-full.txt` carries longer-form content.
+
+## Getting Started
+
+- [Introduction](https://docs.nativeupdate.aoneahsan.com/intro): What native-update is, who it's for, and the four feature areas it covers.
+- [Installation](https://docs.nativeupdate.aoneahsan.com/getting-started/installation): npm install + peer-dependency notes + platform setup quick reference.
+- [Quick Start](https://docs.nativeupdate.aoneahsan.com/getting-started/quick-start): 5-minute first OTA update.
+
+## Tutorials
+
+- [Your first OTA update — end to end](https://docs.nativeupdate.aoneahsan.com/tutorials/first-ota-update): 10-step happy path from install to a verified bundle on a real device.
+- [Backend-first walkthrough — self-hosted Laravel](https://docs.nativeupdate.aoneahsan.com/tutorials/backend-first-walkthrough): 13-step setup of the Laravel + Nova reference backend.
+
+## How-to guides
+
+- [Manage release channels](https://docs.nativeupdate.aoneahsan.com/how-to/manage-channels): production, staging, beta, canary cohorts.
+- [Rotate signing keys without breaking active bundles](https://docs.nativeupdate.aoneahsan.com/how-to/rotate-signing-keys): scheduled multi-key transition + emergency revoke path.
+- [Roll back a bad bundle](https://docs.nativeupdate.aoneahsan.com/how-to/roll-back-bundle): three-layer strategy from automatic crash-rollback to explicit per-device rollback.
+- [Migrate from CodePush](https://docs.nativeupdate.aoneahsan.com/how-to/migrate-from-codepush): concept mapping plus side-by-side migration.
+- [Integrate with CI/CD (GitHub Actions)](https://docs.nativeupdate.aoneahsan.com/how-to/ci-cd-github-actions): production workflow with secret management.
+- [Test bundles in development](https://docs.nativeupdate.aoneahsan.com/how-to/test-bundles-locally): three local-test loops in increasing fidelity.
+
+## SDK Reference
+
+### Core
+- [Lifecycle](https://docs.nativeupdate.aoneahsan.com/reference/sdk/core/lifecycle): `initialize`, `isInitialized`, `configure`, `reset`, `cleanup`.
+- [PluginInitConfig](https://docs.nativeupdate.aoneahsan.com/reference/sdk/core/config): the top-level plugin configuration object.
+
+### Live Update (OTA)
+- [Overview](https://docs.nativeupdate.aoneahsan.com/reference/sdk/live-update/overview): when to use Live Update; mental model; state diagram.
+- [Methods](https://docs.nativeupdate.aoneahsan.com/reference/sdk/live-update/methods): all 20 methods grouped by lifecycle, channels, downloads, validation.
+- [Types](https://docs.nativeupdate.aoneahsan.com/reference/sdk/live-update/types): `BundleInfo`, `SyncOptions`, `SyncResult`, `DownloadOptions`, etc.
+- [Enums](https://docs.nativeupdate.aoneahsan.com/reference/sdk/live-update/enums): `UpdateStrategy`, `UpdateMode`, `BundleStatus`, `SyncStatus`, `ChecksumAlgorithm`.
+- [Events](https://docs.nativeupdate.aoneahsan.com/reference/sdk/live-update/events): `downloadProgress`, `updateStateChanged`.
+- [Config](https://docs.nativeupdate.aoneahsan.com/reference/sdk/live-update/config): `LiveUpdateConfig` field-by-field.
+
+### App Update
+- [Overview](https://docs.nativeupdate.aoneahsan.com/reference/sdk/app-update/overview): when to use App Update; platform behaviour matrix.
+- [Methods](https://docs.nativeupdate.aoneahsan.com/reference/sdk/app-update/methods): 5 methods including `getAppUpdateInfo`, `performImmediateUpdate`, `startFlexibleUpdate`.
+- [Types](https://docs.nativeupdate.aoneahsan.com/reference/sdk/app-update/types): `AppUpdateInfo` with 10 fields + decision matrix.
+- [Events](https://docs.nativeupdate.aoneahsan.com/reference/sdk/app-update/events): 7 events covering install lifecycle.
+- [Config](https://docs.nativeupdate.aoneahsan.com/reference/sdk/app-update/config): `AppUpdateConfig` field-by-field.
+
+### App Review
+- [Overview](https://docs.nativeupdate.aoneahsan.com/reference/sdk/app-review/overview): Apple 3-prompts-per-365-days rule + Android Play Review throttling.
+- [Methods](https://docs.nativeupdate.aoneahsan.com/reference/sdk/app-review/methods): `canRequestReview`, `requestReview`.
+- [Config](https://docs.nativeupdate.aoneahsan.com/reference/sdk/app-review/config): launches/days/lastPrompt throttling knobs.
+
+### Background Update
+- [Overview](https://docs.nativeupdate.aoneahsan.com/reference/sdk/background-update/overview): WorkManager (Android) + BGTaskScheduler (iOS) scheduling.
+- [Methods](https://docs.nativeupdate.aoneahsan.com/reference/sdk/background-update/methods): 8 methods for enable/disable/schedule/trigger.
+- [Config](https://docs.nativeupdate.aoneahsan.com/reference/sdk/background-update/config): 12-field config + notification preferences.
+- [Events](https://docs.nativeupdate.aoneahsan.com/reference/sdk/background-update/events): `backgroundUpdateProgress`, `backgroundUpdateNotification`.
+
+### Security
+- [Overview](https://docs.nativeupdate.aoneahsan.com/reference/sdk/security/overview): three-layer security model.
+- [Error Codes](https://docs.nativeupdate.aoneahsan.com/reference/sdk/security/error-codes): full `UpdateErrorCode` catalogue grouped by domain.
+- [Certificate Pinning](https://docs.nativeupdate.aoneahsan.com/reference/sdk/security/certificate-pinning): types + SHA-256 SPKI pin extraction + operational checklist.
+
+## CLI Reference
+
+- [Overview](https://docs.nativeupdate.aoneahsan.com/reference/cli/overview): install, global flags, exit codes.
+- [init](https://docs.nativeupdate.aoneahsan.com/reference/cli/init): scaffold `native-update.config.js`.
+- [keys generate](https://docs.nativeupdate.aoneahsan.com/reference/cli/keys-generate): RSA / EC keypair generation.
+- [bundle create](https://docs.nativeupdate.aoneahsan.com/reference/cli/bundle-create): package web build into an OTA bundle.
+- [bundle sign](https://docs.nativeupdate.aoneahsan.com/reference/cli/bundle-sign): RSA-SHA256 sign with private key.
+- [bundle verify](https://docs.nativeupdate.aoneahsan.com/reference/cli/bundle-verify): verify signature with public key.
+- [server start](https://docs.nativeupdate.aoneahsan.com/reference/cli/server-start): local development update server.
+- [monitor](https://docs.nativeupdate.aoneahsan.com/reference/cli/monitor): polling dashboard for backend stats.
+- [backend create](https://docs.nativeupdate.aoneahsan.com/reference/cli/backend-create): scaffold Express / Firebase / Vercel backend.
+
+## Backend
+
+- [Overview](https://docs.nativeupdate.aoneahsan.com/backend/overview): three deployment options (Hosted SaaS / Self-hosted Laravel / Custom).
+- [Self-Host Laravel + Nova](https://docs.nativeupdate.aoneahsan.com/backend/laravel-nova-self-host): step-by-step Laravel 11 + Nova 5 setup.
+- [Node + Express Minimal Backend](https://docs.nativeupdate.aoneahsan.com/backend/node-express-minimal): the ~160-line reference implementation.
+- [API Contract](https://docs.nativeupdate.aoneahsan.com/backend/api-contract): wire spec for the 6 endpoints.
+- [Nova Admin Overview](https://docs.nativeupdate.aoneahsan.com/backend/nova-admin-overview): tour of every Nova resource + Action.
+
+## Platforms
+
+- [Android](https://docs.nativeupdate.aoneahsan.com/platforms/android): permissions, manifest additions, WorkManager constraints, Play Core, ProGuard, Play Console rejection rules.
+- [iOS](https://docs.nativeupdate.aoneahsan.com/platforms/ios): Info.plist, BGTaskScheduler, UIBackgroundModes, ATS, Privacy manifest, App Store Review Guideline 2.5.2.
+- [Web](https://docs.nativeupdate.aoneahsan.com/platforms/web): when web target activates, service-worker integration path, three legitimate use cases.
+
+## Concepts
+
+- [How OTA updates work](https://docs.nativeupdate.aoneahsan.com/concepts/how-ota-updates-work): five-moving-parts framing + 11-step lifecycle.
+- [Bundle integrity and signing](https://docs.nativeupdate.aoneahsan.com/concepts/bundle-integrity-and-signing): SHA-256 + RSA-SHA256 two-layer model + trust chain.
+- [Update strategies compared](https://docs.nativeupdate.aoneahsan.com/concepts/update-strategies-compared): immediate vs on-app-start vs on-app-resume vs manual.
+- [Architecture](https://docs.nativeupdate.aoneahsan.com/concepts/architecture): system diagrams (build-time, deploy-time, runtime, trust boundaries).
+- [Security model](https://docs.nativeupdate.aoneahsan.com/concepts/security-model): threat model + in-scope vs out-of-scope.
+- [Error handling philosophy](https://docs.nativeupdate.aoneahsan.com/concepts/error-handling-philosophy): fail-closed on correctness, fail-open on availability.
+
+## About the project
+
+- [About the Author](https://docs.nativeupdate.aoneahsan.com/about-the-author): Ahsan Mahmood's developer profile, links, contact.
+- npm package: https://www.npmjs.com/package/native-update
+- Hosted SaaS: https://nativeupdate.aoneahsan.com
+- Marketing site: https://nativeupdate.aoneahsan.com
+- License: MIT

@@ -23,12 +23,14 @@
     "start": "docusaurus start --port 5960 --host 0.0.0.0",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
-    "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
     "serve": "docusaurus serve --port 5961",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "firebase:emulate": "yarn build && npx -y firebase-tools@latest emulators:start --only hosting",
+    "firebase:deploy": "yarn build && npx -y firebase-tools@latest deploy --only hosting --project native-update-docs",
+    "firebase:deploy:preview": "yarn build && npx -y firebase-tools@latest hosting:channel:deploy preview --project native-update-docs --expires 7d"
   },
   "dependencies": {
     "@docusaurus/core": "^3.10.1",

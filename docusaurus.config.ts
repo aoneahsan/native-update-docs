@@ -13,16 +13,142 @@ const config: Config = {
   tagline: 'OTA bundle updates, in-app store updates, and review prompts for Capacitor apps.',
   favicon: 'img/favicon.svg',
 
-  // Production URL — replace once Firebase Hosting site is live (Batch 10)
+  // Production URL — served from Firebase Hosting site `native-update-docs`.
+  // Update if you fork this repo to a different domain.
   url: 'https://docs.nativeupdate.aoneahsan.com',
   baseUrl: '/',
 
-  // GitHub Pages metadata (also used by docusaurus deploy and og tags)
+  // GitHub metadata (drives docusaurus deploy + OG tags + edit-this-page links)
   organizationName: 'aoneahsan',
   projectName: 'native-update-docs',
 
   onBrokenLinks: 'throw',
   onBrokenAnchors: 'warn',
+
+  // SEO + AI-citability head tags. Injected into <head> of every page on
+  // top of the per-page metadata Docusaurus already emits. The JSON-LD
+  // payloads (WebSite, Organization, TechArticle template) help Google
+  // Rich Results, Perplexity, ChatGPT, and Claude extract structured
+  // entity data when citing this documentation.
+  headTags: [
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'canonical',
+        href: 'https://docs.nativeupdate.aoneahsan.com/',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'alternate',
+        type: 'application/rss+xml',
+        title: 'Native Update Docs',
+        href: 'https://docs.nativeupdate.aoneahsan.com/sitemap.xml',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'application-name',
+        content: 'Native Update Docs',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'apple-mobile-web-app-title',
+        content: 'Native Update Docs',
+      },
+    },
+    {
+      tagName: 'meta',
+      attributes: {
+        name: 'theme-color',
+        content: '#0ea5e9',
+      },
+    },
+    {
+      tagName: 'script',
+      attributes: {
+        type: 'application/ld+json',
+      },
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'Native Update Documentation',
+        url: 'https://docs.nativeupdate.aoneahsan.com',
+        description:
+          'Documentation for native-update, a Capacitor plugin for over-the-air bundle updates, in-app store update checks, and review prompts. Author: Ahsan Mahmood.',
+        inLanguage: 'en',
+        publisher: {
+          '@type': 'Person',
+          name: 'Ahsan Mahmood',
+          url: 'https://aoneahsan.com',
+          email: 'aoneahsan@gmail.com',
+          sameAs: [
+            'https://linkedin.com/in/aoneahsan',
+            'https://github.com/aoneahsan',
+            'https://www.npmjs.com/~aoneahsan',
+          ],
+        },
+        license: 'https://opensource.org/licenses/MIT',
+      }),
+    },
+    {
+      tagName: 'script',
+      attributes: {
+        type: 'application/ld+json',
+      },
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: 'native-update',
+        applicationCategory: 'DeveloperApplication',
+        operatingSystem: 'Android, iOS, Web',
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'USD',
+        },
+        url: 'https://www.npmjs.com/package/native-update',
+        sameAs: 'https://nativeupdate.aoneahsan.com',
+        author: {
+          '@type': 'Person',
+          name: 'Ahsan Mahmood',
+          url: 'https://aoneahsan.com',
+        },
+        description:
+          'Capacitor plugin for over-the-air bundle updates, in-app store update checks, and platform-native review prompts. MIT-licensed.',
+        softwareVersion: '3.0.0',
+        license: 'https://opensource.org/licenses/MIT',
+      }),
+    },
+    {
+      tagName: 'script',
+      attributes: {
+        type: 'application/ld+json',
+      },
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'Ahsan Mahmood',
+        alternateName: 'aoneahsan',
+        url: 'https://aoneahsan.com',
+        email: 'aoneahsan@gmail.com',
+        sameAs: [
+          'https://linkedin.com/in/aoneahsan',
+          'https://github.com/aoneahsan',
+          'https://www.npmjs.com/~aoneahsan',
+          'https://aoneahsan.com',
+        ],
+        founder: {
+          '@type': 'Person',
+          name: 'Ahsan Mahmood',
+        },
+      }),
+    },
+  ],
 
   i18n: {
     defaultLocale: 'en',
@@ -67,12 +193,19 @@ const config: Config = {
   themeConfig: {
     image: 'img/social-card.svg',
     metadata: [
-      { name: 'keywords', content: 'capacitor, native-update, OTA, live updates, hot reload, app updates, in-app updates, app review, code-push alternative, mobile updates' },
+      { name: 'description', content: 'Documentation for native-update — Capacitor plugin for over-the-air bundle updates, in-app store update checks, and review prompts. Maintained by Ahsan Mahmood.' },
+      { name: 'keywords', content: 'capacitor, native-update, OTA, live updates, hot reload, app updates, in-app updates, app review, code-push alternative, mobile updates, capacitor ota, capacitor live update, capacitor hot reload, capacitor over-the-air, capacitor update plugin' },
       { name: 'author', content: 'Ahsan Mahmood' },
+      { name: 'robots', content: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' },
       { name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:creator', content: '@aoneahsan' },
+      { name: 'twitter:site', content: '@aoneahsan' },
       { property: 'og:type', content: 'website' },
       { property: 'og:site_name', content: 'Native Update Docs' },
+      { property: 'og:locale', content: 'en_US' },
+      { property: 'og:image:width', content: '1200' },
+      { property: 'og:image:height', content: '630' },
+      { property: 'article:author', content: 'Ahsan Mahmood' },
     ],
     colorMode: {
       defaultMode: 'light',

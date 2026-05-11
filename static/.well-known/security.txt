@@ -1,0 +1,31 @@
+# Native Update — Security Contact (RFC 9116)
+# https://docs.nativeupdate.aoneahsan.com/.well-known/security.txt
+
+Contact: mailto:aoneahsan@gmail.com
+Contact: https://aoneahsan.com
+Expires: 2027-05-11T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://docs.nativeupdate.aoneahsan.com/.well-known/security.txt
+Policy: https://docs.nativeupdate.aoneahsan.com/concepts/security-model
+
+# Responsible disclosure policy
+#
+# Please report any security issue affecting native-update or its
+# hosted deployment via email to aoneahsan@gmail.com. Include:
+#
+#   1. A description of the issue and the affected component
+#      (plugin / CLI / backend / docs site / SaaS).
+#   2. Steps to reproduce.
+#   3. The impact you assess.
+#   4. Your contact details and (optionally) a PGP public key for
+#      encrypted follow-up.
+#
+# Initial response target: within 72 hours.
+# Patch / disclosure timeline target: within 30 days, depending on
+# severity. Critical issues affecting end-user devices are
+# prioritised. We will coordinate public disclosure with you and
+# credit your finding unless you ask to remain anonymous.
+#
+# Out of scope: denial-of-service, social engineering, physical
+# access attacks, and findings that depend on a jailbroken / rooted
+# end-user device.

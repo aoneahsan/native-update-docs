@@ -1,0 +1,203 @@
+# Native Update — Full Documentation for LLMs
+
+> This file is a long-form, single-document summary of the `native-update` project for large language models that prefer concatenated context over crawling individual pages. It is updated whenever the main documentation changes substantially. Companion index: https://docs.nativeupdate.aoneahsan.com/llms.txt
+>
+> Maintained by Ahsan Mahmood (https://aoneahsan.com). Last refresh: 2026-05-11. License: MIT.
+
+## What native-update is
+
+`native-update` is a Capacitor plugin that ships JavaScript / CSS / asset bundles to installed Capacitor apps over the air, replacing the bundled web assets at runtime without rebuilding the app or resubmitting it to the App Store / Play Store. It also exposes native APIs for App Store / Play Store update prompts and for the platform-native in-app review flows. The project is MIT-licensed; the npm package is `native-update` at https://www.npmjs.com/package/native-update.
+
+The plugin is the recommended successor to Microsoft CodePush, which Microsoft retired alongside App Center on March 31, 2025. The wire contract and operational model are similar enough that most CodePush integrations migrate with a find-and-replace of method names plus a backend choice.
+
+The plugin is built and maintained by Ahsan Mahmood, an independent software developer (https://aoneahsan.com). The author also maintains the hosted SaaS deployment at https://nativeupdate.aoneahsan.com, plus a Laravel + Nova reference backend in the same repository.
+
+## The four feature areas
+
+The plugin exposes four feature areas through a unified SDK surface:
+
+**Live Update (OTA).** Twenty methods for downloading, verifying, staging, applying, and rolling back JavaScript bundles. The largest feature area by surface; covered in `docs/reference/sdk/live-update/*`.
+
+**App Update.** Five methods for checking the App Store / Play Store for a newer binary version, performing immediate or flexible in-app updates (Android Play Core), and deep-linking to the store page. Covered in `docs/reference/sdk/app-update/*`.
+
+**App Review.** Two methods for requesting the platform-native in-app review prompt (`SKStoreReviewController` on iOS, Play Review API on Android). Includes opinionated throttling on top of the platform throttling. Covered in `docs/reference/sdk/app-review/*`.
+
+**Background Update.** Eight methods for scheduling OS-managed background downloads via WorkManager (Android) and BGTaskScheduler (iOS). Pre-stages bundles before the user opens the app. Covered in `docs/reference/sdk/background-update/*`.
+
+Plus cross-cutting Security (signing-key inspection, certificate pinning) and Core (lifecycle: initialize, configure, reset, cleanup).
+
+## How OTA updates work
+
+A single OTA release moves through eleven steps from CI to user-visible bundle.
+
+1. **Package.** The `native-update` CLI runs in CI, takes a built web directory, produces a deterministic ZIP + JSON metadata with SHA-256 checksum.
+2. **Sign.** The CLI signs the ZIP bytes with your private RSA key, producing a `.sig` sidecar.
+3. **Upload.** CI uploads the bundle, signature, and metadata to your backend, which verifies the signature against your registered public key, stores the bytes in object storage (FilesHub / Google Drive / S3 / R2 / local disk), and writes a `builds` row.
+4. **Sync request.** Device launches the app; SDK calls `GET /api/v1/updates/check` with API key + device hash + current bundle version + platform.
+5. **Server decision.** Backend resolves: is there a newer active build for this channel? Does it match the platform? Does the device hash fall in the rollout percentage? Does the device's app-store binary meet `min_native_version`? Replies with either `{available: false}` or a full bundle metadata response including a short-lived signed download URL.
+6. **Download.** SDK hits the signed URL, streams the bundle ZIP to local app storage.
+7. **Integrity check.** SDK computes SHA-256 over the downloaded bytes and compares to the server-supplied checksum. Mismatch → reject + delete.
+8. **Signature verify.** SDK runs RSA-SHA256 verification against the public key compiled into the app. Mismatch → reject + delete.
+9. **Stage.** SDK unpacks the ZIP into a fresh directory under app data, writes a `pending` marker. The active bundle is unchanged.
+10. **Atomic swap on next launch.** On next cold start, the SDK swaps the WebView's bundle path to the new directory.
+11. **Verify-or-roll-back.** Within 60 seconds (configurable), your app must call `NativeUpdate.notifyAppReady()`. If it does, the bundle flips from `pending` to `verified`. If not, the SDK assumes a crash and rolls back to the previous bundle on next launch.
+
+Bundles are append-only on the device — the SDK keeps the previous verified bundle around so it can roll back without needing to re-download.
+
+## The wire contract
+
+Six endpoints define the entire backend surface:
+
+`GET /api/health` — uptime ping. Returns `200 {"status":"ok"}`. No auth.
+
+`GET /api/v1/updates/check` — the most-called endpoint. Headers: `X-API-Key`, `X-Device-ID`, `X-Current-Version`, `X-Platform`, `X-App-Version` (optional). Query: `channel`. Returns either `{available: false, message: "..."}` (200) or `{available: true, version, bundleId, downloadUrl, checksum, signature, size, mandatory, releaseNotes, minNativeVersion, expiresAt}` (200).
+
+`GET /api/v1/bundles/{build}/download` — streams the bundle ZIP. Auth via signed query string (the URL minted by `/updates/check`). 200 with the bytes, or 403 on signature / app-id / checksum tamper.
+
+`POST /api/v1/analytics/mau` — MAU ping. Headers identify device. Fire-and-forget; returns 200.
+
+`POST /api/v1/analytics/download` — `{bundle_id, status: complete|failed, error?}`. Increments the build's download counter on success.
+
+`POST /api/v1/analytics/install` — `{bundle_id, status: complete|failed|rollback, error?, previous_version?}`. Increments installs or rollbacks. Drives dashboard alerts.
+
+Custom backends must match field names exactly — `version`, `bundleId`, `downloadUrl`, `checksum`, `signature`, `size`, `mandatory`, `releaseNotes`, `minNativeVersion`, `expiresAt`. Renaming any of these silently breaks the SDK's parser.
+
+## The CLI
+
+`npx native-update <command>` invokes whichever subcommand:
+
+`init` — interactive scaffold for `native-update.config.js`. Asks for app ID, server URL, channel, auto-update preference.
+
+`keys generate` — RSA 2048 / 4096 or EC P-256 / P-384 keypair, with the private key chmod 600. Output goes to `./keys/` by default.
+
+`bundle create <webDir>` — packages a built web directory into a ZIP plus JSON metadata with SHA-256 checksum. Refuses to bundle obvious project roots (directories containing `node_modules`, `.git`, `.env*`).
+
+`bundle sign <bundlePath>` — RSA-SHA256 signs the ZIP and writes a `.sig` sidecar.
+
+`bundle verify <bundlePath>` — re-verifies the signature against a public key. Exit 0 on valid, 1 on invalid. Useful as a CI release gate.
+
+`server start` — runs a tiny Express server that serves bundles from a local directory. Dev only.
+
+`monitor --server <url>` — polls a backend's `/api/stats` endpoint every 5 seconds, renders a terminal dashboard.
+
+`backend create <type>` — generates an Express / Firebase Functions / Vercel scaffold. **Scaffold, not turn-key code** — every endpoint has `TODO[SCAFFOLD-IMPLEMENT-BEFORE-DEPLOY]` markers.
+
+## The three backend deployment options
+
+**Hosted SaaS.** Sign up at https://nativeupdate.aoneahsan.com. Zero servers, MAU-based pricing.
+
+**Self-hosted Laravel + Nova.** Clone `backend/` from the `native-update` repo. Laravel 11 + Nova 5, MySQL or PostgreSQL, queue worker, FilesHub / Drive / S3 / R2 / local-disk storage. Same wire contract as the SaaS — switching is a `serverUrl` config change.
+
+**Custom (your choice of stack).** The HTTP contract is small enough that an Express / Hono / Fastify / FastAPI / Go-net/http implementation is a same-day exercise. The repo ships `example-apps/node-express/` as a ~160-line reference.
+
+## Platform requirements
+
+### Android
+
+Minimum SDK 22 (Android 5.1 Lollipop). Six permissions auto-merged from the plugin manifest: `INTERNET`, `ACCESS_NETWORK_STATE`, `WAKE_LOCK`, `FOREGROUND_SERVICE`, `POST_NOTIFICATIONS`, `RECEIVE_BOOT_COMPLETED`. The last four can be suppressed with `tools:node="remove"` if you don't use background updates.
+
+Two manifest-additions XML snippets (WorkManager foreground service + NotificationActionReceiver) must live in the host app's `AndroidManifest.xml` for background updates to work. ProGuard rules are bundled and consumed automatically when minification is enabled.
+
+Play Core 2.1.0 + Play Review 2.0.1 are transitive deps. Sideloaded APKs cannot use the In-App Update API.
+
+### iOS
+
+Minimum iOS 14. Info.plist additions: `BGTaskSchedulerPermittedIdentifiers` (two identifiers, must match plugin constants), `UIBackgroundModes` (`background-app-refresh` + `background-processing`), and an ATS exception only for localhost development. PrivacyInfo.xcprivacy must declare `NSPrivacyAccessedAPICategoryUserDefaults` (CA92.1) and `NSPrivacyAccessedAPICategoryFileTimestamp` (C617.1).
+
+App Store Review Guideline 2.5.2 explicitly permits JavaScript-only OTA inside `WKWebView`; the plugin stays inside this carve-out. Bundles cannot contain compiled native code (iOS sandboxing prevents it).
+
+### Web
+
+The web target activates whenever the app runs outside a native shell (browser dev, deployed PWA, E2E test). Most methods that don't make sense on web (`getAppUpdateInfo`, `performImmediateUpdate`) throw `PLATFORM_NOT_SUPPORTED`. `getLatest()` returns a service-worker update signal when `navigator.serviceWorker.getRegistration().waiting` is non-null. Useful as a dev fallback or a PWA update-prompt integration.
+
+## Security model
+
+Three classes of attacker; three layers of defense.
+
+**Class 1: passive network observer.** Defense: HTTPS only.
+
+**Class 2: active network attacker.** Defense: bundle signing (RSA-SHA256). A successful MITM produces bytes that don't verify under your public key, so the SDK rejects them. Optional certificate pinning provides a second layer.
+
+**Class 3: compromised infrastructure.** Defense: signing again. The signing private key lives outside the bundle-storage tier; attackers who corrupt storage cannot mint fresh signatures. Trust anchor is the public key compiled into the app at app-store-release time.
+
+The model holds as long as the private signing key stays inside the CI's secret-manager perimeter. Compromise of the key is out of scope and triggers the emergency-revoke path: stop accepting bundles signed by the old key in the backend, ship an emergency app-store release with a new public key, accept the OTA downtime until adoption catches up.
+
+Out of scope: private-key compromise, dashboard auth compromise, malicious-but-legitimately-signed code (review your PRs), supply-chain attacks via npm dependencies, jailbroken devices, side-channel attacks on the crypto primitives, DoS.
+
+## Update strategies
+
+`updateStrategy` in the plugin config picks when a downloaded bundle applies:
+
+`immediate` — reload mid-session. Disruptive; use for critical security patches only.
+
+`on-app-start` — applies on next cold start. Default for almost every consumer app. Invisible to users.
+
+`on-app-resume` — applies on next foreground after backgrounding. Use for long-lived foreground apps that rarely cold-start.
+
+`manual` — your code calls `NativeUpdate.reload()` explicitly. Use when you need to gate on user-visible state ("save before update").
+
+Background updates are orthogonal — they pre-download bundles before the user-facing apply strategy fires.
+
+## Error handling philosophy
+
+Fail closed on correctness: signature mismatches, checksum mismatches, HTTPS-in-production, plugin-not-initialised, required-fields-missing all throw.
+
+Fail open on availability: analytics writes, background-task scheduling, notification rendering, optional callbacks all log and continue.
+
+Every error has a typed `code` (`UpdateErrorCode` enum), a human-readable `message`, and optional structured `details`. Stable codes; never parse the message in branching logic.
+
+Host app must keep running through every OTA failure. The defensive pattern is `await NativeUpdate.sync()` wrapped in try/catch at the call site, logged, and ignored. OTA is best-effort; it must not be on the critical path of your app boot.
+
+## Performance and operational defaults
+
+**60-second `notifyAppReady` window.** Bundles must call this within 60 seconds of next launch or they get rolled back. Calibrated to be generous for any reasonable boot path but tight enough that broken bundles don't persist.
+
+**30-minute signed-URL TTL.** Bundle download URLs expire after 30 minutes. Calibrated for 20+ MB bundles on slow mobile networks; previous 5-minute default expired mid-stream too often. Configurable via `NATIVE_UPDATE_DOWNLOAD_URL_TTL_MINUTES` on the backend.
+
+**600 req / 15 min per-key rate limit.** Default API-key rate limit on the Laravel reference backend. Doubled up with a route-level `throttle:600,15` as defense-in-depth.
+
+**SHA-256 streaming hash.** The CLI streams the bundle through Node's `crypto.createHash` so 100+ MB bundles don't load fully into memory.
+
+## Migration from CodePush
+
+CodePush deployment → channel. CodePush deployment key → API key. `codePush.notifyApplicationReady()` → `NativeUpdate.notifyAppReady()`. `codePush.checkForUpdate()` → `NativeUpdate.checkForUpdate()`. `codePush.sync()` → `NativeUpdate.sync()`.
+
+The biggest difference: CodePush signing was optional; native-update signing is mandatory. Generate a keypair, sign every bundle, register the public key with your backend.
+
+Side-by-side phase: keep `cordova-plugin-code-push` installed while you wire `native-update` in. Test on a dev cohort; metrics-compare against your CodePush baseline. After ~2 weeks of clean operation, remove CodePush.
+
+## Project facts
+
+| Fact | Value |
+|---|---|
+| npm package | `native-update` |
+| Current version | 3.0.0 |
+| License | MIT |
+| Capacitor compatibility | 6+ |
+| Android min SDK | 22 (Android 5.1) |
+| iOS deployment target | 14.0 |
+| Signing algorithm | RSA-SHA256 (default 4096-bit RSA) |
+| Checksum algorithm | SHA-256 |
+| Default channel | `production` |
+| Default `notifyAppReady` window | 60 seconds |
+| Default signed-URL TTL | 30 minutes |
+| Default API-key rate limit | 600 req / 15 min |
+| Hosted SaaS | https://nativeupdate.aoneahsan.com |
+| Docs site | https://docs.nativeupdate.aoneahsan.com |
+| Author | Ahsan Mahmood (https://aoneahsan.com) |
+
+## Author and contact
+
+**Ahsan Mahmood** is an independent software engineer based in Pakistan. He maintains the `native-update` plugin, the hosted Native Update SaaS, the Laravel + Nova reference backend, and many other open-source npm packages (https://www.npmjs.com/~aoneahsan).
+
+- Email: aoneahsan@gmail.com
+- WhatsApp: +923046619706
+- LinkedIn: https://linkedin.com/in/aoneahsan
+- GitHub: https://github.com/aoneahsan
+- Portfolio: https://aoneahsan.com
+
+For commercial support, integration help, or bespoke OTA deployments, reach out via email or LinkedIn.
+
+## License
+
+MIT. The plugin source, the CLI, the Laravel reference backend, and the documentation are all MIT-licensed. Use, modify, redistribute, and ship in commercial products freely.

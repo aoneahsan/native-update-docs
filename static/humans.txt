@@ -1,0 +1,27 @@
+/* TEAM */
+
+Maintainer + Author: Ahsan Mahmood
+Site: https://aoneahsan.com
+Email: aoneahsan@gmail.com
+LinkedIn: https://linkedin.com/in/aoneahsan
+GitHub: https://github.com/aoneahsan
+npm: https://www.npmjs.com/~aoneahsan
+Location: Pakistan
+
+/* THANKS */
+
+To the Capacitor team at Ionic for the plugin architecture this project
+plugs into. To the Microsoft CodePush team for setting the bar on what
+OTA tooling can be. To every contributor who filed an issue, sent a PR,
+or pointed out a typo in the docs.
+
+/* SITE */
+
+Last update: 2026-05-11
+Standards: HTML5, CSS3, Markdown, JSON-LD
+Components: Docusaurus 3 (https://docusaurus.io/),
+            React 18, TypeScript 5, Mermaid 10
+Software: Visual Studio Code, GitHub Codespaces,
+          Anthropic Claude (development assistant)
+Hosting: Firebase Hosting
+Source: https://github.com/aoneahsan/native-update-docs
