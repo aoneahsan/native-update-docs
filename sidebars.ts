@@ -120,6 +120,16 @@ const sidebars: SidebarsConfig = {
         'backend/nova-admin-overview',
       ],
     },
+    {
+      type: 'category',
+      label: 'Platforms',
+      collapsed: true,
+      items: [
+        'platforms/android',
+        'platforms/ios',
+        'platforms/web',
+      ],
+    },
     // {
     //   type: 'category',
     //   label: 'SDK Reference (placeholder for later batches)',
@@ -152,16 +162,6 @@ const sidebars: SidebarsConfig = {
     //         'reference/sdk/core/config',
     //       ],
     //     },
-    //   ],
-    // },
-    // {
-    //   type: 'category',
-    //   label: 'Platforms',  // Batch 7
-    //   collapsed: true,
-    //   items: [
-    //     'platforms/android',
-    //     'platforms/ios',
-    //     'platforms/web',
     //   ],
     // },
     // {
