@@ -108,6 +108,18 @@ const sidebars: SidebarsConfig = {
         'reference/cli/backend-create',
       ],
     },
+    {
+      type: 'category',
+      label: 'Backend',
+      collapsed: true,
+      items: [
+        'backend/overview',
+        'backend/laravel-nova-self-host',
+        'backend/node-express-minimal',
+        'backend/api-contract',
+        'backend/nova-admin-overview',
+      ],
+    },
     // {
     //   type: 'category',
     //   label: 'SDK Reference (placeholder for later batches)',
@@ -140,18 +152,6 @@ const sidebars: SidebarsConfig = {
     //         'reference/sdk/core/config',
     //       ],
     //     },
-    //   ],
-    // },
-    // {
-    //   type: 'category',
-    //   label: 'Backend',  // Batch 6
-    //   collapsed: true,
-    //   items: [
-    //     'backend/overview',
-    //     'backend/laravel-nova-self-host',
-    //     'backend/node-express-minimal',
-    //     'backend/api-contract',
-    //     'backend/nova-admin-overview',
     //   ],
     // },
     // {
