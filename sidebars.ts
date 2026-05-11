@@ -92,6 +92,22 @@ const sidebars: SidebarsConfig = {
         },
       ],
     },
+    {
+      type: 'category',
+      label: 'CLI Reference',
+      collapsed: true,
+      items: [
+        'reference/cli/overview',
+        'reference/cli/init',
+        'reference/cli/keys-generate',
+        'reference/cli/bundle-create',
+        'reference/cli/bundle-sign',
+        'reference/cli/bundle-verify',
+        'reference/cli/server-start',
+        'reference/cli/monitor',
+        'reference/cli/backend-create',
+      ],
+    },
     // {
     //   type: 'category',
     //   label: 'SDK Reference (placeholder for later batches)',
@@ -124,22 +140,6 @@ const sidebars: SidebarsConfig = {
     //         'reference/sdk/core/config',
     //       ],
     //     },
-    //   ],
-    // },
-    // {
-    //   type: 'category',
-    //   label: 'CLI Reference',  // Batch 5
-    //   collapsed: true,
-    //   items: [
-    //     'reference/cli/overview',
-    //     'reference/cli/init',
-    //     'reference/cli/keys-generate',
-    //     'reference/cli/bundle-create',
-    //     'reference/cli/bundle-sign',
-    //     'reference/cli/bundle-verify',
-    //     'reference/cli/server-start',
-    //     'reference/cli/monitor',
-    //     'reference/cli/backend-create',
     //   ],
     // },
     // {
