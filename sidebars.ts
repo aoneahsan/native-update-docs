@@ -130,6 +130,28 @@ const sidebars: SidebarsConfig = {
         'platforms/web',
       ],
     },
+    {
+      type: 'category',
+      label: 'Tutorials',
+      collapsed: true,
+      items: [
+        'tutorials/first-ota-update',
+        'tutorials/backend-first-walkthrough',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'How-to guides',
+      collapsed: true,
+      items: [
+        'how-to/manage-channels',
+        'how-to/rotate-signing-keys',
+        'how-to/roll-back-bundle',
+        'how-to/migrate-from-codepush',
+        'how-to/ci-cd-github-actions',
+        'how-to/test-bundles-locally',
+      ],
+    },
     // {
     //   type: 'category',
     //   label: 'SDK Reference (placeholder for later batches)',
@@ -162,28 +184,6 @@ const sidebars: SidebarsConfig = {
     //         'reference/sdk/core/config',
     //       ],
     //     },
-    //   ],
-    // },
-    // {
-    //   type: 'category',
-    //   label: 'Tutorials',  // Batch 8
-    //   collapsed: true,
-    //   items: [
-    //     'tutorials/first-ota-update',
-    //     'tutorials/backend-first-walkthrough',
-    //   ],
-    // },
-    // {
-    //   type: 'category',
-    //   label: 'How-to guides',  // Batch 8
-    //   collapsed: true,
-    //   items: [
-    //     'how-to/manage-channels',
-    //     'how-to/rotate-signing-keys',
-    //     'how-to/roll-back-bundle',
-    //     'how-to/migrate-from-codepush',
-    //     'how-to/ci-cd-github-actions',
-    //     'how-to/test-bundles-locally',
     //   ],
     // },
     // {
