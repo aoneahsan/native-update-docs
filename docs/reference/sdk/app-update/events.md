@@ -164,7 +164,7 @@ interface AppUpdateFailedEvent {
 
 ## `appUpdateNotificationClicked`
 
-Fires when the user taps a system notification that the SDK posted (only relevant if you enable *Background Updates* — reference ships in Batch 4 — and opt in to update notifications). Empty payload — the event itself is the signal.
+Fires when the user taps a system notification that the SDK posted (only relevant if you enable [Background Updates](../background-update/overview) and opt in to update notifications). Empty payload — the event itself is the signal.
 
 ---
 

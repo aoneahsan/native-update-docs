@@ -60,6 +60,36 @@ const sidebars: SidebarsConfig = {
             'reference/sdk/app-review/config',
           ],
         },
+        {
+          type: 'category',
+          label: 'Background Update',
+          collapsed: true,
+          items: [
+            'reference/sdk/background-update/overview',
+            'reference/sdk/background-update/methods',
+            'reference/sdk/background-update/config',
+            'reference/sdk/background-update/events',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Security',
+          collapsed: true,
+          items: [
+            'reference/sdk/security/overview',
+            'reference/sdk/security/error-codes',
+            'reference/sdk/security/certificate-pinning',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Core',
+          collapsed: true,
+          items: [
+            'reference/sdk/core/lifecycle',
+            'reference/sdk/core/config',
+          ],
+        },
       ],
     },
     // {
