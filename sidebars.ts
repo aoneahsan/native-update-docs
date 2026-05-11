@@ -152,6 +152,19 @@ const sidebars: SidebarsConfig = {
         'how-to/test-bundles-locally',
       ],
     },
+    {
+      type: 'category',
+      label: 'Concepts',
+      collapsed: true,
+      items: [
+        'concepts/how-ota-updates-work',
+        'concepts/bundle-integrity-and-signing',
+        'concepts/update-strategies-compared',
+        'concepts/architecture',
+        'concepts/security-model',
+        'concepts/error-handling-philosophy',
+      ],
+    },
     // {
     //   type: 'category',
     //   label: 'SDK Reference (placeholder for later batches)',
@@ -184,19 +197,6 @@ const sidebars: SidebarsConfig = {
     //         'reference/sdk/core/config',
     //       ],
     //     },
-    //   ],
-    // },
-    // {
-    //   type: 'category',
-    //   label: 'Concepts',  // Batch 9
-    //   collapsed: true,
-    //   items: [
-    //     'concepts/how-ota-works',
-    //     'concepts/bundle-integrity',
-    //     'concepts/update-strategies',
-    //     'concepts/architecture',
-    //     'concepts/security-model',
-    //     'concepts/error-handling',
     //   ],
     // },
     {
