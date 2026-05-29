@@ -7,16 +7,17 @@ Public Docusaurus documentation site for the `native-update` Capacitor plugin.
 | Key | Value |
 |---|---|
 | Repo | `native-update-docs` |
-| Status | Batch 1 (foundation) complete; Batches 2–10 pending |
-| Type | Docusaurus 3 documentation site |
-| Package manager | yarn@4.10.3 (NEVER npm/pnpm) |
+| Status | All 10 docs batches COMPLETE — 58 `.md` pages, ~71k words (Diátaxis: Getting Started, SDK Reference, CLI, Backend, Platforms, Tutorials, How-to, Concepts). Flow CLOSED. |
+| Type | Docusaurus 3 documentation site (classic preset + Mermaid) |
+| Package manager | yarn@4.14.1 (NEVER npm/pnpm) |
 | Node | >=18 |
 | Author | Ahsan Mahmood ([aoneahsan@gmail.com](mailto:aoneahsan@gmail.com)) |
-| Live URL | TBD — Firebase Hosting (Batch 10) |
-| Source plugin | https://www.npmjs.com/package/native-update |
+| Live URL | https://docs.nativeupdate.aoneahsan.com (Firebase Hosting site `native-update-docs`; confirm DNS/custom-domain at next refresh) |
+| Source plugin | https://www.npmjs.com/package/native-update (parent npm `native-update` v3.0.1) |
 | Sibling project | `/home/ahsan/Documents/01-code/projects/native-update/` (the plugin itself) |
 | Plan file | `native-update/docs/docs-site/plan.md` |
 | Tracker file | `native-update/docs/docs-site/tracker.json` |
+| Build gates (2026-05-29) | `yarn typecheck` exit 0 · `yarn build` (docusaurus/webpack → `./build`) exit 0 |
 
 ## 3-Day Freshness Rule
 
@@ -26,7 +27,7 @@ This file must be reviewed every 3 days. Bump `Last Updated` and update the stat
 
 | Rule | Detail |
 |---|---|
-| Yarn only | Never `npm install` or `pnpm add`. The repo locks `packageManager: "yarn@4.10.3"`. |
+| Yarn only | Never `npm install` or `pnpm add`. The repo locks `packageManager: "yarn@4.14.1"`. |
 | No dev server in agent runs | Per global rule, the agent does not run `yarn start`. The user runs and tests. The agent runs `yarn build` and `yarn typecheck` to verify. |
 | Single source of truth | Every API fact MUST come from the `native-update` repo's `src/`, `cli/`, or `backend/` source. No invented method names, no hallucinated parameters. Read the source before documenting it. |
 | Honest framing | Say what the plugin does NOT do as clearly as what it does. No fabricated stats. Cite sources by name. |
@@ -63,6 +64,19 @@ The `native-update/docs/docs-site/tracker.json` tracker is the canonical source 
 | 9 (Concepts) | `documentation-writer`, `ai-seo` |
 | 10 (SEO + Deploy) | `seo`, `ai-seo`, `firebase-hosting-basics`, `firebase-basics` |
 
+## Portfolio Info File — Weekly Update Rule
+
+- Canonical portfolio info file: `/home/ahsan/Documents/ahsan-notebook/static/assets/personal/projects-info-as-portfolio-item/apps/NATIVE-UPDATE-DOCS_portfolio-info_2026-05-29.md`
+- Update at least once per week (and on any material change). Keep the last-updated date in the filename.
+- Keep a max-10-entry update history inside the file. On each refresh: prepend today's row, delete the previous dated file, write the new one.
+- Tracker: `/home/ahsan/Documents/01-code/docs/tracking/portfolio-info-files-update-tracker.json`
+- Note: this is the **docs-site** portfolio file (category `apps`). The parent npm plugin has a SEPARATE file under `packages/NATIVE-UPDATE_portfolio-info_*.md` — do not conflate them.
+- Last applied: 2026-05-29
+
+## Package Upgrades: Use `npm-check-updates`
+
+For dependency upgrades use `npx -y npm-check-updates -u && yarn install` (latest STABLE), NOT `yarn upgrade --latest`. Full rule in global `~/.claude/CLAUDE.md`. Last applied: 2026-05-29 (all deps already at latest — `package.json` unchanged).
+
 ## Last Updated
 
-2026-05-10
+2026-05-29
