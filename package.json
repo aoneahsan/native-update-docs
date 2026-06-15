@@ -14,7 +14,6 @@
     "type": "git",
     "url": "git+https://github.com/aoneahsan/native-update-docs.git"
   },
-  "packageManager": "yarn@4.14.1",
   "engines": {
     "node": ">=18.0.0"
   },
