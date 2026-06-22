@@ -2,6 +2,10 @@
 
 Public Docusaurus documentation site for the `native-update` Capacitor plugin.
 
+## Task Speed Over Docs (IRON-SOLID — BEHAVIORAL)
+
+Finish the real task fast + correctly FIRST; docs/trackers/sync are a footnote (≤~20% of effort) — never let recording outpace the fix. HARD STOP when doc work outpaces the change → ship, then ONE line if anything. No new summary/status/completion files unless asked; edit/delete over add; delete stale docs. Full rule: `~/.claude/CLAUDE.md`. (Est. 2026-06-19)
+
 ## Identity
 
 | Key | Value |
