@@ -12,6 +12,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.4] - 2026-07-14
+
+### Fixed
+- **CLI `bundle create --version <v>` now works.** The long-form `--version`
+  flag was swallowed by the root `-V, --version` option (commander's default
+  parsing matches program options anywhere on the line), so
+  `native-update bundle create ./dist --version 1.2.0` printed the CLI version
+  and exited instead of building the bundle. The program and every parent
+  command now use `enablePositionalOptions()`, so flags after a subcommand
+  reach the leaf command. Short `-v` and the root `native-update --version`
+  are unchanged.
+- **CLI `bundle create` no longer crashes on `archiver` import.** `archiver`
+  v8 is ESM with named-only exports (no default export), so the previous
+  `import archiver from 'archiver'` threw at load. Migrated to the v8 API
+  (`import { ZipArchive }` + `new ZipArchive({ zlib: { level: 9 } })`); the
+  `.pipe()`/`.directory()`/`.finalize()` flow is unchanged.
+
 ## [3.1.3] - 2026-07-14
 
 ### Fixed
