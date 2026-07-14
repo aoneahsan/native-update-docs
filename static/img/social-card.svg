@@ -23,6 +23,6 @@
   </g>
   <!-- bottom strip -->
   <rect x="0" y="610" width="1200" height="20" fill="url(#nu-card-accent)"/>
-  <text x="80" y="540" font-family="Inter, system-ui, sans-serif" font-size="22" fill="#94a3b8">docs.nativeupdate.aoneahsan.com</text>
+  <text x="80" y="540" font-family="Inter, system-ui, sans-serif" font-size="22" fill="#94a3b8">nativeupdate-docs.aoneahsan.com</text>
   <text x="80" y="572" font-family="Inter, system-ui, sans-serif" font-size="22" fill="#94a3b8">Built by Ahsan Mahmood · aoneahsan.com</text>
 </svg>

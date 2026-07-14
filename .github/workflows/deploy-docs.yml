@@ -1,0 +1,62 @@
+name: Deploy docs to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request: # build-only validation; makes "build" a required-check context
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false # never cancel an in-flight production deploy
+
+jobs:
+  build:
+    name: build # exact name referenced by the main-branch ruleset
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          # NO cache: yarn — setup-node's yarn detection runs before the Corepack
+          # pin below and can resolve classic yarn, deriving the wrong cache dir.
+
+      # The repo deliberately has no "packageManager" field, but yarn.lock is
+      # Berry v4 format. Pin Yarn 4.17.1 (the version that generated the
+      # lockfile) via Corepack's Last Known Good mechanism.
+      - name: Set up Yarn 4.17.1
+        run: |
+          npm install -g corepack@latest
+          corepack enable
+          corepack prepare yarn@4.17.1 --activate
+          yarn --version
+
+      - run: yarn install --immutable
+      - run: yarn typecheck
+      - run: yarn build # onBrokenLinks: 'throw' = the link-integrity gate
+
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request'
+        with:
+          path: build
+
+  deploy:
+    name: deploy
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

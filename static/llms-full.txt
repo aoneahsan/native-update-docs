@@ -1,6 +1,6 @@
 # Native Update — Full Documentation for LLMs
 
-> This file is a long-form, single-document summary of the `native-update` project for large language models that prefer concatenated context over crawling individual pages. It is updated whenever the main documentation changes substantially. Companion index: https://docs.nativeupdate.aoneahsan.com/llms.txt
+> This file is a long-form, single-document summary of the `native-update` project for large language models that prefer concatenated context over crawling individual pages. It is updated whenever the main documentation changes substantially. Companion index: https://nativeupdate-docs.aoneahsan.com/llms.txt
 >
 > Maintained by Ahsan Mahmood (https://aoneahsan.com). Last refresh: 2026-05-11. License: MIT.
 
@@ -171,7 +171,7 @@ Side-by-side phase: keep `cordova-plugin-code-push` installed while you wire `na
 | Fact | Value |
 |---|---|
 | npm package | `native-update` |
-| Current version | 3.0.0 |
+| Current version | 3.1.2 |
 | License | MIT |
 | Capacitor compatibility | 6+ |
 | Android min SDK | 22 (Android 5.1) |
@@ -183,7 +183,7 @@ Side-by-side phase: keep `cordova-plugin-code-push` installed while you wire `na
 | Default signed-URL TTL | 30 minutes |
 | Default API-key rate limit | 600 req / 15 min |
 | Hosted SaaS | https://nativeupdate.aoneahsan.com |
-| Docs site | https://docs.nativeupdate.aoneahsan.com |
+| Docs site | https://nativeupdate-docs.aoneahsan.com |
 | Author | Ahsan Mahmood (https://aoneahsan.com) |
 
 ## Author and contact

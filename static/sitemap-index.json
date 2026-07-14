@@ -1,10 +1,10 @@
 {
-  "$schema": "https://docs.nativeupdate.aoneahsan.com/sitemap-index.json",
+  "$schema": "https://nativeupdate-docs.aoneahsan.com/sitemap-index.json",
   "name": "Native Update Documentation Sitemap Index",
   "description": "Machine-readable site index complementing sitemap.xml. Lists the main content hubs and their canonical URLs for search engines, AI crawlers, and answer-engine bots.",
   "site": {
     "name": "Native Update Documentation",
-    "url": "https://docs.nativeupdate.aoneahsan.com",
+    "url": "https://nativeupdate-docs.aoneahsan.com",
     "sourceRepository": "https://github.com/aoneahsan/native-update-docs",
     "license": "MIT",
     "author": {
@@ -15,67 +15,67 @@
     "lastUpdated": "2026-05-11"
   },
   "discovery": {
-    "sitemap": "https://docs.nativeupdate.aoneahsan.com/sitemap.xml",
-    "robots": "https://docs.nativeupdate.aoneahsan.com/robots.txt",
-    "llms": "https://docs.nativeupdate.aoneahsan.com/llms.txt",
-    "llmsFull": "https://docs.nativeupdate.aoneahsan.com/llms-full.txt",
-    "humans": "https://docs.nativeupdate.aoneahsan.com/humans.txt",
-    "security": "https://docs.nativeupdate.aoneahsan.com/.well-known/security.txt"
+    "sitemap": "https://nativeupdate-docs.aoneahsan.com/sitemap.xml",
+    "robots": "https://nativeupdate-docs.aoneahsan.com/robots.txt",
+    "llms": "https://nativeupdate-docs.aoneahsan.com/llms.txt",
+    "llmsFull": "https://nativeupdate-docs.aoneahsan.com/llms-full.txt",
+    "humans": "https://nativeupdate-docs.aoneahsan.com/humans.txt",
+    "security": "https://nativeupdate-docs.aoneahsan.com/.well-known/security.txt"
   },
   "sections": [
     {
       "id": "getting-started",
       "title": "Getting Started",
-      "url": "https://docs.nativeupdate.aoneahsan.com/getting-started/installation",
+      "url": "https://nativeupdate-docs.aoneahsan.com/getting-started/installation",
       "pageCount": 2,
       "type": "How-to"
     },
     {
       "id": "tutorials",
       "title": "Tutorials",
-      "url": "https://docs.nativeupdate.aoneahsan.com/tutorials/first-ota-update",
+      "url": "https://nativeupdate-docs.aoneahsan.com/tutorials/first-ota-update",
       "pageCount": 2,
       "type": "Tutorial"
     },
     {
       "id": "how-to",
       "title": "How-to guides",
-      "url": "https://docs.nativeupdate.aoneahsan.com/how-to/manage-channels",
+      "url": "https://nativeupdate-docs.aoneahsan.com/how-to/manage-channels",
       "pageCount": 6,
       "type": "How-to"
     },
     {
       "id": "reference-sdk",
       "title": "SDK Reference",
-      "url": "https://docs.nativeupdate.aoneahsan.com/reference/sdk/live-update/overview",
+      "url": "https://nativeupdate-docs.aoneahsan.com/reference/sdk/live-update/overview",
       "pageCount": 23,
       "type": "Reference"
     },
     {
       "id": "reference-cli",
       "title": "CLI Reference",
-      "url": "https://docs.nativeupdate.aoneahsan.com/reference/cli/overview",
+      "url": "https://nativeupdate-docs.aoneahsan.com/reference/cli/overview",
       "pageCount": 9,
       "type": "Reference"
     },
     {
       "id": "backend",
       "title": "Backend",
-      "url": "https://docs.nativeupdate.aoneahsan.com/backend/overview",
+      "url": "https://nativeupdate-docs.aoneahsan.com/backend/overview",
       "pageCount": 5,
       "type": "Reference"
     },
     {
       "id": "platforms",
       "title": "Platforms",
-      "url": "https://docs.nativeupdate.aoneahsan.com/platforms/android",
+      "url": "https://nativeupdate-docs.aoneahsan.com/platforms/android",
       "pageCount": 3,
       "type": "Reference"
     },
     {
       "id": "concepts",
       "title": "Concepts",
-      "url": "https://docs.nativeupdate.aoneahsan.com/concepts/how-ota-updates-work",
+      "url": "https://nativeupdate-docs.aoneahsan.com/concepts/how-ota-updates-work",
       "pageCount": 6,
       "type": "Explanation"
     }

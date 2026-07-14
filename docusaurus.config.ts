@@ -1,6 +1,10 @@
 import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+// Plugin version single source of truth: the ROOT native-update package.json,
+// mirrored into this committed file by `yarn sync:from-plugin` (CI cannot read
+// the private plugin repo). Never hardcode the version anywhere in this repo.
+import pluginVersion from './plugin-version.json';
 
 // ---------------------------------------------------------------------------
 // Native Update — Documentation site config
@@ -13,9 +17,9 @@ const config: Config = {
   tagline: 'OTA bundle updates, in-app store updates, and review prompts for Capacitor apps.',
   favicon: 'img/favicon.svg',
 
-  // Production URL — served from Firebase Hosting site `native-update-docs`.
+  // Production URL — served from GitHub Pages (custom domain).
   // Update if you fork this repo to a different domain.
-  url: 'https://docs.nativeupdate.aoneahsan.com',
+  url: 'https://nativeupdate-docs.aoneahsan.com',
   baseUrl: '/',
 
   // GitHub metadata (drives docusaurus deploy + OG tags + edit-this-page links)
@@ -31,20 +35,16 @@ const config: Config = {
   // Rich Results, Perplexity, ChatGPT, and Claude extract structured
   // entity data when citing this documentation.
   headTags: [
-    {
-      tagName: 'link',
-      attributes: {
-        rel: 'canonical',
-        href: 'https://docs.nativeupdate.aoneahsan.com/',
-      },
-    },
+    // NOTE: no global rel=canonical here — Docusaurus already emits a correct
+    // per-page canonical from `url`; a global one would override it on every
+    // page (pre-existing SEO bug removed 2026-07-14).
     {
       tagName: 'link',
       attributes: {
         rel: 'alternate',
         type: 'application/rss+xml',
         title: 'Native Update Docs',
-        href: 'https://docs.nativeupdate.aoneahsan.com/sitemap.xml',
+        href: 'https://nativeupdate-docs.aoneahsan.com/sitemap.xml',
       },
     },
     {
@@ -77,7 +77,7 @@ const config: Config = {
         '@context': 'https://schema.org',
         '@type': 'WebSite',
         name: 'Native Update Documentation',
-        url: 'https://docs.nativeupdate.aoneahsan.com',
+        url: 'https://nativeupdate-docs.aoneahsan.com',
         description:
           'Documentation for native-update, a Capacitor plugin for over-the-air bundle updates, in-app store update checks, and review prompts. Author: Ahsan Mahmood.',
         inLanguage: 'en',
@@ -120,7 +120,7 @@ const config: Config = {
         },
         description:
           'Capacitor plugin for over-the-air bundle updates, in-app store update checks, and platform-native review prompts. MIT-licensed.',
-        softwareVersion: '3.0.0',
+        softwareVersion: pluginVersion.version,
         license: 'https://opensource.org/licenses/MIT',
       }),
     },
@@ -163,7 +163,13 @@ const config: Config = {
       onBrokenMarkdownLinks: 'warn',
     },
   },
-  themes: ['@docusaurus/theme-mermaid'],
+  themes: [
+    '@docusaurus/theme-mermaid',
+    [
+      '@easyops-cn/docusaurus-search-local',
+      { hashed: true, indexBlog: false, docsRouteBasePath: '/' },
+    ],
+  ],
 
   presets: [
     [
@@ -293,9 +299,9 @@ const config: Config = {
       additionalLanguages: ['bash', 'json', 'typescript', 'kotlin', 'swift', 'php', 'yaml', 'diff'],
     },
     announcementBar: {
-      id: 'v3-released',
+      id: 'v3-1-latest',
       content:
-        'native-update v3.0.0 is here — HTTP-only backend contract, Laravel + Nova reference implementation, Firebase removed from the SDK.',
+        `native-update v${pluginVersion.version} — one shared wire-contract for update checks, refreshed docs, new home at nativeupdate-docs.aoneahsan.com.`,
       backgroundColor: '#0ea5e9',
       textColor: '#ffffff',
       isCloseable: true,

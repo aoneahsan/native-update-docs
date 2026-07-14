@@ -150,6 +150,7 @@ const sidebars: SidebarsConfig = {
         'how-to/migrate-from-codepush',
         'how-to/ci-cd-github-actions',
         'how-to/test-bundles-locally',
+        'how-to/troubleshooting',
       ],
     },
     {
@@ -199,6 +200,8 @@ const sidebars: SidebarsConfig = {
     //     },
     //   ],
     // },
+    'ai-integration',
+    'changelog',
     {
       type: 'category',
       label: 'About',

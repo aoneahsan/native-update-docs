@@ -2,7 +2,7 @@
 # Maintained by Ahsan Mahmood (https://aoneahsan.com)
 # Last updated: 2026-05-11
 #
-# This file is the public crawl policy for https://docs.nativeupdate.aoneahsan.com.
+# This file is the public crawl policy for https://nativeupdate-docs.aoneahsan.com.
 # We allow every reputable search-engine and AI bot we know about. We block
 # scraper bots that don't drive traffic we care about. The Sitemap directive
 # at the bottom is what lets crawlers discover the URL space without spidering.
@@ -138,4 +138,4 @@ Allow: /
 
 # --- Sitemap discovery ------------------------------------------------------
 
-Sitemap: https://docs.nativeupdate.aoneahsan.com/sitemap.xml
+Sitemap: https://nativeupdate-docs.aoneahsan.com/sitemap.xml

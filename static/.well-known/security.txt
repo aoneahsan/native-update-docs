@@ -1,12 +1,12 @@
 # Native Update — Security Contact (RFC 9116)
-# https://docs.nativeupdate.aoneahsan.com/.well-known/security.txt
+# https://nativeupdate-docs.aoneahsan.com/.well-known/security.txt
 
 Contact: mailto:aoneahsan@gmail.com
 Contact: https://aoneahsan.com
 Expires: 2027-05-11T00:00:00.000Z
 Preferred-Languages: en
-Canonical: https://docs.nativeupdate.aoneahsan.com/.well-known/security.txt
-Policy: https://docs.nativeupdate.aoneahsan.com/concepts/security-model
+Canonical: https://nativeupdate-docs.aoneahsan.com/.well-known/security.txt
+Policy: https://nativeupdate-docs.aoneahsan.com/concepts/security-model
 
 # Responsible disclosure policy
 #
