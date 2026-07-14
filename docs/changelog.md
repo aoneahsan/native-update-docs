@@ -12,6 +12,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.3] - 2026-07-14
+
+### Changed
+- **Canonical documentation moved to
+  [nativeupdate-docs.aoneahsan.com](https://nativeupdate-docs.aoneahsan.com)**
+  (Docusaurus on GitHub Pages, CI-deployed on every push). README and all
+  package links now point there; `nativeupdate.aoneahsan.com/docs/*` URLs
+  301-redirect to the matching page, so previously published links keep
+  working.
+- **npm tarball slimmed.** `files[]` now ships a curated doc set
+  (`docs/CHANGELOG.md`, `docs/MIGRATION.md`, `docs/server-requirements.md`,
+  `docs/KNOWN_LIMITATIONS.md`) instead of the whole `docs/` tree — 134 files
+  instead of 321, and internal planning material no longer ships to npm.
+- **Docs corpus consolidated + corrected.** The duplicated in-repo consumer
+  guides (quick start, feature guides, api/, getting-started/, guides/,
+  examples set) were deleted in favor of the docs site; the retained docs
+  were corrected to the real API (nested `configure` config, `SyncResult.status`,
+  `canRequestReview().canRequest`, real event names, real
+  `/v1/updates/check` wire contract, correct backend host).
+
+### Fixed
+- **node-express example now implements the real wire contract**: serves
+  `GET /v1/updates/check` with `X-API-Key` auth (401 without it), reads
+  `X-Current-Version`/`X-Platform`/`X-Device-ID` headers, responds with the
+  contract field names (`version`, `bundleId`, `downloadUrl`, `checksum`,
+  `signature`, `size`, `mandatory`, `releaseNotes`), computes SHA-256
+  checksums at upload, and only offers genuinely newer versions.
+- **react-capacitor example** `capacitor.config.ts` dropped inert config keys
+  and the stale `analytics: { provider: 'firebase' }` block (Firebase was
+  removed from the SDK in v3.0.0).
+
 ## [3.1.2] - 2026-07-14
 
 ### Fixed

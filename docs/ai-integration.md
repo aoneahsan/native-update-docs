@@ -168,7 +168,7 @@ interface LiveUpdateConfig {
 ```
 
 See the full field list for every section in `src/definitions.ts` or the
-[Configuration Guide](https://nativeupdate.aoneahsan.com/docs/getting-started/configuration).
+[Configuration Guide](https://nativeupdate-docs.aoneahsan.com/reference/sdk/core/config).
 
 ## Event Listeners
 
@@ -211,7 +211,7 @@ const stateListener = await NativeUpdate.addListener('updateStateChanged', (even
 Easiest path: use the hosted backend at [nativeupdate.aoneahsan.com](https://nativeupdate.aoneahsan.com)
 (free dashboard — register the app, upload bundles, get the `serverUrl` + API key).
 Self-hosting instead? Your server must implement this contract
-(full spec: [server requirements](https://nativeupdate.aoneahsan.com/docs/server-requirements)):
+(full spec: [server requirements](https://nativeupdate-docs.aoneahsan.com/backend/overview)):
 
 ### GET {serverUrl}/v1/updates/check?channel={channel}
 
@@ -320,8 +320,8 @@ async function handlePurchaseComplete() {
 
 ## Links
 
-- [Full Documentation](https://nativeupdate.aoneahsan.com/docs)
-- [API Reference](https://nativeupdate.aoneahsan.com/docs/api/API)
-- [Example Apps](https://nativeupdate.aoneahsan.com/docs/examples/basic-usage)
-- [CLI Reference](https://nativeupdate.aoneahsan.com/docs/cli-reference)
-- [Security Guide](https://nativeupdate.aoneahsan.com/docs/guides/security-best-practices)
+- [Full Documentation](https://nativeupdate-docs.aoneahsan.com/)
+- [API Reference](https://nativeupdate-docs.aoneahsan.com/reference/sdk/live-update/methods)
+- [Example Apps](https://nativeupdate-docs.aoneahsan.com/tutorials/first-ota-update)
+- [CLI Reference](https://nativeupdate-docs.aoneahsan.com/reference/cli/overview)
+- [Security Guide](https://nativeupdate-docs.aoneahsan.com/concepts/security-model)
