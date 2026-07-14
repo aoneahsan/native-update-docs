@@ -171,7 +171,7 @@ Side-by-side phase: keep `cordova-plugin-code-push` installed while you wire `na
 | Fact | Value |
 |---|---|
 | npm package | `native-update` |
-| Current version | 3.1.4 |
+| Current version | 3.1.5 |
 | License | MIT |
 | Capacitor compatibility | 6+ |
 | Android min SDK | 22 (Android 5.1) |
