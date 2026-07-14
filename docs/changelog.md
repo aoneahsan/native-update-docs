@@ -14,7 +14,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.1.3] - 2026-07-14
 
+### Fixed
+- **[CRITICAL] Native Android/iOS update checks now speak the real wire
+  contract.** Both native layers previously called the dead
+  `{serverUrl}/check` path with NO auth headers, so on-device `sync()` /
+  `getLatest()` / background checks silently reported "up to date" forever
+  against the hosted backend. They now issue
+  `GET {serverUrl}/v1/updates/check?channel=…` with `X-API-Key`,
+  `X-Device-ID` (stable per-install UUID, newly minted/persisted),
+  `X-Current-Version` (active bundle version — Android previously
+  hardcoded "1.0.0"), `X-Platform`, and `X-App-Version` (binary version),
+  and parse the v3 response fields
+  (`version`/`downloadUrl`/`checksum`/`signature`/`size`/`mandatory`/`releaseNotes`).
+- **Flat `initialize(PluginInitConfig)` now configures the NATIVE layers
+  too.** Native `configure`/`initialize` only accepted the wrapped
+  `{ config: {...} }` shape and rejected the flat form outright, so
+  serverUrl/apiKey never reached Android/iOS. Both shapes (plus nested
+  `UpdateConfig`) are now accepted and normalized.
+- **`configure({ liveUpdate })` can finally carry the API key** — new
+  `LiveUpdateConfig.apiKey` field, mapped through to the config manager
+  and the native layers.
+- **Web `getLatest()` implemented** (was a hardcoded `{available:false}`
+  stub) — now delegates to the shared `/v1/updates/check` implementation.
+- **`@capacitor/filesystem` + `@capacitor/preferences` declared as
+  peerDependencies** — the web path statically imports them, but they were
+  only devDependencies, so consumers got runtime module-resolution failures
+  with no install-time warning.
+- **Legacy-key error is actionable:** `INVALID_API_KEY_FORMAT` now tells
+  you to mint an `nu_app_…` key in the dashboard.
+
+### Added
+- **Dashboard API-key management** (backend + app detail page): create
+  (max 3 active keys per app), rotate (replaces the secret in place; old
+  value dies immediately), delete, and copy-anytime reveal (keys now stored
+  encrypted at rest alongside the lookup hash — keys minted before this
+  release can't be revealed, only rotated). Lifecycle actions are
+  rate-limited per app from a DB-backed audit trail: create 1/hour,
+  rotate 1/hour per key, and 10/30-days + 20/180-days caps per action —
+  friendly 429s with retry timing. The ConfigPage now emits copy-paste
+  snippets with the app's REAL bundle id, API key, and the canonical
+  backend URL.
+
 ### Changed
+- **Canonical `serverUrl` rule documented everywhere:**
+  `https://nativeupdatebe.aoneahsan.com/api` — the plugin appends
+  `/v1/updates/check`. Fixed the wrong `…/api/updates` examples in the
+  website's AI docs dump and the stale `api.nativeupdate.aoneahsan.com`
+  host in MIGRATION.md.
+- **node-express example implements the real contract** (X-API-Key auth,
+  contract field names, SHA-256 checksums at upload, semver comparison) —
+  it previously served the legacy fictional shape.
 - **Canonical documentation moved to
   [nativeupdate-docs.aoneahsan.com](https://nativeupdate-docs.aoneahsan.com)**
   (Docusaurus on GitHub Pages, CI-deployed on every push). README and all
@@ -32,13 +81,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `canRequestReview().canRequest`, real event names, real
   `/v1/updates/check` wire contract, correct backend host).
 
-### Fixed
-- **node-express example now implements the real wire contract**: serves
-  `GET /v1/updates/check` with `X-API-Key` auth (401 without it), reads
-  `X-Current-Version`/`X-Platform`/`X-Device-ID` headers, responds with the
-  contract field names (`version`, `bundleId`, `downloadUrl`, `checksum`,
-  `signature`, `size`, `mandatory`, `releaseNotes`), computes SHA-256
-  checksums at upload, and only offers genuinely newer versions.
 - **react-capacitor example** `capacitor.config.ts` dropped inert config keys
   and the stale `analytics: { provider: 'firebase' }` block (Firebase was
   removed from the SDK in v3.0.0).

@@ -24,6 +24,7 @@ import type { LiveUpdateConfig } from 'native-update';
 interface LiveUpdateConfig {
   appId: string;
   serverUrl?: string;
+  apiKey?: string; // since v3.1.3
   channel?: string;
   autoUpdate?: boolean;
   updateStrategy?: UpdateStrategy;
@@ -67,10 +68,27 @@ appId: 'com.yourcompany.yourapp'
 | Required | **yes for production** (technically optional for "I'll call setUpdateUrl() later" flows) |
 | Default | — |
 
-HTTPS origin of your update server. **Plain HTTP is rejected** at startup — use HTTPS even in development. Trailing slash is optional.
+HTTPS origin of your update server. **Plain HTTP is rejected** at startup — use HTTPS even in development. Trailing slash is optional. The plugin appends `/v1/updates/check` itself, so for the hosted backend the value is:
 
 ```typescript
-serverUrl: 'https://updates.yourdomain.com'
+serverUrl: 'https://nativeupdatebe.aoneahsan.com/api'
+```
+
+---
+
+### `apiKey`
+
+| | |
+|---|---|
+| Type | `string` |
+| Required | **yes for the hosted backend** (every check without it is skipped / rejected) |
+| Since | v3.1.3 (earlier versions only accepted it via the flat `initialize({ apiKey })`) |
+| Default | — |
+
+The app API key, sent as the `X-API-Key` header on every update check (web AND native since v3.1.3). Mint, copy, rotate, or delete keys in the dashboard: **Apps → your app → API Keys** (max 3 active keys per app; lifecycle actions are rate-limited).
+
+```typescript
+apiKey: 'nu_app_…'
 ```
 
 ---

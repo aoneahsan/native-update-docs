@@ -16,15 +16,17 @@ If you want a turn-key production backend, read [Self-Host Laravel + Nova](./lar
 
 ## What it implements
 
-Four endpoints, plus a health check:
+Four endpoints, plus a health check. Since v3.1.3 the example implements the **real wire contract** — the same path, headers, and response field names the hosted Laravel backend uses:
 
 | Method | Path | Maps to SDK call |
 |---|---|---|
 | `GET` | `/api/health` | (operations only) |
-| `GET` | `/api/updates/check?version=&channel=` | `NativeUpdate.sync()` / `checkForUpdate()` |
-| `GET` | `/api/updates/download/:id` | The download URL returned by the check |
+| `GET` | `/v1/updates/check?channel=` (headers: `X-API-Key`, `X-Current-Version`, `X-Device-ID`, `X-Platform`) | `NativeUpdate.sync()` / `checkForUpdate()` / `getLatest()` |
+| `GET` | `/v1/bundles/:id/download` | The download URL returned by the check |
 | `POST` | `/api/bundles/upload` | Your CI / release script |
 | `GET` | `/api/bundles` | Operator-only browse endpoint |
+
+Point the SDK at it with `serverUrl: 'http://localhost:3000'` (the plugin appends `/v1/updates/check`) and `apiKey: 'demo-key'` (override with the `API_KEY` env var; requests without it get `401`).
 
 It does **not** implement the SDK's analytics endpoints (`/api/v1/analytics/mau`, `/api/v1/analytics/download`, `/api/v1/analytics/install`). The SDK's analytics writes fail-open — losing them does not break the update flow — so the example skips them. Add them when you need MAU billing or download dashboards.
 
@@ -44,58 +46,65 @@ Point your `native-update.config.js` at `http://localhost:3000` (or your LAN IP 
 ### The update-check endpoint
 
 ```js
-app.get('/api/updates/check', async (req, res) => {
-  const { version, channel = 'production' } = req.query;
-  const metadata = await getMetadata();
+app.get('/v1/updates/check', async (req, res) => {
+  if (req.headers['x-api-key'] !== API_KEY) {
+    return res.status(401).json({ error: 'Invalid or missing X-API-Key header' });
+  }
 
+  const channel = req.query.channel || 'production';
+  const currentVersion = req.headers['x-current-version'] || '';
+
+  const metadata = await getMetadata();
   const latestBundle = metadata.bundles
     .filter((b) => b.channel === channel && b.active)
     .sort((a, b) => b.timestamp - a.timestamp)[0];
 
-  if (!latestBundle) {
+  if (!latestBundle || !isNewerVersion(latestBundle.version, currentVersion)) {
     return res.json({ available: false, message: 'No updates available' });
   }
 
-  const updateAvailable = latestBundle.version !== version;
-
   res.json({
-    available: updateAvailable,
-    latestVersion: latestBundle.version,
-    downloadUrl: `http://localhost:${PORT}/api/updates/download/${latestBundle.id}`,
+    available: true,
+    version: latestBundle.version,
+    bundleId: latestBundle.id,
+    downloadUrl: `http://localhost:${PORT}/v1/bundles/${latestBundle.id}/download`,
+    checksum: latestBundle.checksum,
+    signature: latestBundle.signature || null,
     size: latestBundle.size,
-    releaseNotes: latestBundle.releaseNotes || 'Bug fixes and improvements',
+    mandatory: false,
+    releaseNotes: latestBundle.releaseNotes || null,
   });
 });
 ```
 
-The contract requires:
+The contract, as the example now demonstrates:
 
 `available: boolean` — always present, always `200 OK`. Never `404` for "no update". The SDK distinguishes "no update" from "endpoint broken" via this flag.
 
-`latestVersion` / `version` — the SemVer string the bundle is identified by. The Laravel reference uses the field name `version`; this example uses `latestVersion`. **The Laravel name is canonical** — if you adopt this example, rename the field or the SDK won't pick it up reliably.
+`X-API-Key` header — required; `401` without it. The example accepts one static key; real backends bind keys to apps.
+
+`version` — the SemVer string identifying the bundle (canonical field name, matching the Laravel reference). The example only offers versions **greater than** the device's `X-Current-Version` (proper SemVer compare, not string inequality).
+
+`bundleId` — correlates analytics events back to a build.
 
 `downloadUrl` — full absolute URL. The SDK does not concatenate base URLs. Cross-origin URLs are fine; localhost-relative URLs break for mobile devices.
 
+`checksum` — SHA-256 hex, computed at upload time. The SDK verifies it before applying a bundle.
+
+`signature` — base64 signature over the bundle bytes; the example passes through whatever the upload provided (or `null`). **Production deployments should sign bundles.**
+
 `size` — bytes. Drives the SDK's download progress callback.
+
+`mandatory` — when `true`, the SDK applies the update on the next launch without prompting. The example always answers `false`.
 
 `releaseNotes` — human-readable string. Surfaced to your in-app update prompt.
 
-What's missing compared to Laravel:
-
-`bundleId` — needed by the analytics endpoints to correlate downloads / installs back to a build. Add it if you implement analytics.
-
-`checksum` (SHA-256 hex) and `signature` (base64 RSA-SHA256 over the bundle bytes) — the SDK's signature-verification step (`bundle verify` logic, but on-device) checks both. Without them, your bundles are trusted by URL alone, not by content. **Production deployments must add these.**
-
-`mandatory` — when `true`, the SDK applies the update on the next launch without prompting. Skip and the SDK assumes optional.
-
-`minNativeVersion` — when set, the SDK refuses to install the bundle if the user's app-store binary is older. Lets you ship bundles that depend on native code added in a newer store release.
-
-`expiresAt` — when set, the SDK treats the `downloadUrl` as ephemeral. The Laravel reference uses a 30-minute Laravel-signed-route TTL; this example uses static IDs forever. **For production, generate signed URLs.**
+Still missing compared to Laravel: `minNativeVersion` (binary-version gate) and `expiresAt` with signed download URLs (the Laravel reference uses a 30-minute signed-route TTL; the example serves static IDs forever — **for production, generate signed URLs**). The analytics endpoints are also skipped, as noted above.
 
 ### The download endpoint
 
 ```js
-app.get('/api/updates/download/:id', async (req, res) => {
+app.get('/v1/bundles/:id/download', async (req, res) => {
   const metadata = await getMetadata();
   const bundle = metadata.bundles.find((b) => b.id === req.params.id);
   if (!bundle) return res.status(404).json({ error: 'Bundle not found' });
@@ -120,11 +129,15 @@ app.post('/api/bundles/upload', upload.single('bundle'), async (req, res) => {
   const { version, channel = 'production', releaseNotes } = req.body;
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
 
+  const fileBuffer = await fs.readFile(req.file.path);
+  const checksum = createHash('sha256').update(fileBuffer).digest('hex');
+
   const metadata = await getMetadata();
   const bundleId = `bundle-${Date.now()}`;
   const newBundle = {
     id: bundleId, version, channel,
     filename: req.file.filename, size: req.file.size,
+    checksum, signature: signature || null,
     releaseNotes, timestamp: Date.now(), active: true,
   };
   metadata.bundles.push(newBundle);

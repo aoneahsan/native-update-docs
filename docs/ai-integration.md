@@ -34,9 +34,13 @@ import { NativeUpdate } from 'native-update';
 // Configure the plugin (nested UpdateConfig — one section per feature)
 await NativeUpdate.configure({
   liveUpdate: {
-    appId: 'your-app-id',
-    // OTA update checks are issued as GET {serverUrl}/v1/updates/check
-    serverUrl: 'https://your-update-server.com',
+    appId: 'com.your.app',
+    // Canonical rule: serverUrl is the backend base; the plugin appends
+    // /v1/updates/check. Hosted backend: https://nativeupdatebe.aoneahsan.com/api
+    serverUrl: 'https://nativeupdatebe.aoneahsan.com/api',
+    // Sent as X-API-Key on every check. Mint/copy in the dashboard
+    // (Apps → your app → API Keys). Supported here since v3.1.3.
+    apiKey: 'nu_app_…',
     channel: 'production', // e.g. 'development' | 'staging' | 'production'
     autoUpdate: true,
     updateStrategy: 'background', // 'immediate' | 'background' | 'manual'
@@ -157,6 +161,7 @@ interface UpdateConfig {
 interface LiveUpdateConfig {
   appId: string;                    // Your app identifier (required)
   serverUrl?: string;               // Backend base URL; checks hit {serverUrl}/v1/updates/check (HTTPS required in production)
+  apiKey?: string;                  // Sent as X-API-Key on every check (dashboard: Apps → your app → API Keys). Since v3.1.3
   channel?: string;                 // Update channel (default: 'production')
   autoUpdate?: boolean;             // Auto-check + apply updates
   updateStrategy?: 'immediate' | 'background' | 'manual';
