@@ -145,6 +145,7 @@ const sidebars: SidebarsConfig = {
       collapsed: true,
       items: [
         'how-to/manage-channels',
+        'how-to/restrict-api-keys',
         'how-to/rotate-signing-keys',
         'how-to/roll-back-bundle',
         'how-to/migrate-from-codepush',

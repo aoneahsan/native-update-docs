@@ -221,7 +221,10 @@ Self-hosting instead? Your server must implement this contract
 ### GET {serverUrl}/v1/updates/check?channel={channel}
 
 Request headers sent by the plugin: `X-API-Key`, `X-Device-ID`,
-`X-Current-Version`, `X-Platform` (and `X-App-Version` when known).
+`X-Current-Version`, `X-Platform` (and `X-App-Version` when known). Native
+builds also send client-identity headers (`X-Android-Package`,
+`X-Android-Cert-Sha256`/`-Sha1`, `X-Ios-Bundle-Id`) — see "Lock your API key to
+your clients" below.
 
 Response — `200` with `available: false` when there is no update, `200` with:
 
@@ -240,6 +243,51 @@ Response — `200` with `available: false` when there is no update, `200` with:
 ```
 
 `downloadUrl` must be an HTTPS URL that returns the bundle zip.
+
+## Lock your API key to your clients (restrictions)
+
+The `nu_app_…` API key is meant to ship **inside** your app — you do not need
+your own backend just to hide it. In the dashboard (**Apps → API Keys →
+Restrictions**) you can lock each key to the clients that may use it:
+
+- **Web** — allowed origins (exact `https://app.example.com` or a
+  `https://*.example.com` wildcard). Enforced against the browser's `Origin`
+  header, so the update API is safe to call directly from your web app. (The
+  `/v1/*` API sends permissive CORS precisely so browsers can call it; the real
+  gate is this per-key check, not CORS.)
+- **Android** — allowed apps by package name + signing-cert SHA-256/SHA-1
+  (`keytool -list -printcert`; add both your upload key and the Play App
+  Signing cert).
+- **iOS** — allowed apps by bundle identifier.
+
+A key with **no** restrictions works from anywhere (default). A restricted key
+that a client doesn't satisfy gets `403 { error: { code:
+"API_KEY_RESTRICTED", … } }`.
+
+The plugin sends the needed headers automatically on native update checks. If
+you run your **own** fetch, read the identity first and attach the headers:
+
+```typescript
+import { NativeUpdate } from 'native-update';
+
+const id = await NativeUpdate.getAppIdentity();
+const headers: Record<string, string> = { 'X-API-Key': apiKey, /* … */ };
+if (id.platform === 'android') {
+  if (id.packageName) headers['X-Android-Package'] = id.packageName;
+  if (id.certSha256) headers['X-Android-Cert-Sha256'] = id.certSha256;
+  if (id.certSha1) headers['X-Android-Cert-Sha1'] = id.certSha1;
+} else if (id.platform === 'ios') {
+  if (id.bundleId) headers['X-Ios-Bundle-Id'] = id.bundleId;
+}
+```
+
+**Requirements & honesty:** Android/iOS restrictions only take effect for apps
+built with **native-update ≥ 3.2.0** (older builds send no identity and are
+blocked by an Android/iOS restriction — web restrictions work with any version).
+The native identity headers are **client-attested** (parity with Google Maps
+API-key app restrictions): they stop cross-site/casual key reuse and quota
+abuse, not a determined attacker replaying headers by hand. Only the web
+`Origin` check is browser-enforced.
 
 ## CLI Tools
 

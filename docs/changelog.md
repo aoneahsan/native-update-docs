@@ -12,6 +12,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.0] - 2026-07-14
+
+### Added
+- **API-key client restrictions — ship `nu_app_…` keys directly in your app,
+  no self-hosted proxy needed.** In the dashboard (Apps → API Keys →
+  Restrictions) you can now lock each key to its clients:
+  - **Web** — allowed origins (exact `https://app.example.com` or a
+    `https://*.example.com` wildcard), enforced against the browser's `Origin`
+    header. The public update API (`/v1/updates/check`, analytics, signed
+    download) is now callable straight from the browser (permissive CORS on
+    that plane; the real gating is the per-key check, not CORS).
+  - **Android** — allowed apps by package name + signing-cert SHA-256/SHA-1.
+  - **iOS** — allowed apps by bundle identifier.
+
+  A key with **no** restrictions keeps working from anywhere (unchanged,
+  back-compatible). A restricted key that a client does not satisfy gets a
+  `403 API_KEY_RESTRICTED` (the response never leaks the allowlist).
+- **`LiveUpdate.getAppIdentity()`** returns this app's client identity
+  (Android: applicationId + signing-cert SHA-256/SHA-1; iOS: bundle id; web:
+  `{ platform: 'web' }`). Use it when you perform your OWN update-check fetch,
+  then attach the `X-Android-*` / `X-Ios-*` headers. The plugin's native
+  update-check attaches them automatically.
+
+### Notes
+- Android/iOS restrictions require the app to be built with **native-update
+  ≥ 3.2.0** (older builds send no identity headers and will be blocked by an
+  Android/iOS restriction). Web restrictions work with any version.
+- The native identity headers are **client-attested** (parity with Google
+  API-key app restrictions): they stop cross-site/casual key reuse and quota
+  abuse, not a determined attacker replaying headers by hand. Only the web
+  Origin check is browser-enforced.
+
 ## [3.1.5] - 2026-07-14
 
 ### Changed
