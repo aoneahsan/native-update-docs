@@ -27,12 +27,40 @@ Add the exact origins your web app runs on:
 - `https://*.example.com` — any sub-domain of `example.com` (not the apex; add
   `https://example.com` separately if you need it).
 - `http://localhost:5173` — for local development.
+- `http://192.168.1.10:5173` — your dev server as a phone on the LAN sees it.
 
 This is enforced against the browser's `Origin` header, which page JavaScript
 cannot forge — so a web-origin restriction genuinely stops another site from
 reusing your key. Because of this, the `/v1/*` update API is deliberately
 callable straight from the browser (it sends permissive CORS); the real gate is
 this per-key check, not CORS.
+
+### Scheme and port are part of the origin
+
+An origin is matched exactly, so `https://localhost`, `http://localhost:3843`
+and `https://localhost:3843` are **three different origins**. Add each one you
+actually use. (`https://localhost` is what a Capacitor **Android** WebView sends
+as its `Origin` — though a Capacitor app that uses the plugin is normally matched
+by the Android list below, not by this one. Capacitor **iOS** sends
+`capacitor://localhost`, which is not an http(s) origin and cannot be
+allowlisted here — use the iOS list.)
+
+### https is required, except locally
+
+Public hosts are **https-only**. You do not need to type the scheme — enter
+`app.example.com` and it is stored as `https://app.example.com`. Entering
+`http://app.example.com` is rejected, so a key can never be pinned to an
+insecure public page.
+
+Plain `http` is accepted only where there is no public network to protect:
+
+- `localhost` and any `*.localhost` sub-domain;
+- loopback, private and link-local IPs — `127.0.0.1`, `10.x.x.x`,
+  `172.16–31.x.x`, `192.168.x.x`, `169.254.x.x`, `[::1]`, `fc00::/7`,
+  `fe80::/10`.
+
+A **public** IP (`203.0.113.5`, `[2606:4700::1111]`) is treated like any other
+public host: https only.
 
 ## Android: allowed apps
 
