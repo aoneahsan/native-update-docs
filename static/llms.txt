@@ -76,6 +76,16 @@ This `llms.txt` follows the [llmstxt.org](https://llmstxt.org) spec — a struct
 - [server start](https://nativeupdate-docs.aoneahsan.com/reference/cli/server-start): local development update server.
 - [monitor](https://nativeupdate-docs.aoneahsan.com/reference/cli/monitor): polling dashboard for backend stats.
 - [backend create](https://nativeupdate-docs.aoneahsan.com/reference/cli/backend-create): scaffold Express / Firebase / Vercel backend.
+- [deploy & remote commands](https://nativeupdate-docs.aoneahsan.com/reference/cli/deploy): deploy a bundle from CI with an access token — `deploy --wait`, `token info`, `apps list`, `builds list|promote|rollout|status|delete`, `jobs status`.
+
+## Public API (access tokens)
+
+Manage apps and releases over HTTP from CI, scripts, or agents. Distinct from the device plane: `nu_pat_…` access tokens (user-level, server/CI only, no CORS) vs `nu_app_…` app API keys (in-app).
+
+- [Overview](https://nativeupdate-docs.aoneahsan.com/public-api/overview): access tokens vs app API keys, scoping (out-of-scope → 404, never 403), permissions (implied `manage` + opt-in `builds.delete`), envelopes, rate limits.
+- [Endpoints](https://nativeupdate-docs.aoneahsan.com/public-api/endpoints): all 11 routes with curl — token introspection, apps, builds (list/upload/update/promote/rollout/delete), job status.
+- [Queued jobs](https://nativeupdate-docs.aoneahsan.com/public-api/async-jobs): uploads return 202 + a job id; 202 means accepted, not live — poll until `completed` or `failed`.
+- [OpenAPI 3.1 spec](https://nativeupdate-docs.aoneahsan.com/openapi/public-api.json): machine-readable contract for the whole plane.
 
 ## Backend
 
