@@ -106,6 +106,17 @@ const sidebars: SidebarsConfig = {
         'reference/cli/server-start',
         'reference/cli/monitor',
         'reference/cli/backend-create',
+        'reference/cli/deploy',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Public API',
+      collapsed: true,
+      items: [
+        'public-api/overview',
+        'public-api/endpoints',
+        'public-api/async-jobs',
       ],
     },
     {

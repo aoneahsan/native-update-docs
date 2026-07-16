@@ -14,6 +14,12 @@ This page is the wire-format reference. It documents every endpoint the SDK call
 
 The contract is small but exact: deviating from a field name silently breaks the SDK's parsing, and the SDK does not log helpful errors for malformed responses. Read this page in full before writing or auditing a backend.
 
+:::note This page is the DEVICE plane
+These are the endpoints your **app** calls, authenticated with an app API key (`nu_app_…`).
+
+Managing releases — uploading a bundle, publishing, promoting, adjusting a rollout from CI or a script — is a separate plane on the hosted backend, authenticated with an access token (`nu_pat_…`). See the [Public Management API](/public-api/overview). The two token families are not interchangeable.
+:::
+
 ## Conventions
 
 All endpoints are JSON over HTTPS. HTTP-only is fine for local dev, but never in production — the SDK refuses bundle downloads from non-HTTPS URLs on iOS (App Transport Security) and emits a warning on Android.

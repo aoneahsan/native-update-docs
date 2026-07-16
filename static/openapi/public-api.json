@@ -1,0 +1,756 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Native Update — Public Management API",
+    "version": "1.0.0",
+    "summary": "Manage apps, builds, and releases with a personal access token.",
+    "description": "Everything the Native Update dashboard does — list apps, upload a bundle, publish it, promote it between channels, adjust a rollout — over HTTP. Intended for CI, scripts, and agents.\n\n**Authentication:** `Authorization: Bearer nu_pat_…`. An access token is a user-level secret with no origin restrictions: keep it in a CI secret or server environment variable, never in a browser or a repository. This plane sends no CORS headers on purpose.\n\n**Not the same as an app API key.** `nu_app_…` keys authenticate the plugin inside your app against `/api/v1/updates/check`; they are rejected here.\n\n**Scoping:** a token reaches only the apps selected for it in the dashboard. Anything else answers 404 — never 403 — so the API cannot be used to discover other people's apps.\n\n**Permissions:** every valid token may `manage` (read, upload, publish, promote, rollout). `builds.delete` is opt-in.\n\n**Uploads are queued:** POSTing a bundle returns 202 with a job id. Poll `GET /jobs/{jobId}` until `completed` or `failed`. A 202 means accepted, not live.",
+    "contact": {
+      "name": "Ahsan Mahmood",
+      "email": "aoneahsan@gmail.com",
+      "url": "https://aoneahsan.com"
+    },
+    "license": { "name": "MIT", "identifier": "MIT" }
+  },
+  "servers": [
+    {
+      "url": "https://nativeupdatebe.aoneahsan.com/api/public/v1",
+      "description": "Hosted backend"
+    },
+    {
+      "url": "{origin}/api/public/v1",
+      "description": "Self-hosted backend",
+      "variables": {
+        "origin": {
+          "default": "https://your-backend.example.com",
+          "description": "Origin of your own deployment"
+        }
+      }
+    }
+  ],
+  "security": [{ "accessToken": [] }],
+  "tags": [
+    { "name": "Token", "description": "Introspect the calling token" },
+    { "name": "Apps", "description": "Apps the token may manage" },
+    { "name": "Builds", "description": "Upload, publish, promote, and retire builds" },
+    { "name": "Jobs", "description": "Status of queued work" }
+  ],
+  "paths": {
+    "/token": {
+      "get": {
+        "tags": ["Token"],
+        "operationId": "getToken",
+        "summary": "Introspect this access token",
+        "description": "What this token is and which apps it manages. Call this first: it saves a client from guessing app ids and reports whether deletion is permitted. Never returns the secret.",
+        "responses": {
+          "200": {
+            "description": "Token details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "data": { "$ref": "#/components/schemas/TokenInfo" } }
+                },
+                "example": {
+                  "data": {
+                    "name": "GitHub Actions",
+                    "permissions": ["manage"],
+                    "apps": [{ "id": 12, "app_id": "com.example.app", "name": "Example" }],
+                    "last_used_at": "2026-07-16T09:12:44+00:00",
+                    "expires_at": null,
+                    "created_at": "2026-07-16T08:00:00+00:00"
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      }
+    },
+    "/apps": {
+      "get": {
+        "tags": ["Apps"],
+        "operationId": "listApps",
+        "summary": "List apps this token manages",
+        "parameters": [
+          { "$ref": "#/components/parameters/PerPage" },
+          { "$ref": "#/components/parameters/Page" }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of apps",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": { "type": "array", "items": { "$ref": "#/components/schemas/App" } },
+                    "meta": { "$ref": "#/components/schemas/PaginationMeta" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      }
+    },
+    "/apps/{app}": {
+      "parameters": [{ "$ref": "#/components/parameters/App" }],
+      "get": {
+        "tags": ["Apps"],
+        "operationId": "getApp",
+        "summary": "Get one app",
+        "responses": {
+          "200": {
+            "description": "App details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "data": { "$ref": "#/components/schemas/App" } }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      }
+    },
+    "/apps/{app}/builds": {
+      "parameters": [{ "$ref": "#/components/parameters/App" }],
+      "get": {
+        "tags": ["Builds"],
+        "operationId": "listBuilds",
+        "summary": "List builds for an app",
+        "description": "Newest first. An unknown channel or status is refused with 422 rather than silently ignored.",
+        "parameters": [
+          {
+            "name": "channel",
+            "in": "query",
+            "schema": { "$ref": "#/components/schemas/Channel" }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": { "$ref": "#/components/schemas/BuildStatus" }
+          },
+          { "$ref": "#/components/parameters/PerPage" },
+          { "$ref": "#/components/parameters/Page" }
+        ],
+        "responses": {
+          "200": {
+            "description": "A page of builds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": { "type": "array", "items": { "$ref": "#/components/schemas/Build" } },
+                    "meta": { "$ref": "#/components/schemas/PaginationMeta" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "422": { "$ref": "#/components/responses/ValidationFailed" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      },
+      "post": {
+        "tags": ["Builds"],
+        "operationId": "uploadBuild",
+        "summary": "Upload a bundle (queued)",
+        "description": "Always queued: signing and storing a bundle is too slow to hold a request open. Returns 202 with a job id — poll `GET /jobs/{jobId}` until `completed`. The build exists immediately as `processing` and is invisible to devices until the job finishes.\n\nRate limited to 30 uploads per hour.\n\nDuplicate and non-monotonic versions are refused synchronously, before any job exists.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["file", "version", "channel"],
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "The bundle .zip. Max 100 MB by default."
+                  },
+                  "version": {
+                    "type": "string",
+                    "pattern": "^\\d+\\.\\d+\\.\\d+$",
+                    "description": "Strict semver. Must be newer than the channel's active head.",
+                    "examples": ["1.2.0"]
+                  },
+                  "channel": { "$ref": "#/components/schemas/Channel" },
+                  "release_notes": { "type": "string", "maxLength": 5000 },
+                  "min_native_version": { "type": "string" },
+                  "rollout_percentage": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100,
+                    "default": 100
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted for processing — not yet live",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "job_id": { "type": "string", "description": "ULID of the queued job" },
+                        "status_url": { "type": "string", "format": "uri" },
+                        "build": { "$ref": "#/components/schemas/Build" }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "data": {
+                    "job_id": "01hq2xk8vt9r3m4n5p6q7s8t9v",
+                    "status_url": "https://nativeupdatebe.aoneahsan.com/api/public/v1/jobs/01hq2xk8vt9r3m4n5p6q7s8t9v",
+                    "build": { "id": 42, "version": "1.2.0", "channel": "production", "status": "processing" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "409": {
+            "description": "That version already exists in the channel",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorEnvelope" },
+                "example": {
+                  "error": {
+                    "code": "VERSION_ALREADY_EXISTS",
+                    "message": "Version 1.2.0 already exists in production channel."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid payload, or the version is not newer than the channel head",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorEnvelope" },
+                "example": {
+                  "error": {
+                    "code": "VERSION_NOT_NEWER",
+                    "message": "Version 1.1.0 is not newer than the current production head (1.2.0). Bump the version or use the explicit rollback flow."
+                  }
+                }
+              }
+            }
+          },
+          "429": { "$ref": "#/components/responses/RateLimited" },
+          "500": {
+            "description": "The bundle could not be accepted for processing",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorEnvelope" } }
+            }
+          }
+        }
+      }
+    },
+    "/apps/{app}/builds/{build}": {
+      "parameters": [
+        { "$ref": "#/components/parameters/App" },
+        { "$ref": "#/components/parameters/Build" }
+      ],
+      "get": {
+        "tags": ["Builds"],
+        "operationId": "getBuild",
+        "summary": "Get one build",
+        "responses": {
+          "200": { "$ref": "#/components/responses/BuildResponse" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      },
+      "patch": {
+        "tags": ["Builds"],
+        "operationId": "updateBuild",
+        "summary": "Pause, resume, archive, or edit a build",
+        "description": "Only `active` builds are served to devices, so setting `paused` stops a bad release on the next update check.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": { "type": "string", "enum": ["active", "paused", "archived"] },
+                  "release_notes": { "type": ["string", "null"], "maxLength": 5000 },
+                  "min_native_version": { "type": ["string", "null"] }
+                }
+              },
+              "example": { "status": "paused" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "$ref": "#/components/responses/BuildResponse" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "422": { "$ref": "#/components/responses/ValidationFailed" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      },
+      "delete": {
+        "tags": ["Builds"],
+        "operationId": "deleteBuild",
+        "summary": "Delete a build",
+        "description": "Requires a token with the `builds.delete` permission. Permanent. The stored bundle is cleaned up in the background; a build promoted elsewhere keeps working, because promotions share one stored object.",
+        "responses": {
+          "200": {
+            "description": "Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "deleted": { "type": "boolean" },
+                        "id": { "type": "integer" }
+                      }
+                    }
+                  }
+                },
+                "example": { "data": { "deleted": true, "id": 42 } }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/PermissionDenied" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      }
+    },
+    "/apps/{app}/builds/{build}/promote": {
+      "parameters": [
+        { "$ref": "#/components/parameters/App" },
+        { "$ref": "#/components/parameters/Build" }
+      ],
+      "post": {
+        "tags": ["Builds"],
+        "operationId": "promoteBuild",
+        "summary": "Promote a build into another channel",
+        "description": "Zero-copy: the new build points at the same stored bundle, and `promoted_from_id` points back at the source.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["target_channel"],
+                "properties": { "target_channel": { "$ref": "#/components/schemas/Channel" } }
+              },
+              "example": { "target_channel": "production" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The new build in the target channel",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "data": { "$ref": "#/components/schemas/Build" } }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "409": {
+            "description": "That version already exists in the target channel",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ErrorEnvelope" } }
+            }
+          },
+          "422": {
+            "description": "The build is already in the target channel",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorEnvelope" },
+                "example": {
+                  "error": {
+                    "code": "ALREADY_IN_CHANNEL",
+                    "message": "Build is already in the target channel."
+                  }
+                }
+              }
+            }
+          },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      }
+    },
+    "/apps/{app}/builds/{build}/rollout": {
+      "parameters": [
+        { "$ref": "#/components/parameters/App" },
+        { "$ref": "#/components/parameters/Build" }
+      ],
+      "patch": {
+        "tags": ["Builds"],
+        "operationId": "setRollout",
+        "summary": "Set a build's rollout percentage",
+        "description": "Ramp a release: 10 → 25 → 50 → 100.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["rollout_percentage"],
+                "properties": {
+                  "rollout_percentage": { "type": "integer", "minimum": 0, "maximum": 100 }
+                }
+              },
+              "example": { "rollout_percentage": 25 }
+            }
+          }
+        },
+        "responses": {
+          "200": { "$ref": "#/components/responses/BuildResponse" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "422": { "$ref": "#/components/responses/ValidationFailed" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      }
+    },
+    "/jobs/{jobId}": {
+      "parameters": [
+        {
+          "name": "jobId",
+          "in": "path",
+          "required": true,
+          "schema": { "type": "string" },
+          "description": "ULID returned by an upload",
+          "example": "01hq2xk8vt9r3m4n5p6q7s8t9v"
+        }
+      ],
+      "get": {
+        "tags": ["Jobs"],
+        "operationId": "getJob",
+        "summary": "Get a queued job's status",
+        "description": "Poll every ~5 seconds until `completed` or `failed`. A job is visible to any token that manages its app, so rotating a token never strands an in-flight deploy.",
+        "responses": {
+          "200": {
+            "description": "Job status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "data": { "$ref": "#/components/schemas/ApiJob" } }
+                },
+                "example": {
+                  "data": {
+                    "id": "01hq2xk8vt9r3m4n5p6q7s8t9v",
+                    "type": "build.process",
+                    "status": "completed",
+                    "attempts": 1,
+                    "result": { "build_id": 42, "version": "1.2.0", "channel": "production" },
+                    "error": null,
+                    "status_url": "https://nativeupdatebe.aoneahsan.com/api/public/v1/jobs/01hq2xk8vt9r3m4n5p6q7s8t9v",
+                    "queued_at": "2026-07-16T09:00:00+00:00",
+                    "started_at": "2026-07-16T09:00:03+00:00",
+                    "finished_at": "2026-07-16T09:00:12+00:00"
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "accessToken": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "nu_pat_{64 hex}_{crc32}",
+        "description": "A personal access token created in the dashboard (Access Tokens). Server/CI only — it has no origin restrictions. `X-Access-Token: nu_pat_…` is accepted as a fallback when your transport owns the Authorization header."
+      }
+    },
+    "parameters": {
+      "App": {
+        "name": "app",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" },
+        "description": "Numeric id or the string app_id. Prefer app_id in CI — it survives re-creating an app.",
+        "example": "com.example.app"
+      },
+      "Build": {
+        "name": "build",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "integer" },
+        "example": 42
+      },
+      "PerPage": {
+        "name": "per_page",
+        "in": "query",
+        "schema": { "type": "integer", "minimum": 1, "maximum": 50, "default": 20 },
+        "description": "Items per page. Capped at 50."
+      },
+      "Page": {
+        "name": "page",
+        "in": "query",
+        "schema": { "type": "integer", "minimum": 1, "default": 1 }
+      }
+    },
+    "responses": {
+      "BuildResponse": {
+        "description": "The build",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": { "data": { "$ref": "#/components/schemas/Build" } }
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Missing, malformed, unknown, revoked, or expired token",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorEnvelope" },
+            "examples": {
+              "missing": {
+                "value": {
+                  "error": {
+                    "code": "MISSING_ACCESS_TOKEN",
+                    "message": "An access token is required. Send it as \"Authorization: Bearer nu_pat_…\" — create one in the dashboard (Access Tokens)."
+                  }
+                }
+              },
+              "wrongFamily": {
+                "summary": "An app API key was sent instead of an access token",
+                "value": {
+                  "error": {
+                    "code": "INVALID_ACCESS_TOKEN_FORMAT",
+                    "message": "Invalid access token format. Tokens look like nu_pat_… — create one in the dashboard (Access Tokens). App API keys (nu_app_…) authenticate the device update plane (/api/v1) and are not accepted here."
+                  }
+                }
+              },
+              "expired": {
+                "value": {
+                  "error": {
+                    "code": "ACCESS_TOKEN_INVALID",
+                    "message": "Access token is expired or revoked. Rotate it in the dashboard (Access Tokens).",
+                    "details": { "status": "active", "expires_at": "2026-07-01T00:00:00+00:00" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "PermissionDenied": {
+        "description": "The token lacks an opt-in permission",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorEnvelope" },
+            "example": {
+              "error": {
+                "code": "TOKEN_PERMISSION_DENIED",
+                "message": "This access token does not have the 'builds.delete' permission. Grant it in the dashboard (Access Tokens), or use a token that has it.",
+                "details": { "required_permission": "builds.delete" }
+              }
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Absent, **or** outside this token's apps — deliberately indistinguishable, so the API cannot be used to discover other people's apps. If an app id you trust 404s, check `GET /token` first.",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorEnvelope" },
+            "example": {
+              "error": {
+                "code": "APP_NOT_FOUND",
+                "message": "App not found, or this access token does not manage it. Check the app id, and the token's app list in the dashboard (Access Tokens)."
+              }
+            }
+          }
+        }
+      },
+      "ValidationFailed": {
+        "description": "Laravel validation error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": { "type": "string" },
+                "errors": {
+                  "type": "object",
+                  "additionalProperties": { "type": "array", "items": { "type": "string" } }
+                }
+              }
+            }
+          }
+        }
+      },
+      "RateLimited": {
+        "description": "120 requests/minute, or 30 uploads/hour. Retry after the `Retry-After` header.",
+        "headers": {
+          "Retry-After": { "schema": { "type": "integer" }, "description": "Seconds to wait" }
+        },
+        "content": {
+          "application/json": { "schema": { "$ref": "#/components/schemas/ErrorEnvelope" } }
+        }
+      }
+    },
+    "schemas": {
+      "Channel": {
+        "type": "string",
+        "enum": ["production", "staging", "development"]
+      },
+      "BuildStatus": {
+        "type": "string",
+        "enum": ["uploading", "processing", "active", "archived", "failed", "paused"],
+        "description": "Devices are only ever served `active` builds."
+      },
+      "TokenInfo": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "permissions": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["manage", "builds.delete"] },
+            "description": "The effective set. `manage` is implied by holding a valid token."
+          },
+          "apps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "integer" },
+                "app_id": { "type": "string" },
+                "name": { "type": "string" }
+              }
+            }
+          },
+          "last_used_at": { "type": ["string", "null"], "format": "date-time" },
+          "expires_at": { "type": ["string", "null"], "format": "date-time" },
+          "created_at": { "type": ["string", "null"], "format": "date-time" }
+        }
+      },
+      "App": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "app_id": { "type": "string", "examples": ["com.example.app"] },
+          "bundle_id": { "type": ["string", "null"] },
+          "name": { "type": "string" },
+          "description": { "type": ["string", "null"] },
+          "platform": { "type": ["string", "null"], "examples": ["android", "ios", "both"] },
+          "platforms": { "type": ["array", "null"], "items": { "type": "string" } },
+          "channels": { "type": ["array", "null"], "items": { "type": "string" } },
+          "created_at": { "type": ["string", "null"], "format": "date-time" }
+        }
+      },
+      "Build": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "version": { "type": "string", "examples": ["1.2.0"] },
+          "channel": { "$ref": "#/components/schemas/Channel" },
+          "status": { "$ref": "#/components/schemas/BuildStatus" },
+          "checksum": { "type": ["string", "null"], "description": "SHA-256 of the bundle" },
+          "checksum_algorithm": { "type": ["string", "null"], "examples": ["SHA-256"] },
+          "signature": { "type": ["string", "null"] },
+          "file_size": { "type": ["integer", "null"] },
+          "release_notes": { "type": ["string", "null"] },
+          "min_native_version": { "type": ["string", "null"] },
+          "rollout_percentage": { "type": ["integer", "null"], "minimum": 0, "maximum": 100 },
+          "mandatory": { "type": "boolean" },
+          "promoted_from_id": {
+            "type": ["integer", "null"],
+            "description": "Set when this build was promoted from another channel"
+          },
+          "created_at": { "type": ["string", "null"], "format": "date-time" },
+          "updated_at": { "type": ["string", "null"], "format": "date-time" }
+        }
+      },
+      "ApiJob": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "description": "ULID" },
+          "type": { "type": "string", "enum": ["build.process"] },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "processing", "completed", "failed"],
+            "description": "`completed` and `failed` are final."
+          },
+          "attempts": { "type": "integer", "description": "A failing job retries 3 times with backoff." },
+          "result": {
+            "type": ["object", "null"],
+            "description": "On success: the finished build.",
+            "additionalProperties": true
+          },
+          "error": { "type": ["string", "null"], "description": "On failure: why it gave up." },
+          "status_url": { "type": "string", "format": "uri" },
+          "queued_at": { "type": ["string", "null"], "format": "date-time" },
+          "started_at": { "type": ["string", "null"], "format": "date-time" },
+          "finished_at": { "type": ["string", "null"], "format": "date-time" }
+        }
+      },
+      "PaginationMeta": {
+        "type": "object",
+        "properties": {
+          "current_page": { "type": "integer" },
+          "last_page": { "type": "integer" },
+          "per_page": { "type": "integer" },
+          "total": { "type": "integer" }
+        }
+      },
+      "ErrorEnvelope": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "required": ["code", "message"],
+            "properties": {
+              "code": { "type": "string", "description": "Stable — branch on this." },
+              "message": { "type": "string", "description": "Human-readable; explains the fix." },
+              "details": { "type": "object", "additionalProperties": true }
+            }
+          }
+        }
+      }
+    }
+  }
+}

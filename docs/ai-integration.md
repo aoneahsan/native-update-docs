@@ -305,8 +305,156 @@ npx native-update bundle verify ./bundles/1.2.0.zip --key ./public.key
 npx native-update keys generate --type rsa --size 4096
 ```
 
-Upload the resulting bundle through your backend's dashboard/API (hosted
-dashboard: the Upload page at nativeupdate.aoneahsan.com).
+Upload the resulting bundle through the dashboard, the public management API, or
+the `deploy` command below.
+
+## Public Management API (access tokens)
+
+Everything the dashboard does — list apps, upload a bundle, publish, promote,
+adjust rollout — is also an HTTP API. Use it from CI, a script, or an agent.
+
+**Two token families. They are not interchangeable.**
+
+| Token | Prefix | Used by | Where it may live |
+|---|---|---|---|
+| App API key | `nu_app_…` | The plugin in your app (`/api/v1/updates/check`) | Ships in the app. Lock it down with client restrictions. |
+| **Access token** | `nu_pat_…` | **You / CI / an agent** (`/api/public/v1/*`) | **Server or CI secret only — NEVER a browser or a repo.** |
+
+An access token is a user-level secret with no origin restrictions. Anyone
+holding it can manage the apps it is scoped to. Treat it like a password.
+
+**Create one:** dashboard → **Access Tokens** → *New token*. Tick the apps it may
+manage, and grant *Allow deleting builds* only if you need it. Copy the token
+anytime from that page.
+
+### Authenticate
+
+```
+Authorization: Bearer nu_pat_…
+```
+
+Base URL: `https://nativeupdatebe.aoneahsan.com/api/public/v1`
+(`X-Access-Token: nu_pat_…` also works if your transport owns `Authorization`.)
+
+**Start here.** `GET /token` tells an agent who it is and what it may touch, so
+it never has to guess an app id:
+
+```bash
+curl -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" \
+  https://nativeupdatebe.aoneahsan.com/api/public/v1/token
+```
+
+```json
+{ "data": {
+  "name": "GitHub Actions",
+  "permissions": ["manage"],
+  "apps": [{ "id": 12, "app_id": "com.example.app", "name": "Example" }]
+} }
+```
+
+### Endpoints
+
+`{app}` accepts the numeric id **or** the string `app_id` (`com.example.app`).
+
+| Method | Path | Does |
+|---|---|---|
+| GET | `/token` | What this token is and which apps it manages |
+| GET | `/apps` | Apps this token manages (paginated) |
+| GET | `/apps/{app}` | App details |
+| GET | `/apps/{app}/builds` | Builds; filter `?channel=` `?status=` |
+| GET | `/apps/{app}/builds/{build}` | Build details |
+| POST | `/apps/{app}/builds` | **Upload a bundle — queued, returns 202** |
+| PATCH | `/apps/{app}/builds/{build}` | Set `status` (`active`/`paused`/`archived`), release notes |
+| POST | `/apps/{app}/builds/{build}/promote` | Copy into another channel (`target_channel`) |
+| PATCH | `/apps/{app}/builds/{build}/rollout` | Set `rollout_percentage` (0–100) |
+| DELETE | `/apps/{app}/builds/{build}` | Delete — needs the `builds.delete` permission |
+| GET | `/jobs/{jobId}` | Status of queued work |
+
+Machine-readable spec (OpenAPI 3.1):
+<https://nativeupdate-docs.aoneahsan.com/openapi/public-api.json>
+
+### Upload: 202 now, live in a moment
+
+Signing and storing a bundle takes too long to hold a request open, so an upload
+is **always queued**. You get a job id; poll it until the build goes live.
+
+```bash
+# 1. Upload → 202
+curl -X POST \
+  -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" \
+  -F "file=@./bundle.zip" \
+  -F "version=1.2.0" \
+  -F "channel=production" \
+  -F "release_notes=Bug fixes" \
+  https://nativeupdatebe.aoneahsan.com/api/public/v1/apps/com.example.app/builds
+```
+
+```json
+{ "data": {
+  "job_id": "01hq2xk8...",
+  "status_url": "https://nativeupdatebe.aoneahsan.com/api/public/v1/jobs/01hq2xk8...",
+  "build": { "id": 42, "version": "1.2.0", "status": "processing" }
+} }
+```
+
+```bash
+# 2. Poll until status is "completed" or "failed"
+curl -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" \
+  https://nativeupdatebe.aoneahsan.com/api/public/v1/jobs/01hq2xk8...
+```
+
+```json
+{ "data": {
+  "status": "completed",
+  "result": { "build_id": 42, "version": "1.2.0", "channel": "production" }
+} }
+```
+
+**Agents: poll, don't assume.** A 202 means *accepted*, not *live*. The build
+stays `processing` and devices never see it until the job reports `completed`.
+On `failed`, read `error` — the build never goes live and the owner is emailed.
+Poll every ~5s; processing normally finishes in well under a minute.
+
+### CLI equivalents
+
+```bash
+export NATIVE_UPDATE_TOKEN=nu_pat_…   # never pass --token in CI; it leaks into logs
+
+npx native-update token info                     # who am I, which apps?
+npx native-update apps list
+npx native-update builds list com.example.app
+
+# Deploy: zips the directory, uploads, and (with --wait) blocks until live.
+# Exits non-zero if the release fails, so CI fails too.
+npx native-update deploy ./dist --app com.example.app --version 1.2.0 --wait
+
+npx native-update builds promote com.example.app 42 --to production
+npx native-update builds rollout com.example.app 42 --percent 10
+npx native-update builds status  com.example.app 42 --set paused
+npx native-update jobs status 01hq2xk8... --wait
+```
+
+### Errors
+
+Every error uses one envelope:
+
+```json
+{ "error": { "code": "APP_NOT_FOUND", "message": "…", "details": { } } }
+```
+
+| Status | Code | Meaning |
+|---|---|---|
+| 401 | `MISSING_ACCESS_TOKEN`, `INVALID_ACCESS_TOKEN_FORMAT`, `ACCESS_TOKEN_NOT_FOUND`, `ACCESS_TOKEN_INVALID` | No, malformed, unknown, revoked, or expired token |
+| 403 | `TOKEN_PERMISSION_DENIED` | The token lacks an opt-in permission (`details.required_permission`) |
+| 404 | `APP_NOT_FOUND`, `BUILD_NOT_FOUND`, `JOB_NOT_FOUND` | Absent **or** outside this token's apps — the two are deliberately indistinguishable |
+| 409 | `VERSION_ALREADY_EXISTS` | That version already exists in the channel |
+| 422 | `VERSION_NOT_NEWER` | Not newer than the channel's current head — bump the version |
+| 429 | — | Rate limited: 120 requests/min; uploads 30/hour |
+
+**A 404 does not always mean "gone".** Scoping errors answer 404 on purpose, so
+the API cannot be used to discover which apps exist. If an app id you believe in
+returns 404, check the token's app list with `GET /token` before concluding the
+app is missing.
 
 ## Platform-Specific Setup
 

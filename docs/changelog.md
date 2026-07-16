@@ -12,6 +12,54 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.0] - 2026-07-16
+
+### Added
+- **Public Management API — manage your apps and releases over HTTP.** Everything
+  the dashboard does (list apps, upload a bundle, publish, promote between
+  channels, adjust a rollout, delete) is now an API at
+  `https://nativeupdatebe.aoneahsan.com/api/public/v1`, for CI, scripts, and
+  agents. Machine-readable spec:
+  <https://nativeupdate-docs.aoneahsan.com/openapi/public-api.json>
+- **Access tokens** — a new user-level credential (`nu_pat_…`), created in the
+  dashboard under **Access Tokens**:
+  - **App-scoped.** Tick the apps a token may manage; it reaches nothing else.
+    Anything out of scope answers 404, never 403, so the API cannot be used to
+    discover other people's apps.
+  - **Permission split.** Every token has an implied `manage` (read, upload,
+    publish, promote, rollout). **`builds.delete` is opt-in and off by default**,
+    so a leaked CI token can ship a release but never erase your history.
+  - **Retrievable.** Copy a token from the dashboard anytime, or rotate it — the
+    old secret stops working immediately. Same posture as app API keys.
+  - Distinct from app API keys (`nu_app_…`), which authenticate the plugin inside
+    your app. The two are not interchangeable, and the public plane deliberately
+    sends no CORS headers: an access token has no origin restrictions and belongs
+    in a CI secret, never a browser.
+- **Queued uploads with a job to poll.** `POST /apps/{app}/builds` answers **202**
+  with `{job_id, status_url}` — a 202 means accepted, not live. Devices only ever
+  receive `active` builds, so a release is invisible until `GET /jobs/{jobId}`
+  reports `completed`. On failure the job reports `error`, the build never goes
+  live, and the owner is emailed.
+- **New CLI commands** (no new dependencies):
+  - `native-update deploy <webDirOrZip> --app <app> [--wait]` — zips a directory
+    if needed, uploads it, and with `--wait` blocks until the release is live,
+    exiting non-zero if it fails, so a broken release fails your pipeline.
+  - `native-update token info` · `apps list` · `builds list|promote|rollout|status|delete`
+    · `jobs status`.
+  - Auth via `NATIVE_UPDATE_TOKEN` (preferred — a `--token` flag leaks into shell
+    history and CI logs); `NATIVE_UPDATE_SERVER` for self-hosted backends.
+
+### Changed
+- Bundle-upload logic (duplicate-version and monotonic-version guards, sync and
+  queued storage paths, zero-copy promotion) moved into a shared
+  `BuildUploadService`, so the dashboard and the public API cannot drift apart.
+  No behaviour change to the dashboard.
+
+### Backend
+- Requires a deploy: two migrations (`access_tokens` + `access_token_app`,
+  `api_jobs`) and a `RolesPermissionsSeeder` re-run for the new
+  `access-tokens.manage` permission.
+
 ## [3.2.0] - 2026-07-14
 
 ### Added

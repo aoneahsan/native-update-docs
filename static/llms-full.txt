@@ -82,6 +82,26 @@ Custom backends must match field names exactly — `version`, `bundleId`, `downl
 
 `backend create <type>` — generates an Express / Firebase Functions / Vercel scaffold. **Scaffold, not turn-key code** — every endpoint has `TODO[SCAFFOLD-IMPLEMENT-BEFORE-DEPLOY]` markers.
 
+`deploy <webDirOrZip> --app <app> [--wait]` — zips the directory if needed, uploads it to the hosted backend over the public management API, and with `--wait` blocks until the release is live (exit 1 if it fails). Companion remote commands: `token info`, `apps list`, `builds list|promote|rollout|status|delete`, `jobs status`. All need an access token (`NATIVE_UPDATE_TOKEN`).
+
+## The public management API (access tokens)
+
+Added in 3.3.0. Everything the dashboard does — list apps, upload a bundle, publish, promote between channels, adjust a rollout, delete — is an HTTP API at `https://nativeupdatebe.aoneahsan.com/api/public/v1`, for CI, scripts, and agents. Machine-readable spec: https://nativeupdate-docs.aoneahsan.com/openapi/public-api.json
+
+**Two token families, not interchangeable.** `nu_app_…` app API keys authenticate the plugin inside your app against the device plane (`/api/v1/updates/check`) and may ship in the app once client-restricted. `nu_pat_…` access tokens are user-level secrets for the management plane; they carry no origin restrictions, so they belong in a CI secret or server env var and never in a browser or a repo. The public plane deliberately sends no CORS headers. Sending an `nu_app_` key to the management plane is rejected by format.
+
+**Auth:** `Authorization: Bearer nu_pat_…`. Create a token in the dashboard → Access Tokens, ticking the apps it may manage.
+
+**Scoping:** a token reaches only its selected apps. Everything else — another user's app, an unticked own app, a nonexistent id — answers 404, never 403, so the API cannot enumerate other people's apps. `GET /token` reports the token's own app list; check it before concluding an app is missing.
+
+**Permissions:** every valid token has an implied `manage` (read, upload, publish, promote, rollout). `builds.delete` is opt-in and off by default, so a leaked CI token can ship a release but not erase history. Finer-grained per-endpoint permissions are planned.
+
+**Endpoints:** `GET /token` · `GET /apps` · `GET /apps/{app}` · `GET /apps/{app}/builds` · `POST /apps/{app}/builds` (upload) · `GET|PATCH|DELETE /apps/{app}/builds/{build}` · `POST /apps/{app}/builds/{build}/promote` · `PATCH /apps/{app}/builds/{build}/rollout` · `GET /jobs/{jobId}`. `{app}` accepts the numeric id or the string app_id. Lists paginate at 20, max 50. Rate limits: 120 requests/min; 30 uploads/hour.
+
+**Uploads are queued — 202 means accepted, not live.** Signing and storing a bundle is too slow to hold a request open, so `POST /apps/{app}/builds` returns 202 with `{job_id, status_url}` and a build already in `processing`. Devices only ever receive `active` builds, so the release is invisible until the job reports `completed`. Poll `GET /jobs/{jobId}` every ~5s: `pending` → `processing` → `completed` (with `result`) or `failed` (with `error`). A failing job retries 3 times with backoff (60s, 300s); on final failure the build is marked failed, never goes live, and the owner is emailed. Duplicate versions (409 `VERSION_ALREADY_EXISTS`) and downgrades (422 `VERSION_NOT_NEWER`) are refused synchronously, before any job is created.
+
+**Errors** use one envelope: `{"error":{"code","message","details"?}}` — branch on `code`, show `message` (it names the fix).
+
 ## The three backend deployment options
 
 **Hosted SaaS.** Sign up at https://nativeupdate.aoneahsan.com. Zero servers, MAU-based pricing.
@@ -171,7 +191,7 @@ Side-by-side phase: keep `cordova-plugin-code-push` installed while you wire `na
 | Fact | Value |
 |---|---|
 | npm package | `native-update` |
-| Current version | 3.2.0 |
+| Current version | 3.3.0 |
 | License | MIT |
 | Capacitor compatibility | 6+ |
 | Android min SDK | 22 (Android 5.1) |
