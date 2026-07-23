@@ -76,16 +76,17 @@ This `llms.txt` follows the [llmstxt.org](https://llmstxt.org) spec — a struct
 - [server start](https://nativeupdate-docs.aoneahsan.com/reference/cli/server-start): local development update server.
 - [monitor](https://nativeupdate-docs.aoneahsan.com/reference/cli/monitor): polling dashboard for backend stats.
 - [backend create](https://nativeupdate-docs.aoneahsan.com/reference/cli/backend-create): scaffold Express / Firebase / Vercel backend.
-- [deploy & remote commands](https://nativeupdate-docs.aoneahsan.com/reference/cli/deploy): deploy a bundle from CI with an access token — `deploy --wait`, `token info`, `apps list`, `builds list|promote|rollout|status|delete`, `jobs status`.
+- [deploy & remote commands](https://nativeupdate-docs.aoneahsan.com/reference/cli/deploy): manage apps and releases from CI with an access token (`NATIVE_UPDATE_TOKEN`) — `deploy --wait`, `token info`, `apps list|create|show|update|delete`, `apps keys list|create|show|rotate|reveal|revoke|deprecate|restrict|delete`, `apps signing show|create|rotate`, `apps keystore upload|info|download|delete`, `builds list|promote|rollout|status|delete`, `jobs status`.
 
 ## Public API (access tokens)
 
-Manage apps and releases over HTTP from CI, scripts, or agents. Distinct from the device plane: `nu_pat_…` access tokens (user-level, server/CI only, no CORS) vs `nu_app_…` app API keys (in-app).
+Run an app's whole lifecycle over HTTP from CI, scripts, or agents. Distinct from the device plane: `nu_pat_…` access tokens (user-level, server/CI only, no CORS) vs `nu_app_…` app API keys (in-app).
 
-- [Overview](https://nativeupdate-docs.aoneahsan.com/public-api/overview): access tokens vs app API keys, scoping (out-of-scope → 404, never 403), permissions (implied `manage` + opt-in `builds.delete`), envelopes, rate limits.
-- [Endpoints](https://nativeupdate-docs.aoneahsan.com/public-api/endpoints): all 11 routes with curl — token introspection, apps, builds (list/upload/update/promote/rollout/delete), job status.
+- [Overview](https://nativeupdate-docs.aoneahsan.com/public-api/overview): access tokens vs app API keys; scoping (out-of-scope → 404, never 403; `all_apps` tokens reach every app you own, including apps created later); permissions (implied `manage` + opt-in `builds.delete` / `apps.delete` / `keys.delete`); the guarantee that access tokens themselves are dashboard-only; envelopes; rate limits.
+- [Endpoints](https://nativeupdate-docs.aoneahsan.com/public-api/endpoints): every route with curl — token introspection; app CRUD (create/edit/delete); API keys (list/create/show/rotate/reveal/restrict/revoke/deprecate/delete); the signing key (show/create/rotate); the private keystore backup (info/upload/download/delete); builds (list/upload/update/promote/rollout/delete, incl. the `mandatory` flag, the `BUILD_NOT_READY` guard, and rollout pause/resume); job status.
 - [Queued jobs](https://nativeupdate-docs.aoneahsan.com/public-api/async-jobs): uploads return 202 + a job id; 202 means accepted, not live — poll until `completed` or `failed`.
-- [OpenAPI 3.1 spec](https://nativeupdate-docs.aoneahsan.com/openapi/public-api.json): machine-readable contract for the whole plane.
+- [OpenAPI 3.1 spec](https://nativeupdate-docs.aoneahsan.com/openapi/public-api.json): machine-readable contract (v1.1.0) for the whole plane.
+- [Raw Markdown for AI agents](https://nativeupdate-docs.aoneahsan.com/raw/manifest.json): front-matter-stripped copies of the public-API, AI-integration, and changelog pages at `/raw/<name>.md`, indexed by `/raw/manifest.json`.
 
 ## Backend
 

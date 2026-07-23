@@ -1,0 +1,32 @@
+[
+  {
+    "name": "public-api-overview",
+    "path": "/raw/public-api-overview.md",
+    "title": "Public API — Overview",
+    "bytes": 5230
+  },
+  {
+    "name": "public-api-endpoints",
+    "path": "/raw/public-api-endpoints.md",
+    "title": "Public API — Endpoints",
+    "bytes": 16500
+  },
+  {
+    "name": "public-api-async-jobs",
+    "path": "/raw/public-api-async-jobs.md",
+    "title": "Public API — Queued jobs",
+    "bytes": 3866
+  },
+  {
+    "name": "ai-integration",
+    "path": "/raw/ai-integration.md",
+    "title": "AI Integration Guide",
+    "bytes": 23182
+  },
+  {
+    "name": "changelog",
+    "path": "/raw/changelog.md",
+    "title": "Changelog",
+    "bytes": 37751
+  }
+]

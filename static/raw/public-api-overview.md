@@ -1,13 +1,3 @@
----
-sidebar_position: 1
-title: Public API — Overview
-description: Manage your apps, builds, and releases over HTTP with a personal access token. Deploy from CI, a script, or an AI agent — the same things the dashboard does.
-keywords: [native-update public api, access token, ota deploy api, ci deploy capacitor, native update rest api]
-last_update:
-  date: 2026-07-23
-  author: Ahsan Mahmood
----
-
 # Public Management API
 
 Everything the dashboard does — create and configure apps, mint and rotate API

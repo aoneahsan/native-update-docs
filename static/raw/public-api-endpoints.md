@@ -1,13 +1,3 @@
----
-sidebar_position: 2
-title: Public API — Endpoints
-description: Every route on the public management API, with curl examples — token introspection, app CRUD, API keys, signing keys, keystore backup, builds, upload, promote, rollout, delete, and job status.
-keywords: [native-update api endpoints, ota upload api, create app api, api key management api, signing key api, keystore backup api, promote build api, rollout api, curl native update]
-last_update:
-  date: 2026-07-23
-  author: Ahsan Mahmood
----
-
 # Endpoints
 
 Base URL: `https://nativeupdatebe.aoneahsan.com/api/public/v1`

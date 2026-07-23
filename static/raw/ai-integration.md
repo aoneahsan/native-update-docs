@@ -1,12 +1,3 @@
----
-title: AI Integration Guide
-description: Quick reference for AI development agents integrating native-update.
-sidebar_position: 9
-mdx:
-  format: md
----
-
-
 Quick reference for AI development agents (Claude Code, Cursor, Copilot, etc.) to integrate native-update into Capacitor projects.
 
 ## Installation

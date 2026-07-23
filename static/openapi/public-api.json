@@ -2,9 +2,9 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Native Update — Public Management API",
-    "version": "1.0.0",
-    "summary": "Manage apps, builds, and releases with a personal access token.",
-    "description": "Everything the Native Update dashboard does — list apps, upload a bundle, publish it, promote it between channels, adjust a rollout — over HTTP. Intended for CI, scripts, and agents.\n\n**Authentication:** `Authorization: Bearer nu_pat_…`. An access token is a user-level secret with no origin restrictions: keep it in a CI secret or server environment variable, never in a browser or a repository. This plane sends no CORS headers on purpose.\n\n**Not the same as an app API key.** `nu_app_…` keys authenticate the plugin inside your app against `/api/v1/updates/check`; they are rejected here.\n\n**Scoping:** a token reaches only the apps selected for it in the dashboard. Anything else answers 404 — never 403 — so the API cannot be used to discover other people's apps.\n\n**Permissions:** every valid token may `manage` (read, upload, publish, promote, rollout). `builds.delete` is opt-in.\n\n**Uploads are queued:** POSTing a bundle returns 202 with a job id. Poll `GET /jobs/{jobId}` until `completed` or `failed`. A 202 means accepted, not live.",
+    "version": "1.1.0",
+    "summary": "Run an app's whole lifecycle with a personal access token — apps, API keys, signing keys, keystore backups, builds, and releases.",
+    "description": "Everything the Native Update dashboard does — create and configure apps, mint and rotate API keys, manage a signing key, back up a keystore, upload a bundle, publish it, promote it between channels, adjust a rollout — over HTTP. Intended for CI, scripts, and agents.\n\n**Authentication:** `Authorization: Bearer nu_pat_…`. An access token is a user-level secret with no origin restrictions: keep it in a CI secret or server environment variable, never in a browser or a repository. This plane sends no CORS headers on purpose.\n\n**Not the same as an app API key.** `nu_app_…` keys authenticate the plugin inside your app against `/api/v1/updates/check`; they are rejected here.\n\n**Scoping:** a token reaches the apps selected for it in the dashboard, or — when created with `all_apps` — every app you own, including apps created later. Creating an app with an explicitly-scoped token auto-attaches it. Anything out of scope answers 404 — never 403 — so the API cannot be used to discover other people's apps.\n\n**Permissions:** every valid token may `manage` (read; create and edit apps; mint, rotate and restrict API keys; create and rotate a signing key; upload, publish, promote and roll out builds; upload and download a keystore). The three delete permissions — `builds.delete`, `apps.delete`, `keys.delete` — are opt-in and off by default.\n\n**Access tokens are dashboard-only.** There is no endpoint to create, rotate, or delete a token here; a leaked token can never mint another token or widen its own reach.\n\n**Uploads are queued:** POSTing a bundle returns 202 with a job id. Poll `GET /jobs/{jobId}` until `completed` or `failed`. A 202 means accepted, not live.",
     "contact": {
       "name": "Ahsan Mahmood",
       "email": "aoneahsan@gmail.com",
@@ -31,7 +31,10 @@
   "security": [{ "accessToken": [] }],
   "tags": [
     { "name": "Token", "description": "Introspect the calling token" },
-    { "name": "Apps", "description": "Apps the token may manage" },
+    { "name": "Apps", "description": "Create, read, edit, and delete apps the token may manage" },
+    { "name": "API keys", "description": "Mint, rotate, reveal, restrict, and retire app API keys" },
+    { "name": "Signing key", "description": "The app's bundle-signing key (public key + fingerprint only)" },
+    { "name": "Keystore", "description": "Private keystore .zip backup" },
     { "name": "Builds", "description": "Upload, publish, promote, and retire builds" },
     { "name": "Jobs", "description": "Status of queued work" }
   ],
@@ -55,6 +58,7 @@
                   "data": {
                     "name": "GitHub Actions",
                     "permissions": ["manage"],
+                    "all_apps": false,
                     "apps": [{ "id": 12, "app_id": "com.example.app", "name": "Example" }],
                     "last_used_at": "2026-07-16T09:12:44+00:00",
                     "expires_at": null,
@@ -96,6 +100,69 @@
           "401": { "$ref": "#/components/responses/Unauthorized" },
           "429": { "$ref": "#/components/responses/RateLimited" }
         }
+      },
+      "post": {
+        "tags": ["Apps"],
+        "operationId": "createApp",
+        "summary": "Create an app",
+        "description": "A token created for specific apps auto-attaches the new app to itself, so it can manage the app immediately.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name"],
+                "properties": {
+                  "name": { "type": "string" },
+                  "bundle_id": {
+                    "type": "string",
+                    "description": "Reverse-DNS package id, globally unique across the platform. Immutable once set.",
+                    "examples": ["com.example.app"]
+                  },
+                  "platform": { "type": "string", "enum": ["ios", "android", "both"], "default": "both" },
+                  "description": { "type": ["string", "null"] }
+                }
+              },
+              "example": { "name": "Example", "bundle_id": "com.example.app", "platform": "both" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The new app",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object", "properties": { "data": { "$ref": "#/components/schemas/App" } } }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "409": {
+            "description": "That bundle_id already belongs to another app",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorEnvelope" },
+                "example": {
+                  "error": {
+                    "code": "BUNDLE_ID_TAKEN",
+                    "message": "The bundle id 'com.example.app' is already registered to another app."
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The plan's app quota is full",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorEnvelope" },
+                "example": { "error": { "code": "APP_LIMIT_REACHED", "message": "App limit reached for this plan." } }
+              }
+            }
+          },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
       }
     },
     "/apps/{app}": {
@@ -117,6 +184,55 @@
             }
           },
           "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      },
+      "patch": {
+        "tags": ["Apps"],
+        "operationId": "updateApp",
+        "summary": "Edit an app",
+        "description": "Edits name, platform, and description. `bundle_id` is immutable and is not accepted here.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "platform": { "type": "string", "enum": ["ios", "android", "both"] },
+                  "description": { "type": ["string", "null"] }
+                }
+              },
+              "example": { "name": "Example (renamed)", "platform": "android" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The updated app",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object", "properties": { "data": { "$ref": "#/components/schemas/App" } } }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "422": { "$ref": "#/components/responses/ValidationFailed" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      },
+      "delete": {
+        "tags": ["Apps"],
+        "operationId": "deleteApp",
+        "summary": "Delete an app",
+        "description": "Requires a token with the `apps.delete` permission. Permanent and cascading — removes the app's builds and API keys.",
+        "responses": {
+          "200": { "$ref": "#/components/responses/Deleted" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/PermissionDenied" },
           "404": { "$ref": "#/components/responses/NotFound" },
           "429": { "$ref": "#/components/responses/RateLimited" }
         }
@@ -196,6 +312,11 @@
                     "minimum": 1,
                     "maximum": 100,
                     "default": 100
+                  },
+                  "mandatory": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Force the update on eligible devices."
                   }
                 }
               }
@@ -290,7 +411,7 @@
         "tags": ["Builds"],
         "operationId": "updateBuild",
         "summary": "Pause, resume, archive, or edit a build",
-        "description": "Only `active` builds are served to devices, so setting `paused` stops a bad release on the next update check.",
+        "description": "Only `active` builds are served to devices, so setting `paused` stops a bad release on the next update check. Setting `status` to `active` on a build still `uploading`, `processing`, or `failed` is refused with 422 `BUILD_NOT_READY` — a build only becomes active when its upload job completes.",
         "requestBody": {
           "required": true,
           "content": {
@@ -300,7 +421,8 @@
                 "properties": {
                   "status": { "type": "string", "enum": ["active", "paused", "archived"] },
                   "release_notes": { "type": ["string", "null"], "maxLength": 5000 },
-                  "min_native_version": { "type": ["string", "null"] }
+                  "min_native_version": { "type": ["string", "null"] },
+                  "mandatory": { "type": "boolean" }
                 }
               },
               "example": { "status": "paused" }
@@ -311,7 +433,20 @@
           "200": { "$ref": "#/components/responses/BuildResponse" },
           "401": { "$ref": "#/components/responses/Unauthorized" },
           "404": { "$ref": "#/components/responses/NotFound" },
-          "422": { "$ref": "#/components/responses/ValidationFailed" },
+          "422": {
+            "description": "Invalid payload, or the build is not ready to be made active",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorEnvelope" },
+                "example": {
+                  "error": {
+                    "code": "BUILD_NOT_READY",
+                    "message": "This build is still processing and cannot be made active yet."
+                  }
+                }
+              }
+            }
+          },
           "429": { "$ref": "#/components/responses/RateLimited" }
         }
       },
@@ -417,17 +552,17 @@
       "patch": {
         "tags": ["Builds"],
         "operationId": "setRollout",
-        "summary": "Set a build's rollout percentage",
-        "description": "Ramp a release: 10 → 25 → 50 → 100.",
+        "summary": "Set a build's rollout percentage, or pause/resume it",
+        "description": "Ramp a release: 10 → 25 → 50 → 100. Send `rollout_percentage`, `enabled`, or both. `0` halts the rollout; `enabled: false` pauses it without changing the percentage.",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["rollout_percentage"],
                 "properties": {
-                  "rollout_percentage": { "type": "integer", "minimum": 0, "maximum": 100 }
+                  "rollout_percentage": { "type": "integer", "minimum": 0, "maximum": 100, "description": "0 halts the rollout." },
+                  "enabled": { "type": "boolean", "description": "Pause (false) or resume (true) the rollout." }
                 }
               },
               "example": { "rollout_percentage": 25 }
@@ -439,6 +574,444 @@
           "401": { "$ref": "#/components/responses/Unauthorized" },
           "404": { "$ref": "#/components/responses/NotFound" },
           "422": { "$ref": "#/components/responses/ValidationFailed" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      }
+    },
+    "/apps/{app}/api-keys": {
+      "parameters": [{ "$ref": "#/components/parameters/App" }],
+      "get": {
+        "tags": ["API keys"],
+        "operationId": "listApiKeys",
+        "summary": "List an app's API keys (safe fields only)",
+        "responses": {
+          "200": {
+            "description": "The app's keys — never the secret",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "data": { "type": "array", "items": { "$ref": "#/components/schemas/ApiKeySafe" } } }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      },
+      "post": {
+        "tags": ["API keys"],
+        "operationId": "createApiKey",
+        "summary": "Mint a new API key",
+        "description": "Returns the full `plaintext_key` once (also retrievable later via reveal). An app allows at most 3 active keys.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "type": "object", "required": ["name"], "properties": { "name": { "type": "string" } } },
+              "example": { "name": "production" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "$ref": "#/components/responses/PlaintextKey" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "422": {
+            "description": "The 3-active-key cap is reached",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorEnvelope" },
+                "example": { "error": { "code": "MAX_KEYS_REACHED", "message": "This app already has the maximum of 3 active API keys. Rotate or retire one first." } }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited — the plane cap, or a per-key action cap",
+            "headers": { "Retry-After": { "schema": { "type": "integer" }, "description": "Seconds to wait" } },
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorEnvelope" },
+                "example": { "error": { "code": "KEY_ACTION_RATE_LIMITED", "message": "Too many key actions. Try again shortly." } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/apps/{app}/api-keys/{key}": {
+      "parameters": [
+        { "$ref": "#/components/parameters/App" },
+        { "$ref": "#/components/parameters/Key" }
+      ],
+      "get": {
+        "tags": ["API keys"],
+        "operationId": "getApiKey",
+        "summary": "Get one API key (safe fields only)",
+        "responses": {
+          "200": { "$ref": "#/components/responses/ApiKeyResponse" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/KeyNotFound" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      },
+      "delete": {
+        "tags": ["API keys"],
+        "operationId": "deleteApiKey",
+        "summary": "Delete an API key",
+        "description": "Requires a token with the `keys.delete` permission.",
+        "responses": {
+          "200": { "$ref": "#/components/responses/Deleted" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/PermissionDenied" },
+          "404": { "$ref": "#/components/responses/KeyNotFound" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      }
+    },
+    "/apps/{app}/api-keys/{key}/rotate": {
+      "parameters": [
+        { "$ref": "#/components/parameters/App" },
+        { "$ref": "#/components/parameters/Key" }
+      ],
+      "post": {
+        "tags": ["API keys"],
+        "operationId": "rotateApiKey",
+        "summary": "Rotate an API key",
+        "description": "Issues a new secret and invalidates the old one immediately.",
+        "responses": {
+          "200": { "$ref": "#/components/responses/PlaintextKey" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/KeyNotFound" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      }
+    },
+    "/apps/{app}/api-keys/{key}/reveal": {
+      "parameters": [
+        { "$ref": "#/components/parameters/App" },
+        { "$ref": "#/components/parameters/Key" }
+      ],
+      "post": {
+        "tags": ["API keys"],
+        "operationId": "revealApiKey",
+        "summary": "Re-read an API key's plaintext",
+        "responses": {
+          "200": {
+            "description": "The recovered secret",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "data": { "type": "object", "properties": { "id": { "type": "integer" }, "plaintext_key": { "type": "string" } } } }
+                },
+                "example": { "data": { "id": 6, "plaintext_key": "nu_app_…" } }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/KeyNotFound" },
+          "409": {
+            "description": "The key predates recovery support",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorEnvelope" },
+                "example": { "error": { "code": "PLAINTEXT_UNAVAILABLE", "message": "This key predates recovery support — rotate it to get a new copyable key." } }
+              }
+            }
+          },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      }
+    },
+    "/apps/{app}/api-keys/{key}/restrictions": {
+      "parameters": [
+        { "$ref": "#/components/parameters/App" },
+        { "$ref": "#/components/parameters/Key" }
+      ],
+      "patch": {
+        "tags": ["API keys"],
+        "operationId": "updateApiKeyRestrictions",
+        "summary": "Set or clear a key's client restrictions",
+        "description": "Locks a key to web origins / Android apps / iOS apps. An empty body clears every restriction (the key becomes unrestricted). Origins are scheme- and port-exact; http:// only for local hosts.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/KeyRestrictions" },
+              "example": {
+                "origins": ["https://app.example.com", "https://*.example.com"],
+                "android": [{ "package_name": "com.example.app", "sha256": ["AB:CD:…"] }],
+                "ios": [{ "bundle_id": "com.example.app" }]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "$ref": "#/components/responses/ApiKeyResponse" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/KeyNotFound" },
+          "422": { "$ref": "#/components/responses/ValidationFailed" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      }
+    },
+    "/apps/{app}/api-keys/{key}/revoke": {
+      "parameters": [
+        { "$ref": "#/components/parameters/App" },
+        { "$ref": "#/components/parameters/Key" }
+      ],
+      "post": {
+        "tags": ["API keys"],
+        "operationId": "revokeApiKey",
+        "summary": "Revoke an API key immediately",
+        "responses": {
+          "200": { "$ref": "#/components/responses/ApiKeyResponse" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/KeyNotFound" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      }
+    },
+    "/apps/{app}/api-keys/{key}/deprecate": {
+      "parameters": [
+        { "$ref": "#/components/parameters/App" },
+        { "$ref": "#/components/parameters/Key" }
+      ],
+      "post": {
+        "tags": ["API keys"],
+        "operationId": "deprecateApiKey",
+        "summary": "Mark an API key for retirement (it keeps working)",
+        "responses": {
+          "200": { "$ref": "#/components/responses/ApiKeyResponse" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/KeyNotFound" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      }
+    },
+    "/apps/{app}/signing-key": {
+      "parameters": [{ "$ref": "#/components/parameters/App" }],
+      "get": {
+        "tags": ["Signing key"],
+        "operationId": "getSigningKey",
+        "summary": "Get the app's signing key (public key + fingerprint)",
+        "description": "Absent = `{configured:false}`, a 200 — not a 404. The private key is never returned.",
+        "responses": {
+          "200": {
+            "description": "Signing-key status",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object", "properties": { "data": { "$ref": "#/components/schemas/SigningKey" } } },
+                "examples": {
+                  "absent": { "value": { "data": { "configured": false } } },
+                  "configured": {
+                    "value": {
+                      "data": {
+                        "configured": true,
+                        "id": 3,
+                        "name": "release",
+                        "public_key": "-----BEGIN PUBLIC KEY-----\n…",
+                        "fingerprint": "e3b0c44298fc1c14…",
+                        "status": "active",
+                        "created_at": "2026-06-01T10:00:00+00:00",
+                        "rotated_at": null
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      },
+      "post": {
+        "tags": ["Signing key"],
+        "operationId": "createSigningKey",
+        "summary": "Create the app's signing key",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "type": "object", "properties": { "name": { "type": ["string", "null"] } } },
+              "example": { "name": "release" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "$ref": "#/components/responses/SigningKeyResponse" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "409": {
+            "description": "The app already has an active signing key",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorEnvelope" },
+                "example": { "error": { "code": "SIGNING_KEY_EXISTS", "message": "This app already has an active signing key. Rotate it instead of creating another." } }
+              }
+            }
+          },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      }
+    },
+    "/apps/{app}/signing-key/rotate": {
+      "parameters": [{ "$ref": "#/components/parameters/App" }],
+      "post": {
+        "tags": ["Signing key"],
+        "operationId": "rotateSigningKey",
+        "summary": "Rotate the app's signing key",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "type": "object", "properties": { "name": { "type": ["string", "null"] } } },
+              "example": { "name": "release-2027" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "$ref": "#/components/responses/SigningKeyResponse" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "409": {
+            "description": "No active signing key to rotate",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorEnvelope" },
+                "example": { "error": { "code": "NO_ACTIVE_SIGNING_KEY", "message": "No active signing key to rotate. Create one first." } }
+              }
+            }
+          },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      }
+    },
+    "/apps/{app}/keystore": {
+      "parameters": [{ "$ref": "#/components/parameters/App" }],
+      "get": {
+        "tags": ["Keystore"],
+        "operationId": "getKeystore",
+        "summary": "Keystore backup metadata",
+        "description": "Absent = `{configured:false}`, a 200. Never returns the file contents.",
+        "responses": {
+          "200": {
+            "description": "Keystore metadata",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object", "properties": { "data": { "$ref": "#/components/schemas/KeystoreMeta" } } },
+                "examples": {
+                  "absent": { "value": { "data": { "configured": false } } },
+                  "configured": {
+                    "value": {
+                      "data": {
+                        "configured": true,
+                        "original_name": "example-release.zip",
+                        "size_bytes": 4821,
+                        "sha256": "e3b0c44298fc1c14…",
+                        "uploaded_at": "2026-07-16T09:00:00+00:00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      },
+      "post": {
+        "tags": ["Keystore"],
+        "operationId": "uploadKeystore",
+        "summary": "Upload or replace the keystore backup",
+        "description": "The file must be a .zip, at most 10 MB. Stored privately; uploading again replaces the previous backup.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["file"],
+                "properties": {
+                  "file": { "type": "string", "format": "binary", "description": "A .zip, max 10 MB." }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Stored — metadata returned",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object", "properties": { "data": { "$ref": "#/components/schemas/KeystoreMeta" } } }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "422": {
+            "description": "The file is not a .zip",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorEnvelope" },
+                "example": { "error": { "code": "KEYSTORE_MUST_BE_ZIP", "message": "The keystore backup must be a .zip file (zip your keystore before uploading — an added layer of protection)." } }
+              }
+            }
+          },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      },
+      "delete": {
+        "tags": ["Keystore"],
+        "operationId": "deleteKeystore",
+        "summary": "Delete the keystore backup",
+        "responses": {
+          "200": {
+            "description": "Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "data": { "type": "object", "properties": { "deleted": { "type": "boolean" } } } }
+                },
+                "example": { "data": { "deleted": true } }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      }
+    },
+    "/apps/{app}/keystore/download": {
+      "parameters": [{ "$ref": "#/components/parameters/App" }],
+      "get": {
+        "tags": ["Keystore"],
+        "operationId": "downloadKeystore",
+        "summary": "Download the keystore backup .zip",
+        "description": "Streams the stored .zip from private storage — no public URL is ever exposed.",
+        "responses": {
+          "200": {
+            "description": "The keystore .zip",
+            "content": { "application/zip": { "schema": { "type": "string", "format": "binary" } } }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": {
+            "description": "No keystore backup for this app (or the app is out of scope)",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorEnvelope" },
+                "example": { "error": { "code": "KEYSTORE_NOT_FOUND", "message": "No keystore backup for this app." } }
+              }
+            }
+          },
           "429": { "$ref": "#/components/responses/RateLimited" }
         }
       }
@@ -517,6 +1090,14 @@
         "schema": { "type": "integer" },
         "example": 42
       },
+      "Key": {
+        "name": "key",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "integer" },
+        "description": "Numeric API-key id.",
+        "example": 6
+      },
       "PerPage": {
         "name": "per_page",
         "in": "query",
@@ -538,6 +1119,79 @@
               "type": "object",
               "properties": { "data": { "$ref": "#/components/schemas/Build" } }
             }
+          }
+        }
+      },
+      "ApiKeyResponse": {
+        "description": "The API key, safe fields only",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": { "data": { "$ref": "#/components/schemas/ApiKeySafe" } }
+            }
+          }
+        }
+      },
+      "PlaintextKey": {
+        "description": "The API key including its full secret — shown here and on reveal only",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer" },
+                    "name": { "type": "string" },
+                    "status": { "type": "string" },
+                    "plaintext_key": { "type": "string", "description": "The full nu_app_… key." }
+                  }
+                }
+              }
+            },
+            "example": { "data": { "id": 6, "name": "production", "status": "active", "plaintext_key": "nu_app_…" } }
+          }
+        }
+      },
+      "SigningKeyResponse": {
+        "description": "The signing key, public fields only",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": { "data": { "$ref": "#/components/schemas/SigningKey" } }
+            }
+          }
+        }
+      },
+      "Deleted": {
+        "description": "Deleted",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "deleted": { "type": "boolean" },
+                    "id": { "type": "integer" }
+                  }
+                }
+              }
+            },
+            "example": { "data": { "deleted": true, "id": 12 } }
+          }
+        }
+      },
+      "KeyNotFound": {
+        "description": "API key absent, or the app is outside this token's scope",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ErrorEnvelope" },
+            "example": { "error": { "code": "KEY_NOT_FOUND", "message": "API key not found for this app." } }
           }
         }
       },
@@ -649,8 +1303,12 @@
           "name": { "type": "string" },
           "permissions": {
             "type": "array",
-            "items": { "type": "string", "enum": ["manage", "builds.delete"] },
-            "description": "The effective set. `manage` is implied by holding a valid token."
+            "items": { "type": "string", "enum": ["manage", "builds.delete", "apps.delete", "keys.delete"] },
+            "description": "The effective set. `manage` is implied by holding a valid token; the three delete permissions are opt-in."
+          },
+          "all_apps": {
+            "type": "boolean",
+            "description": "When true, the token reaches every app you own — including apps created later — and `apps` is just the current snapshot."
           },
           "apps": {
             "type": "array",
@@ -735,6 +1393,84 @@
           "last_page": { "type": "integer" },
           "per_page": { "type": "integer" },
           "total": { "type": "integer" }
+        }
+      },
+      "ApiKeySafe": {
+        "type": "object",
+        "description": "An app API key with safe fields only — never the secret.",
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "key_preview": { "type": "string", "description": "A masked preview, e.g. nu_app_9f…c2" },
+          "status": { "type": "string", "examples": ["active", "revoked", "deprecated"] },
+          "recoverable": { "type": "boolean", "description": "Whether reveal can return the plaintext." },
+          "restrictions": { "type": ["object", "null"], "additionalProperties": true },
+          "unrestricted": { "type": "boolean" },
+          "blocked_count": { "type": "integer" },
+          "last_blocked_at": { "type": ["string", "null"], "format": "date-time" },
+          "last_blocked_reason": { "type": ["string", "null"] },
+          "last_used_at": { "type": ["string", "null"], "format": "date-time" },
+          "rotated_at": { "type": ["string", "null"], "format": "date-time" },
+          "created_at": { "type": ["string", "null"], "format": "date-time" }
+        }
+      },
+      "KeyRestrictions": {
+        "type": "object",
+        "description": "Client restrictions for an API key. An empty object clears all restrictions.",
+        "properties": {
+          "origins": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Allowed web origins. Scheme- and port-exact; http:// only for local hosts. Exact host or https://*.example.com wildcard."
+          },
+          "android": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["package_name"],
+              "properties": {
+                "package_name": { "type": "string" },
+                "sha256": { "type": "array", "items": { "type": "string" } },
+                "sha1": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          },
+          "ios": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["bundle_id"],
+              "properties": {
+                "bundle_id": { "type": "string" },
+                "team_id": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "SigningKey": {
+        "type": "object",
+        "description": "Public fields only — the private key never leaves the server. When absent, only `configured: false` is returned.",
+        "properties": {
+          "configured": { "type": "boolean" },
+          "id": { "type": "integer" },
+          "name": { "type": ["string", "null"] },
+          "public_key": { "type": "string", "description": "PEM public key." },
+          "fingerprint": { "type": "string", "description": "SHA-256 of the public key." },
+          "status": { "type": "string" },
+          "created_at": { "type": ["string", "null"], "format": "date-time" },
+          "rotated_at": { "type": ["string", "null"], "format": "date-time" }
+        }
+      },
+      "KeystoreMeta": {
+        "type": "object",
+        "description": "Metadata of the private keystore .zip backup — never the file itself. When absent, only `configured: false` is returned.",
+        "properties": {
+          "configured": { "type": "boolean" },
+          "original_name": { "type": "string" },
+          "size_bytes": { "type": "integer" },
+          "sha256": { "type": "string" },
+          "uploaded_at": { "type": ["string", "null"], "format": "date-time" }
         }
       },
       "ErrorEnvelope": {
