@@ -1,16 +1,16 @@
 ---
 sidebar_position: 3
 title: keys generate — Generate signing key pair
-description: native-update keys generate produces an RSA-2048 / RSA-4096 / EC P-256 / EC P-384 key pair for bundle signing. The private key is chmod 600; the public key goes into your app's native-update config.
-keywords: [native-update keys generate, ota bundle signing keys, rsa 4096 capacitor, ec p-256 update signing, native-update private key]
+description: native-update keys generate produces an RSA-2048 or RSA-4096 key pair for RSA-SHA256 bundle signing. The private key is chmod 600; the public key goes into your app's native-update config.
+keywords: [native-update keys generate, ota bundle signing keys, rsa 4096 capacitor, native-update private key]
 last_update:
-  date: 2026-05-11
+  date: 2026-08-05
   author: Ahsan Mahmood
 ---
 
 # `keys generate` — Generate a bundle-signing key pair
 
-**`native-update keys generate` writes a fresh RSA or EC key pair to disk for OTA bundle signing.** The private key is used by your build pipeline (via [`bundle sign`](./bundle-sign)) to sign every release. The public key is shipped inside your app — the SDK uses it to verify every downloaded bundle before applying it.
+**`native-update keys generate` writes a fresh RSA key pair to disk for OTA bundle signing.** The private key is used by your build pipeline (via [`bundle sign`](./bundle-sign)) to sign every release. The public key is shipped inside your app — the SDK uses it to verify every downloaded bundle before applying it.
 
 Run this once at project setup, plus whenever you rotate keys (see the "Rotation" section below).
 
@@ -25,8 +25,8 @@ npx native-update keys generate [options]
 | Flag | Default | Description |
 |---|---|---|
 | `-o, --output <dir>` | `./keys` | Output directory. Created if missing (recursive). |
-| `-t, --type <type>` | `rsa` | Key algorithm. Accepted: `rsa`, `ec`. |
-| `-s, --size <size>` | `2048` | Key size. For `rsa`: `2048` or `4096`. For `ec`: `256` (P-256) or `384` (P-384). |
+| `-t, --type <type>` | `rsa` | Key algorithm. Only `rsa` is accepted. |
+| `-s, --size <size>` | `2048` | RSA modulus size: `2048` or `4096`. |
 | `-h, --help` | — | Print help and exit. |
 
 ## Output files
@@ -46,8 +46,6 @@ The CLI sets `chmod 0o600` on the private key automatically. On Windows, the chm
 |---|---|---|
 | `rsa --size 4096` | **Default for production.** Strongest mainstream option. | Signatures are ~512 bytes; signing is slower than RSA-2048. |
 | `rsa --size 2048` | The library default. Fine for most apps. | Slightly faster; weaker margin against future cryptanalysis than 4096. |
-| `ec --size 256` | When bundle size matters and you trust ECDSA. | Signatures are ~70-72 bytes (much smaller). Library support is broader for RSA. |
-| `ec --size 384` | High-security EC option. | Same trade-off as P-256, slightly slower. |
 
 When in doubt, use `rsa --size 4096`. The signature size difference (~440 bytes per bundle) is negligible next to a multi-megabyte JS bundle, and RSA support is universal.
 
@@ -69,10 +67,10 @@ npx native-update keys generate --type rsa --size 4096
 
 Recommended for any production deployment. Generation takes a few seconds — be patient.
 
-### EC P-256 pair in a custom directory
+### RSA pair in a custom directory
 
 ```bash
-npx native-update keys generate --type ec --size 256 --output ./.secrets
+npx native-update keys generate --type rsa --size 4096 --output ./.secrets
 ```
 
 Useful when you store secrets in a non-default folder or want to keep keys outside the default `keys/` path that `init` references.
@@ -105,8 +103,7 @@ Where you store the private key in production is your call — common choices: a
 | Error | Cause | Fix |
 |---|---|---|
 | `RSA key size must be 2048 or 4096` | Passed `--size 1024` or another unsupported value with `--type rsa`. | Use `2048` or `4096`. RSA-1024 is below modern security baselines. |
-| `EC key size must be 256 or 384` | Passed an unsupported curve hint with `--type ec`. | Use `256` (P-256 / prime256v1) or `384` (secp384r1). |
-| `Key type must be "rsa" or "ec"` | Passed something other than `rsa` / `ec` to `--type`. | Use `rsa` or `ec`. The CLI does not (currently) support Ed25519 / DSA. |
+| `Only RSA keys are supported by the RSA-SHA256 bundle contract` | Passed `--type ec` or another algorithm. | Use `--type rsa`. |
 | `Failed to generate keys: EACCES …` | Output directory is not writable. | Pick a writable `--output` directory, or `chmod +w` the existing one. |
 
 The command exits `1` on any of the above; otherwise it exits `0`.

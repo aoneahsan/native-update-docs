@@ -4,7 +4,7 @@ title: Live Update — Types
 description: TypeScript type reference for the Live Update API of native-update. Field-by-field breakdown of BundleInfo, SyncOptions, SyncResult, DownloadOptions, LatestVersion, CheckForUpdateResult, DownloadUpdateOptions, ValidateOptions, ValidationResult, and DeleteOptions.
 keywords: [native-update types, BundleInfo, SyncOptions, SyncResult, DownloadOptions, LatestVersion, ValidationResult]
 last_update:
-  date: 2026-05-10
+  date: 2026-08-05
   author: Ahsan Mahmood
 ---
 
@@ -154,6 +154,9 @@ Return value of [`getLatest()`](./methods#getlatest). All fields except `availab
 | `notes` | `string` | no | Release notes from the backend. |
 | `size` | `number` | no | Bundle size in bytes. |
 | `checksum` | `string` | no | Expected checksum (used by the next `downloadUpdate` call). |
+| `signature` | `string` | no | RSA-SHA256 signature over the bundle. |
+| `signatureAlgorithm` | `'RSA-SHA256'` | no | Wire signature algorithm. |
+| `delta` | `DeltaUpdateInfo` | no | Verified patch metadata when a patch exists for the current bundle. |
 
 ---
 
@@ -172,6 +175,19 @@ Return value of [`checkForUpdate()`](./methods#checkforupdate). Adds the device'
 | `size` | `number` | no | Bytes. |
 | `checksum` | `string` | no | Expected checksum. |
 | `signature` | `string` | no | Expected signature (when signed). |
+| `signatureAlgorithm` | `'RSA-SHA256'` | no | Wire signature algorithm. |
+| `delta` | `DeltaUpdateInfo` | no | Patch metadata, including source version, URL, size, and checksums. |
+
+### `DeltaUpdateInfo`
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `format` | `'NUDELTA/1'` | yes | Patch-format discriminator. |
+| `fromVersion` | `string` | yes | Active bundle version the patch applies to. |
+| `patchUrl` | `string` | yes | Short-lived signed HTTPS patch URL. |
+| `patchSize` | `number` | yes | Patch bytes. |
+| `patchChecksum` | `string` | yes | SHA-256 checksum of the patch document. |
+| `targetChecksum` | `string` | yes | SHA-256 checksum the reconstructed ZIP must match. |
 
 ---
 

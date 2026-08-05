@@ -4,7 +4,7 @@ title: Live Update — Overview
 description: The Live Update API ships JavaScript bundles to installed Capacitor apps over the air. Read this first before diving into method, type, enum, event, or config reference pages.
 keywords: [native-update live update, capacitor OTA api, live update overview, native-update sync, native-update bundle]
 last_update:
-  date: 2026-05-10
+  date: 2026-08-05
   author: Ahsan Mahmood
 ---
 
@@ -51,7 +51,7 @@ Every bundle on a device is in one of five states (formal definitions on the [En
 
 1. **App boots** with the bundle that shipped in the binary (or the most recently activated OTA bundle).
 2. **`sync()` is called** — typically in a startup hook, on resume, or by a background worker. The plugin asks your update server "what's the latest version on this channel for this app?".
-3. If an update is available, the plugin **downloads the bundle**, verifies its **checksum** (SHA-256 / SHA-512) and **signature** (RSA / ECDSA over the checksum), and stores it as `READY`.
+3. If an update is available, the plugin downloads a verified delta patch when possible (otherwise the full ZIP), verifies SHA-256 plus the RSA-SHA256 signature, and stores the bundle as `READY`.
 4. The bundle is **applied** based on the configured `UpdateStrategy`:
    - `IMMEDIATE` — reload the web view now
    - `BACKGROUND` — apply on next resume
@@ -69,7 +69,7 @@ The 20 methods organise around six concerns:
 | **Download** | `download`, `downloadUpdate`, `cancelDownload`, `cancelAllDownloads`, `isDownloading`, `getActiveDownloadCount` | Fetch the bundle bytes; inspect / cancel in-flight transfers. |
 | **Apply & rollback** | `set`, `reload`, `applyUpdate`, `reset`, `notifyAppReady` | Activate a downloaded bundle; mark the new bundle healthy; revert. |
 | **Inspect** | `current`, `list` | Read what is on the device. |
-| **Configure** | `setChannel`, `setUpdateUrl` | Switch channel or override the server URL at runtime. |
+| **Configure** | `setChannel`, `setUpdateUrl` | Switch channel; `setUpdateUrl` is a deprecated no-op because server configuration is locked. |
 | **Maintenance** | `delete`, `validateUpdate` | Garbage-collect old bundles; re-verify a stored bundle. |
 
 ## What every Live Update flow needs
@@ -105,7 +105,10 @@ If `notifyAppReady()` is not called within the first session on a new bundle, th
 
 ### Does it support delta updates?
 
-Not in v3. A single bundle download is a full ZIP of the web build. Delta updates are tracked for a future major.
+Yes. v4 can download a verified `NUDELTA/1` copy/literal patch when the backend has one for the device's
+current bundle. The client validates the patch checksum, source checksum, operation bounds, target size,
+and final target checksum, then verifies the normal bundle signature. Any patch failure automatically
+falls back to the signed full ZIP. Set `enableDeltaUpdates: false` to force full downloads.
 
 ### What channels ship by default?
 

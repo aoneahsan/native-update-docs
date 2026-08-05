@@ -4,7 +4,7 @@ title: bundle sign — Sign an OTA bundle with your private key
 description: native-update bundle sign produces an RSA-SHA256 signature of an OTA bundle and writes a sidecar .sig JSON file. The signed bundle and signature both upload to your backend; the device-side SDK verifies before applying.
 keywords: [native-update bundle sign, rsa sha256 ota signing, capacitor bundle signature, native-update sig sidecar]
 last_update:
-  date: 2026-05-11
+  date: 2026-08-05
   author: Ahsan Mahmood
 ---
 
@@ -131,7 +131,7 @@ npx native-update bundle verify ./bundle.signed.zip --key ./keys/public.pem
 
 ## Notes and limitations
 
-- **Algorithm is fixed.** `RSA-SHA256` is the only supported algorithm in v3.x. EC signing is not yet wired through `bundle sign` — open an issue if you need it.
+- **Algorithm is fixed.** `RSA-SHA256` is the only supported algorithm in v4.x. RSA 2048 and 4096-bit keys are supported; EC keys are rejected consistently by the CLI, backend, web, Android, and iOS verifiers.
 - **Bundle content is unchanged.** The signed ZIP is a byte-for-byte copy of the input (or the input file itself if no `--output` is passed and the names happen to match). The signature is the only new artifact.
 - **Reproducibility.** Signing the same bundle twice with the same key produces the same signature (deterministic RSA-SHA256 in Node's `crypto`).
 

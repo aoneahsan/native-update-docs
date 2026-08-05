@@ -87,12 +87,11 @@ interface SecurityConfig {
 | Type | `boolean` |
 | Default | `true` |
 
-When `true`, every URL passed to `download()` / `setUpdateUrl()` / `getLatest()` etc. is checked against `^https://`. HTTP URLs throw `INSECURE_URL`. Set to `false` only when running against a localhost dev server during development.
+Every server, bundle, and patch URL is required to use HTTPS. Setting this field to `false` is rejected;
+use a trusted local TLS endpoint or tunnel during development.
 
 ```typescript
-security: {
-  enforceHttps: import.meta.env.PROD,   // true in production, false in dev
-}
+security: { enforceHttps: true }
 ```
 
 ### `certificatePinning`

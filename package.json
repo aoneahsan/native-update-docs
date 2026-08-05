@@ -31,20 +31,23 @@
     "sync:raw": "node -e \"const fs=require('fs');fs.mkdirSync('static/raw',{recursive:true});const S=[['docs/public-api/overview.md','public-api-overview'],['docs/public-api/endpoints.md','public-api-endpoints'],['docs/public-api/async-jobs.md','public-api-async-jobs'],['docs/ai-integration.md','ai-integration'],['docs/changelog.md','changelog']];const M=[];for(const [src,name] of S){const t=fs.readFileSync(src,'utf8');let title=name,body=t;if(t.startsWith('---')){const end=t.indexOf('\\n---',3);if(end>=0){const fm=t.slice(3,end);const after=t.indexOf('\\n',end+1);body=t.slice(after+1);while(body.startsWith('\\n'))body=body.slice(1);const tl=fm.split('\\n').find(l=>l.startsWith('title:'));if(tl)title=tl.slice(6).trim();}}fs.writeFileSync('static/raw/'+name+'.md',body);M.push({name:name,path:'/raw/'+name+'.md',title:title,bytes:Buffer.byteLength(body)});}fs.writeFileSync('static/raw/manifest.json',JSON.stringify(M,null,2)+'\\n');console.log('synced static/raw/ ('+M.length+' files) + manifest.json');\""
   },
   "dependencies": {
-    "@docusaurus/core": "^3.10.1",
-    "@docusaurus/preset-classic": "^3.10.1",
-    "@docusaurus/theme-mermaid": "^3.10.1",
-    "@easyops-cn/docusaurus-search-local": "^0.55.2",
+    "@docusaurus/core": "^3.10.2",
+    "@docusaurus/plugin-content-docs": "^3.10.2",
+    "@docusaurus/preset-classic": "^3.10.2",
+    "@docusaurus/theme-common": "^3.10.2",
+    "@docusaurus/theme-mermaid": "^3.10.2",
+    "@easyops-cn/docusaurus-search-local": "^0.55.3",
     "@mdx-js/react": "^3.1.1",
     "clsx": "^2.1.1",
     "prism-react-renderer": "^2.4.1",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^3.10.1",
-    "@docusaurus/tsconfig": "^3.10.1",
-    "@docusaurus/types": "^3.10.1",
+    "@docusaurus/module-type-aliases": "^3.10.2",
+    "@docusaurus/tsconfig": "^3.10.2",
+    "@docusaurus/types": "^3.10.2",
+    "@types/react": "^19.2.18",
     "typescript": "~6.0.3"
   },
   "browserslist": {

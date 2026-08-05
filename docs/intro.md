@@ -4,7 +4,7 @@ title: Introduction
 description: native-update is a Capacitor plugin that ships over-the-air JavaScript bundle updates, in-app store update prompts, and native review prompts to mobile apps without rebuilding or resubmitting them.
 keywords: [capacitor, native-update, OTA, live updates, hot reload, app updates, in-app updates, app review, code-push alternative]
 last_update:
-  date: 2026-05-10
+  date: 2026-08-05
   author: Ahsan Mahmood
 ---
 
@@ -73,7 +73,7 @@ Yes. CodePush (now in maintenance mode under Microsoft AppCenter) shipped the sa
 
 ### Does it work on Capacitor 7 or 6?
 
-The current major (`v3.x`) requires Capacitor 8. The plugin's peer dependency in `package.json` is `@capacitor/core ^8.0.1`. Earlier Capacitor majors are not supported by v3 — older majors of this plugin existed for those, but they receive no further updates.
+The current major (`v4.x`) requires Capacitor 8. The plugin's peer dependency in `package.json` is `@capacitor/core ^8.0.1`. Earlier Capacitor majors are not supported by v4 — older majors of this plugin existed for those, but they receive no further updates.
 
 ### What does it cost?
 
@@ -85,7 +85,7 @@ OTA updates are explicitly permitted under both stores' guidelines as long as yo
 
 ### Can I sign bundles?
 
-Yes — and you should in production. The CLI ships `keys generate`, `bundle sign`, and `bundle verify` commands. Signatures are RSA or ECDSA over a SHA-256 / SHA-512 checksum of the bundle. The on-device verification happens inside the plugin before the bundle is ever loaded.
+Yes — and v4 requires signed updates by default. The CLI ships `keys generate`, `bundle sign`, and `bundle verify` commands. Every signer and verifier uses RSA-SHA256 (RSASSA-PKCS1-v1_5 with SHA-256); RSA 2048 and 4096-bit keys are supported. The on-device verification happens before the bundle is loaded.
 
 ### How do I roll back a bad update?
 

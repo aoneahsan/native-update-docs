@@ -13,15 +13,15 @@ Finish the real task fast + correctly FIRST; docs/trackers/sync are a footnote (
 | Repo | `native-update-docs` |
 | Status | All 10 docs batches COMPLETE — 58 `.md` pages, ~71k words (Diátaxis: Getting Started, SDK Reference, CLI, Backend, Platforms, Tutorials, How-to, Concepts). Flow CLOSED. |
 | Type | Docusaurus 3 documentation site (classic preset + Mermaid) |
-| Package manager | yarn@4.14.1 (NEVER npm/pnpm) |
+| Package manager | yarn@4.17.1 (NEVER npm/pnpm) |
 | Node | >=18 |
 | Author | Ahsan Mahmood ([aoneahsan@gmail.com](mailto:aoneahsan@gmail.com)) |
 | Live URL | https://nativeupdate-docs.aoneahsan.com (GitHub Pages — auto-deploy on push via `.github/workflows/deploy-docs.yml`) |
-| Source plugin | https://www.npmjs.com/package/native-update (parent npm `native-update` v3.0.1) |
+| Source plugin | https://www.npmjs.com/package/native-update (parent npm `native-update` v4.0.1) |
 | Sibling project | `/Users/pc/Documents/ahsan-work/code/production-projects/native-update/` (the plugin itself) |
 | Plan file | `native-update/docs/docs-site/plan.md` |
 | Tracker file | `native-update/docs/docs-site/tracker.json` |
-| Build gates (2026-05-29) | `yarn typecheck` exit 0 · `yarn build` (docusaurus/webpack → `./build`) exit 0 |
+| Build gates (2026-08-05) | `yarn typecheck` exit 0 · `yarn build` (docusaurus/webpack → `./build`) exit 0 |
 
 ## 3-Day Freshness Rule
 
@@ -31,7 +31,7 @@ This file must be reviewed every 3 days. Bump `Last Updated` and update the stat
 
 | Rule | Detail |
 |---|---|
-| Yarn only | Never `npm install` or `pnpm add`. The repo locks `packageManager: "yarn@4.14.1"`. |
+| Yarn only | Never `npm install` or `pnpm add`. The repo locks `packageManager: "yarn@4.17.1"`. |
 | No dev server in agent runs | Per global rule, the agent does not run `yarn start`. The user runs and tests. The agent runs `yarn build` and `yarn typecheck` to verify. |
 | Single source of truth | Every API fact MUST come from the `native-update` repo's `src/`, `cli/`, or `backend/` source. No invented method names, no hallucinated parameters. Read the source before documenting it. |
 | Honest framing | Say what the plugin does NOT do as clearly as what it does. No fabricated stats. Cite sources by name. |
@@ -88,7 +88,7 @@ Three tiers, each tool ONLY for its tier — for the best, most reproducible dev
 
 ## Package Upgrades: Use `npm-check-updates`
 
-For dependency upgrades use `npx -y npm-check-updates -u && yarn install` (latest STABLE), NOT `yarn upgrade --latest`. Full rule in global `~/.claude/CLAUDE.md`. Last applied: 2026-05-29 (all deps already at latest — `package.json` unchanged).
+For dependency upgrades use `npx -y npm-check-updates -u && yarn install` (latest STABLE), NOT `yarn upgrade --latest`. Full rule in global `~/.claude/CLAUDE.md`. Last applied: 2026-08-05 (Docusaurus 3.10.2, React 19.2.8, search-local 0.55.3; TypeScript remains 6.0.3 because Docusaurus 3.10.2's base config is not TypeScript 7 compatible).
 
 ## Share Feature — Web + Mobile Contract (IRON-SOLID)
 
@@ -101,7 +101,7 @@ Gitignore Last Verified: 2026-06-24
 
 ## Last Updated
 
-2026-05-29
+2026-08-05
 
 
 ## Sub-agents & Skills — Main-Context-First (IRON-SOLID)

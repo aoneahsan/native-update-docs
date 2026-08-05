@@ -8,8 +8,8 @@ Finish the real task fast + correctly FIRST; docs/trackers/sync are a footnote (
 
 ## TL;DR
 
-- Docusaurus 3 site for the `native-update` Capacitor plugin (https://www.npmjs.com/package/native-update, parent npm v3.0.1).
-- yarn only (`yarn@4.14.1`).
+- Docusaurus 3 site for the `native-update` Capacitor plugin (https://www.npmjs.com/package/native-update, parent npm v4.0.1).
+- yarn only (`yarn@4.17.1`).
 - Status: all 10 docs batches COMPLETE — 58 `.md` pages, ~71k words (Diátaxis). Flow CLOSED.
 - Live URL: https://nativeupdate-docs.aoneahsan.com (GitHub Pages — auto-deploy on push via `.github/workflows/deploy-docs.yml`).
 - Plan + tracker live in the sibling repo: `/Users/pc/Documents/ahsan-work/code/production-projects/native-update/docs/docs-site/`.
@@ -17,7 +17,7 @@ Finish the real task fast + correctly FIRST; docs/trackers/sync are a footnote (
 - Honest framing: no fabricated stats, no marketing claims unsupported by source code.
 - Every long page surfaces Ahsan Mahmood author credit via `.nu-author-card` div.
 - ONE commit per docs-site batch.
-- Build gates (2026-05-29): `yarn typecheck` exit 0 · `yarn build` exit 0.
+- Build gates (2026-08-05): `yarn typecheck` exit 0 · `yarn build` exit 0.
 
 ## Hard checks before editing
 
@@ -45,7 +45,7 @@ Three tiers, each tool ONLY for its tier — for the best, most reproducible dev
 
 ## Package Upgrades: Use `npm-check-updates`
 
-For dependency upgrades use `npx -y npm-check-updates -u && yarn install` (latest STABLE), NOT `yarn upgrade --latest`. Full rule in global `~/.claude/CLAUDE.md`. Last applied: 2026-05-29 (all deps already at latest — `package.json` unchanged).
+For dependency upgrades use `npx -y npm-check-updates -u && yarn install` (latest STABLE), NOT `yarn upgrade --latest`. Full rule in global `~/.claude/CLAUDE.md`. Last applied: 2026-08-05 (Docusaurus 3.10.2, React 19.2.8, search-local 0.55.3; TypeScript remains 6.0.3 because Docusaurus 3.10.2's base config is not TypeScript 7 compatible).
 
 ## Share Feature — Web + Mobile Contract (IRON-SOLID)
 
@@ -58,7 +58,7 @@ Gitignore Last Verified: 2026-06-24
 
 ## Last Updated
 
-2026-05-29
+2026-08-05
 
 
 ## Sub-agents & Skills — Main-Context-First (IRON-SOLID)

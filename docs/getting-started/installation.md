@@ -4,24 +4,25 @@ title: Installation
 description: Install the native-update Capacitor plugin into a new or existing Capacitor 8 project. Covers npm install, iOS pod install, Android sync, and verification.
 keywords: [native-update install, capacitor plugin install, native-update setup, OTA install]
 last_update:
-  date: 2026-05-10
+  date: 2026-08-05
   author: Ahsan Mahmood
 ---
 
 # Installation
 
-This guide installs `native-update` into an existing Capacitor 8 project. If you do not yet have a Capacitor project, create one first with the [official Capacitor docs](https://capacitorjs.com/docs/getting-started). The minimum supported environment is Node.js 18 and Capacitor 8.
+This guide installs `native-update` into an existing Capacitor 8 project. If you do not yet have a Capacitor project, create one first with the [official Capacitor docs](https://capacitorjs.com/docs/getting-started). The v4 baseline is Node.js 24.16+, Capacitor 8, iOS 14+, and Android API 26+.
 
 ## Prerequisites
 
 | Requirement | Minimum | Notes |
 |---|---|---|
-| Node.js | 18.0.0 | Test environment is Node 20 LTS. |
-| Yarn | 1.22+ or 4.x (recommended) | npm and pnpm work, but the project itself ships `yarn@4.10.3` and is tested with it. |
-| Capacitor | `@capacitor/core ^8.0.1` | Plugin's peer dependency. v7 and earlier are not supported by v3. |
+| Node.js | 24.16.0 | The package declares and CI verifies this minimum. |
+| Yarn | 4.x (recommended) | This project is locked to Yarn 4.17; package consumers may use their app's package manager. |
+| Capacitor | `@capacitor/core ^8.0.1` | Plugin's peer dependency. v7 and earlier are not supported by v4. |
 | Xcode | 15+ | Required only for iOS builds. Apple Silicon Macs supported. |
 | Android Studio | Hedgehog (2023.1) or newer | Required only for Android builds. |
-| JDK | 17 | Capacitor 8 requires JDK 17 for Android builds. |
+| JDK | 21 | Used by the Android build and CI. |
+| Android | API 26+ | The plugin compiles/targets API 36. |
 
 ## Step 1 — Add the package
 

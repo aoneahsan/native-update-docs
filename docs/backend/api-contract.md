@@ -121,11 +121,20 @@ The SDK accepts any of these `message` values; it only checks `available`. Reaso
   "downloadUrl": "https://updates.example.com/api/v1/bundles/42/download?signature=…&expires=…",
   "checksum": "5f3a…b8d1",
   "signature": "AbCdEf…==",
+  "signatureAlgorithm": "RSA-SHA256",
   "size": 1843921,
   "mandatory": false,
   "releaseNotes": "Bug fixes for the cart page.",
   "minNativeVersion": "1.0.0",
-  "expiresAt": "2026-05-11T13:04:56.000Z"
+  "expiresAt": "2026-08-05T13:04:56.000Z",
+  "delta": {
+    "format": "NUDELTA/1",
+    "fromVersion": "1.3.0",
+    "patchUrl": "https://updates.example.com/api/v1/delta-patches/7/download?signature=…&expires=…",
+    "patchSize": 241391,
+    "patchChecksum": "9f40…2c31",
+    "targetChecksum": "5f3a…b8d1"
+  }
 }
 ```
 
@@ -139,7 +148,9 @@ Field semantics:
 
 `checksum` (string, required for signature verification) — SHA-256 of the bundle ZIP, hex-encoded lowercase. The SDK re-hashes the downloaded ZIP and refuses to apply if the hashes don't match.
 
-`signature` (string, required for signed bundles) — RSA-SHA256 over the bundle bytes, base64-encoded. The SDK verifies against the public key compiled into the app via `native-update.config.js`'s `publicKey` field. Optional only if you ship without signature verification (not recommended).
+`signature` (string, required by default) — RSA-SHA256 over the bundle bytes, base64-encoded. The SDK verifies against the public key compiled into the app. Unsigned mode requires an explicit development escape hatch and remains disabled in native release builds.
+
+`signatureAlgorithm` (string, required when `signature` is present) — exactly `RSA-SHA256`.
 
 `size` (number, required) — bytes. Drives the download progress callback's percentage.
 
@@ -150,6 +161,9 @@ Field semantics:
 `minNativeVersion` (string, optional) — when set, the SDK compares it against `X-App-Version` and aborts if the device's store binary is older. Lets you ship JS that depends on native code from a newer store release.
 
 `expiresAt` (string, ISO 8601, optional) — the `downloadUrl` expiry timestamp. Purely informational from the SDK's side — the server enforces expiry, the SDK just doesn't bother retrying expired URLs.
+
+`delta` (object or `null`) — optional `NUDELTA/1` patch metadata for the device's current version. Patch and
+reconstructed-bundle integrity are verified independently; any failure falls back to `downloadUrl`.
 
 **Response (errors):**
 

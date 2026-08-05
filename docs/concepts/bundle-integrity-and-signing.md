@@ -92,7 +92,7 @@ RSA-SHA256 signatures are deterministic. Two signings of the same bundle with th
 
 The signature size penalty is negligible. An RSA-4096 signature is 512 bytes; an RSA-2048 signature is 256 bytes. Either is dwarfed by the bundle ZIP itself (typically multi-megabyte). Signature size only matters for ultra-bandwidth-constrained use cases that don't apply to mobile OTA.
 
-ECDSA (and Ed25519) are on the roadmap as opt-in algorithms via the `ChecksumAlgorithm` enum — they're already in the type system (`SHA256`, `SHA384`, `SHA512`, `MD5`, `CRC32`), and a future release will route them through to the verification path. Until then, default to RSA-4096 for new projects and RSA-2048 if you're size-constrained.
+No other signature algorithm is accepted by v4. Use RSA-4096 for new projects or RSA-2048 where signing and verification latency matters more; both use RSASSA-PKCS1-v1_5 with SHA-256.
 
 ## What you should walk away with
 

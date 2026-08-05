@@ -4,7 +4,7 @@ title: Quick Start
 description: Ship your first OTA update with native-update in five minutes — install, configure, sync, and listen for download progress events.
 keywords: [native-update quick start, capacitor OTA quick start, first OTA update, capacitor live update tutorial]
 last_update:
-  date: 2026-05-10
+  date: 2026-08-05
   author: Ahsan Mahmood
 ---
 
@@ -49,7 +49,7 @@ async function bootUpdates() {
     autoCheck: true,
     autoUpdate: false,                           // we listen and decide ourselves
     updateStrategy: 'BACKGROUND',
-    publicKey: '<your RSA / ECDSA public key PEM>',
+    publicKey: '<your RSA public key PEM>',
     requireSignature: true,
     checksumAlgorithm: 'SHA-256',
     checkInterval: 3600,                         // seconds; here, hourly
@@ -60,10 +60,10 @@ async function bootUpdates() {
 void bootUpdates();
 ```
 
-`initialize()` is idempotent — calling it twice with the same config is safe.
+Call `initialize()` once at boot. Configuration is locked afterward; call `reset()` before initializing again with different values.
 
 :::tip No server yet?
-You can point `serverUrl` at the hosted [Native Update SaaS](https://nativeupdate.aoneahsan.com) free tier, or run a local Express dev server with `npx native-update server start --port 4477` (CLI reference ships in Batch 5). To skip server setup entirely while you wire the UI, set `autoCheck: false` and call `NativeUpdate.sync()` manually with `NativeUpdate.setUpdateUrl(...)` pointing at a local file mock.
+You can point `serverUrl` at the hosted [Native Update SaaS](https://nativeupdate.aoneahsan.com) free tier, or expose a local Express server through a trusted HTTPS endpoint. `setUpdateUrl()` is intentionally a deprecated no-op; choose the HTTPS server during initialization.
 :::
 
 ## Step 2 — Notify the SDK that boot succeeded (`~30 sec`)

@@ -4,7 +4,7 @@ title: Live Update — Methods
 description: Complete reference for all 20 Live Update API methods in native-update. Each entry includes the TypeScript signature, parameters, return value, errors thrown, and a runnable example.
 keywords: [native-update methods, live update api, native-update sync, native-update download, native-update applyUpdate]
 last_update:
-  date: 2026-05-10
+  date: 2026-08-05
   author: Ahsan Mahmood
 ---
 
@@ -57,7 +57,7 @@ getLatest(): Promise<LatestVersion>
 
 Pure check. Asks the server about the latest bundle for the configured channel and returns metadata. Does **not** download.
 
-**Returns** [`LatestVersion`](./types#latestversion) — `available`, `version`, `url`, `mandatory`, `notes`, `size`, `checksum`.
+**Returns** [`LatestVersion`](./types#latestversion) — `available`, `version`, `url`, `mandatory`, `notes`, `size`, `checksum`, `signature`, `signatureAlgorithm`, and optional `delta` metadata.
 
 ```typescript
 const latest = await NativeUpdate.getLatest();
@@ -103,6 +103,8 @@ Low-level download with full control. You provide the URL, version, checksum, an
 | `options.version` | `string` | yes | Semver string, used to identify the bundle. |
 | `options.checksum` | `string` | yes | Hex digest using the configured `checksumAlgorithm`. |
 | `options.signature` | `string` | when `requireSignature: true` | Base64 signature over the checksum. |
+| `options.signatureAlgorithm` | `'RSA-SHA256'` | no | Explicit algorithm discriminator; no other value is accepted. |
+| `options.delta` | `DeltaUpdateInfo` | no | Verified patch metadata; failures automatically fall back to `options.url`. |
 | `options.maxRetries` | `number` | no | Override default retry count for this download. |
 | `options.timeout` | `number` | no | Override default timeout (ms). |
 
@@ -286,7 +288,9 @@ await NativeUpdate.setChannel('beta');  // user opts into beta
 setUpdateUrl(url: string): Promise<void>
 ```
 
-Override the configured `serverUrl` at runtime. Mostly useful for QA flows where you want to point a build at a staging server without rebuilding.
+Deprecated no-op retained for source compatibility. The update origin is locked after initialization to
+prevent a compromised WebView from repointing downloads. Call `reset()` and then `initialize()` with the new
+HTTPS `serverUrl`.
 
 ---
 
@@ -343,8 +347,8 @@ These come from the `UpdateErrorCode` enum and are the ones you are most likely 
 | `TIMEOUT_ERROR` | Default download timeout exceeded | Increase `timeout` in `DownloadOptions` or move to `BACKGROUND` strategy. |
 | `CHECKSUM_ERROR` / `VERIFICATION_ERROR` | Checksum mismatch | Re-sign and re-upload from the CLI. Report to your monitoring. |
 | `SIGNATURE_ERROR` | Public key cannot verify the signature | Confirm the public key in [config](./config) matches the private key used by `bundle sign`. |
-| `INSECURE_URL` | HTTP (not HTTPS) URL passed to download / setUpdateUrl | Use HTTPS. iOS would block it anyway. |
-| `SIZE_LIMIT_EXCEEDED` | Bundle exceeds `maxBundleSize` or platform cap | Slim the bundle (delta updates planned for a future major). |
+| `INSECURE_URL` | HTTP (not HTTPS) bundle or patch URL | Use HTTPS. iOS would block it anyway. |
+| `SIZE_LIMIT_EXCEEDED` | Bundle exceeds `maxBundleSize` or platform cap | Slim the bundle; v4 automatically uses a smaller verified delta when one is available. |
 | `STORAGE_ERROR` | Filesystem write failed (full disk, permissions) | Call `delete()` to free space; surface a "low storage" UI to the user. |
 
 ---

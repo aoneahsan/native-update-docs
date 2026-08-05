@@ -4,7 +4,7 @@ title: Android Platform Guide
 description: Everything you need to wire native-update into an Android Capacitor app — required permissions, manifest additions for background updates, WorkManager constraints, Play Core integration, ProGuard rules, signing setup, and Play Console-compliance pitfalls.
 keywords: [native-update android, capacitor android ota, workmanager background update, play core in-app update, proguard rules native update]
 last_update:
-  date: 2026-05-11
+  date: 2026-08-05
   author: Ahsan Mahmood
 ---
 
@@ -16,9 +16,9 @@ The integration work splits into four areas: SDK + permission setup, manifest ad
 
 ## Capacitor and Android-Gradle versions
 
-The plugin's `android/build.gradle` targets `minSdkVersion 22` (Android 5.1 Lollipop), `compileSdkVersion` to the latest stable, Kotlin 1.9.22, and uses Play Core 2.1.0 for in-app updates plus Play Review 2.0.1 for in-app reviews. Your host app's `android/app/build.gradle` should match or exceed these.
+The plugin's `android/build.gradle` targets `minSdkVersion 26`, `compileSdkVersion 36`, `targetSdkVersion 36`, Kotlin 2.2.20, and uses Play Core 2.1.0 for in-app updates plus Play Review 2.0.2 for in-app reviews. Your host app's `android/app/build.gradle` should match or exceed these.
 
-If you are on Capacitor 6 or 7, `npx cap sync android` resolves the plugin's gradle dependencies automatically. Capacitor 8 changes the artifact resolution slightly but the plugin works without modification. Mixing Capacitor majors between your host app and other plugins is the most common source of `Duplicate class` errors at build time — keep `@capacitor/core`, `@capacitor/android`, and `@capacitor/cli` on the same major version.
+v4 supports Capacitor 8 only. Mixing Capacitor majors between your host app and other plugins is the most common source of `Duplicate class` errors at build time — keep `@capacitor/core`, `@capacitor/android`, and `@capacitor/cli` on the same major version.
 
 ## Required permissions
 

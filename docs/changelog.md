@@ -12,6 +12,101 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.1] - 2026-08-05
+
+### Fixed
+
+- Excluded nested Yarn install state from the published tarball and made the normalized `bin` and
+  repository metadata explicit. Runtime code is unchanged from 4.0.0.
+
+## [4.0.0] - 2026-08-05
+
+### Added
+
+- **Real delta delivery.** The canonical backend generates deterministic `NUDELTA/1` copy/literal
+  patches from the last three compatible active builds, stores only patches smaller than 85% of the
+  full target archive, and advertises them on the existing update-check response. Web, Android, and
+  iOS validate the patch checksum, source checksum, operation bounds, target size, and final target
+  checksum; every failure falls back to the signed full bundle.
+- Active GitHub Actions gates for the plugin, website, Laravel backend, Android, iOS, CLI, examples,
+  dependency audits, publish-artifact inspection, and the no-source-map policy.
+- Focused TypeScript delta tests and Laravel reconstruction/signed-download tests; the backend suite
+  now contains 426 passing tests (1,253 assertions), alongside 83 Android plugin tests.
+
+### Changed
+
+- Requires Capacitor 8, Node.js 24.16+, Java 21, Android API 26+, Android compile/target SDK 36,
+  Gradle 8.14.5, and current supported dependencies across every monorepo unit.
+- Standardizes the wire and all verifiers on `RSA-SHA256` (RSASSA-PKCS1-v1_5 with SHA-256), matching
+  the backend signer. Removed false RSA-PSS/ECDSA fallback claims.
+- Configuration is immutable after initialization. `setUpdateUrl()` remains a deprecated no-op;
+  changing locked settings requires `reset()` followed by a new `initialize()`/`configure()` call.
+- Android sensitive configuration now uses a non-exportable Android Keystore AES-256-GCM key rather
+  than deprecated EncryptedSharedPreferences. iOS Keychain entries are device-only.
+- Reveal endpoints for retrievable API/access-token secrets are POST-only, rate-limited, audited,
+  and return no-store headers. Keystore replacement validates ZIP structure and uploads the new
+  private object before deleting the old one.
+
+### Fixed
+
+- Native bridge return/argument shape drift, omitted iOS bridge methods, double-resolved
+  initialization calls, nonfunctional background helper instances, fake worker responses, download
+  cancellation tracking, boot-time signed-ZIP deletion, and inconsistent HTTPS/host/path checks.
+- PayPal subscription plan changes now call the vendor-supported revise operation.
+- The published examples and marketing snippets now use the real package name, v4 configuration
+  shape, signed manifest fields, delta-aware download helper, and Capacitor 8 APIs.
+
+### Backend deploy required
+
+- Apply `2026_08_05_000001_create_delta_patches_table.php`, rebuild Laravel caches, restart PHP-FPM
+  when needed for OPcache, and verify `/api/version` returns `2026.08.05.1`.
+
+## [3.4.2] - 2026-07-25
+
+### Fixed
+
+- 🔴 **Android release builds failed for every consumer.** `android/build.gradle` called
+  `getDefaultProguardFile('proguard-android.txt')`, which the current Android Gradle Plugin hard-rejects
+  because that file bundles `-dontoptimize`. The call is evaluated at **configuration** time, so a
+  consuming app's `./gradlew :app:processReleaseManifest` and `bundleRelease` failed during evaluation of
+  `:native-update` — **even with `minifyEnabled false`**. Now uses `proguard-android-optimize.txt`, which
+  is what every other Capacitor plugin already uses. Consumers carrying a local yarn `patch:` for this can
+  drop it.
+
+### Changed
+
+- **README rewritten to the canonical package pattern** and renamed `Readme.md` → `README.md`. The
+  previous file shipped with no heading anchors across 24 sections, no table of contents, an internal
+  `## Current State` audit block, and relative links (`./LICENSE`, `./CONTRIBUTING.md`,
+  `./docs/deployment/…`) that are dead wherever npm renders the README outside the repository. Limitations,
+  Changelog and Keywords sections added; every link is now absolute and probed.
+- `funding` added; `description` shortened to match the README's one-line promise.
+- **`.npmignore` deleted.** It coexisted with the `files` allowlist, which silently wins — and it listed
+  `CHANGELOG.md`, which `files` explicitly ships. Proven inert before removal: packing with and without it
+  produced identical 136-file lists.
+
+## [3.4.1] - 2026-07-25
+
+### Fixed
+
+- 🔴 **`require('native-update')` returned an empty object.** Every CommonJS consumer got `{}` — no
+  error, just nothing — while ESM consumers got all 28 exports. `package.json` declares
+  `"type": "module"`, which makes Node treat **every `.js` file as ESM**, and the CommonJS artifact was
+  emitted as `dist/plugin.cjs.js`. That `.js` ending meant genuinely-CommonJS output (`exports.X = …`)
+  was loaded as an ES module, exposing no named exports. The artifact is now `dist/plugin.cjs`, whose
+  extension forces CommonJS regardless of `type`; `main` and `exports["."].require` updated to match.
+  Proven with identical bytes under two extensions in one directory: `.cjs` → 28 exports,
+  `.cjs.js` → 0. `dist/plugin.esm.js` is unaffected and stays ESM.
+- **`repository` pointed at the documentation site**, not a git remote, so `npm repo` and the registry's
+  Repository link did not lead to source. Now `git+https://github.com/aoneahsan/native-update.git` with
+  an explicit `"type": "git"`.
+- **`cli/CLAUDE.md` and `cli/AGENTS.md` were shipping inside the tarball.** Those are internal
+  agent-instruction files and have no business in a published package; the `files` entry `"cli/"` swept
+  them in. Excluded with `!**/CLAUDE.md` and `!**/AGENTS.md`. Tarball goes 138 → 136 files, with every
+  real artifact retained.
+
+No runtime behaviour changed for ESM consumers.
+
 ## [3.4.0] - 2026-07-23
 
 ### Added

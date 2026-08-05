@@ -4,7 +4,7 @@ title: Core — Lifecycle
 description: Reference for the core lifecycle methods of native-update — initialize, isInitialized, configure, reset, cleanup. Covers what each does, when to call it, and the ordering rules between them.
 keywords: [native-update initialize, isInitialized, NativeUpdate cleanup, native-update lifecycle, plugin lifecycle]
 last_update:
-  date: 2026-05-11
+  date: 2026-08-05
   author: Ahsan Mahmood
 ---
 
@@ -21,8 +21,8 @@ import type { PluginInitConfig, UpdateConfig } from 'native-update';
 |---|---|
 | [`initialize(config)`](#initialize) | Once at app boot, before any other plugin call |
 | [`isInitialized()`](#isinitialized) | Defensive checks; tests; debug screens |
-| [`configure(config)`](#configure) | Update non-startup config at runtime (channel switch, server URL change) |
-| [`reset()`](#reset) | Roll back live-update state to "binary default" |
+| [`configure(config)`](#configure) | Alternative first-time configuration shape; locked after initialization |
+| [`reset()`](#reset) | Clear downloaded bundles and configuration, then allow reinitialization |
 | [`cleanup()`](#cleanup) | Release resources before app shutdown / on logout |
 
 ---
@@ -39,7 +39,8 @@ The first call. Sets up storage, validates config, registers OS task identifiers
 
 **Throws** `INVALID_CONFIG` (required field missing or out of range), `STORAGE_ERROR` (cannot access app sandbox).
 
-**Idempotency** — safe to call multiple times with the same config. Calling with a *different* config replaces the prior configuration entirely.
+**Idempotency** — subsequent calls are ignored while initialized, even when values differ. To change locked
+configuration, call `reset()` and then `initialize()` again.
 
 ```typescript
 import { NativeUpdate, UpdateStrategy, ChecksumAlgorithm } from 'native-update';
@@ -68,22 +69,18 @@ Call `initialize()` from your app entry file (`src/main.ts`, `src/main.tsx`, `Ap
 ## `isInitialized()` {#isinitialized}
 
 ```typescript
-isInitialized(): boolean
+isInitialized(): Promise<boolean>
 ```
 
-Synchronous check. Returns `true` once `initialize()` has resolved. Useful in defensive code and in tests.
+Asynchronous check. Resolves `true` once `initialize()` has completed. Useful in defensive code and tests.
 
 ```typescript
-if (!NativeUpdate.isInitialized()) {
+if (!(await NativeUpdate.isInitialized())) {
   console.warn('[native-update] plugin not initialised yet');
   return;
 }
 await NativeUpdate.sync();
 ```
-
-This is the only synchronous method on the plugin; every other method returns a promise.
-
----
 
 ## `configure(config)` {#configure}
 
@@ -91,13 +88,9 @@ This is the only synchronous method on the plugin; every other method returns a 
 configure(config: UpdateConfig | { config: PluginInitConfig }): Promise<void>
 ```
 
-Replace runtime configuration without re-initialising. Use this when:
-
-- The user switches channels in your settings UI.
-- An A/B test flips the strategy from `BACKGROUND` to `IMMEDIATE`.
-- You receive a new public key from the server for key rotation.
-
-The two argument shapes accommodate two call styles:
+Configure and initialize the plugin using either accepted argument shape. This method is only valid before
+initialization; afterward it rejects with `INVALID_CONFIG` because update-server and trust settings are
+immutable for the session.
 
 ```typescript
 // Style A — pass a partial UpdateConfig directly:
@@ -107,9 +100,9 @@ await NativeUpdate.configure({ liveUpdate: { channel: 'beta' } });
 await NativeUpdate.configure({ config: { ...everything, channel: 'beta' } });
 ```
 
-Style A is the common one. Style B exists for parity with `initialize()` and is convenient when you keep your plugin config in a single object that you spread into both calls.
-
-For one-off per-call overrides (channel, update mode), the dedicated methods on `LiveUpdatePlugin` ([`setChannel`](../live-update/methods#setchannel), [`setUpdateUrl`](../live-update/methods#setupdateurl)) are simpler.
+Prefer `initialize()` for new code. `setChannel()` remains the supported runtime channel preference. To
+change server URL, API key, public key, allowed hosts, or signature policy, call `reset()` and initialize
+again. `setUpdateUrl()` is a deprecated no-op.
 
 ---
 
@@ -119,12 +112,9 @@ For one-off per-call overrides (channel, update mode), the dedicated methods on 
 reset(): Promise<void>
 ```
 
-Two distinct meanings depending on context:
-
-1. **On `LiveUpdatePlugin`** — rolls the device back to the binary-shipped bundle (the one that came with the App Store / Play Store install). All downloaded OTA bundles are deleted; the next launch boots from the original web assets. Use as a panic button for a corrupted bundle state.
-2. **On the core `NativeUpdatePlugin`** — clears persisted plugin state (last-check time, retry counters, cached bundle metadata) but does *not* delete bundles. Use for "reset to factory defaults" UI in your settings.
-
-The two `reset()` methods share the name for ergonomics on the combined `NativeUpdatePlugin` interface — calling `NativeUpdate.reset()` invokes the live-update reset (the more common operation). Power users who want the core-only reset can access `pluginManager.reset()` via the [`PluginManager`](#plugin-manager-power-user-export) export below.
+Cancels active downloads, deletes downloaded OTA bundles and cached versions, removes listeners, restores
+default configuration, and marks the plugin uninitialized. The app returns to its binary-shipped web bundle.
+Call `initialize()` afterward before using update methods again.
 
 ```typescript
 // Roll back to the binary's original bundle:

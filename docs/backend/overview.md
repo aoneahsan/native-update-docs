@@ -74,7 +74,7 @@ Migration between any two options is a single config change in your app (`server
 
 Every backend that claims to implement this contract honours the same conventions, because the device-side SDK encodes them in its parser. If you write your own, copy these behaviours exactly:
 
-The update check endpoint returns `{available: false, message: "..."}` when there is nothing to ship, never `404` or `null`. The check returns `200` even when no update is available — clients distinguish "no update" from "endpoint broken" by the response body, not by status. When an update IS available, the response carries `version`, `bundleId`, `downloadUrl`, `checksum`, `signature`, `size`, `mandatory`, `releaseNotes`, `minNativeVersion`, `expiresAt` — all required for the SDK to verify and apply the bundle.
+The update check endpoint returns `{available: false, message: "..."}` when there is nothing to ship, never `404` or `null`. The check returns `200` even when no update is available — clients distinguish "no update" from "endpoint broken" by the response body, not by status. When an update IS available, the response carries `version`, `bundleId`, `downloadUrl`, `checksum`, `signature`, `signatureAlgorithm`, `size`, `mandatory`, `releaseNotes`, `minNativeVersion`, `expiresAt`, plus optional `NUDELTA/1` patch metadata — the full URL always remains available as a fallback.
 
 The download URL must be short-lived and unguessable. The Laravel reference uses Laravel's signed routes with a 30-minute default TTL (`NATIVE_UPDATE_DOWNLOAD_URL_TTL_MINUTES`); your own implementation should use HMAC-signed query strings or pre-signed S3 URLs. Static `/bundles/<filename>` paths are fine for local dev only, never for production.
 

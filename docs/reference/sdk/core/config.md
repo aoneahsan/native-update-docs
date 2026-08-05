@@ -4,7 +4,7 @@ title: Core — Config (PluginInitConfig)
 description: Field-by-field reference for PluginInitConfig — the single configuration object passed to NativeUpdate.initialize() at app boot. Covers every flag across server, security, live-update, app-update, and review settings.
 keywords: [PluginInitConfig, NativeUpdate.initialize, native-update config, capacitor update config, apiKey, publicKey]
 last_update:
-  date: 2026-05-11
+  date: 2026-08-05
   author: Ahsan Mahmood
 ---
 
@@ -74,7 +74,7 @@ As of v2 the plugin does **not** persist the API key across sessions — the hos
 | Required | no |
 | Default | `[]` (every HTTPS host accepted) |
 
-Allow-list of hostnames for bundle downloads. Non-empty values are matched against the host of every download URL; mismatches throw `INSECURE_URL`. Use this as a belt-and-braces guard against misconfigured `setUpdateUrl()` calls.
+Allow-list of hostnames for bundle and delta-patch downloads. Non-empty values are matched against every download URL; mismatches throw `INSECURE_URL`. Server configuration is locked after initialization and `setUpdateUrl()` is a deprecated no-op.
 
 ---
 
@@ -128,9 +128,9 @@ How a `READY` bundle is applied. See [`UpdateStrategy`](../live-update/enums#upd
 |---|---|
 | Type | `boolean` |
 | Required | no |
-| Default | `false` |
+| Default | `true` |
 
-Set `true` in production. See [`LiveUpdateConfig.requireSignature`](../live-update/config#requiresignature).
+Signed updates are the default. Disabling them also requires `allowUnsignedDevelopmentUpdates: true`, and native release builds ignore that development escape hatch. See [`LiveUpdateConfig.requireSignature`](../live-update/config#requiresignature).
 
 ### `checksumAlgorithm`
 
@@ -177,6 +177,26 @@ Public key used to verify bundle signatures.
 | Default | `100 * 1024 * 1024` (100 MB) |
 
 Hard cap on bundle size. Bundles larger than this throw `SIZE_LIMIT_EXCEEDED` regardless of platform caps.
+
+### `maxUncompressedBundleSize`
+
+| | |
+|---|---|
+| Type | `number` (bytes) |
+| Required | no |
+| Default | `500 * 1024 * 1024` (500 MB) |
+
+Caps the total extracted ZIP size to prevent zip-bomb expansion.
+
+### `enableDeltaUpdates`
+
+| | |
+|---|---|
+| Type | `boolean` |
+| Required | no |
+| Default | `true` |
+
+Accept verified `NUDELTA/1` patches with automatic signed-full-bundle fallback.
 
 ### `downloadTimeout`
 

@@ -4,8 +4,6 @@ Quick reference for AI development agents (Claude Code, Cursor, Copilot, etc.) t
 
 ```bash
 yarn add native-update
-# or
-npm install native-update
 ```
 
 ## Core Concepts
@@ -32,6 +30,8 @@ await NativeUpdate.configure({
     // Sent as X-API-Key on every check. Mint/copy in the dashboard
     // (Apps → your app → API Keys). Supported here since v3.1.3.
     apiKey: 'nu_app_…',
+    publicKey: import.meta.env.VITE_NATIVE_UPDATE_PUBLIC_KEY,
+    requireSignature: true,
     channel: 'production', // e.g. 'development' | 'staging' | 'production'
     autoUpdate: true,
     updateStrategy: 'background', // 'immediate' | 'background' | 'manual'
@@ -52,15 +52,12 @@ if (result.status === 'UPDATE_INSTALLED') {
 }
 
 // Manual update flow
-const latest = await NativeUpdate.getLatest();
-if (latest.available && latest.url && latest.version && latest.checksum) {
-  const bundle = await NativeUpdate.download({
-    url: latest.url,
-    version: latest.version,
-    checksum: latest.checksum,
-  });
-  await NativeUpdate.set(bundle);
-  await NativeUpdate.reload();
+const latest = await NativeUpdate.checkForUpdate();
+if (latest.available) {
+  // Fetches the complete signed manifest and uses a compatible NUDELTA/1
+  // patch when available, with verified full-bundle fallback.
+  await NativeUpdate.downloadUpdate();
+  await NativeUpdate.applyUpdate();
 }
 
 // Notify app is stable after update (prevents auto-rollback)
@@ -75,7 +72,7 @@ import { NativeUpdate } from 'native-update';
 // Check for app store updates
 const updateInfo = await NativeUpdate.getAppUpdateInfo();
 if (updateInfo.updateAvailable) {
-  if (updateInfo.updatePriority >= 4) {
+  if ((updateInfo.updatePriority ?? 0) >= 4) {
     // Critical update - force immediate
     await NativeUpdate.performImmediateUpdate();
   } else {
@@ -117,7 +114,7 @@ if (eligibility.canRequest) {
 | `notifyAppReady()` | Mark update as stable | `Promise<void>` |
 | `getLatest()` | Check for latest version | `Promise<LatestVersion>` |
 | `setChannel(channel)` | Switch update channel | `Promise<void>` |
-| `setUpdateUrl(url)` | Set update server URL | `Promise<void>` |
+| `setUpdateUrl(url)` | Deprecated no-op; use reset + reinitialize | `Promise<void>` |
 
 ### App Update Methods
 
@@ -156,8 +153,12 @@ interface LiveUpdateConfig {
   channel?: string;                 // Update channel (default: 'production')
   autoUpdate?: boolean;             // Auto-check + apply updates
   updateStrategy?: 'immediate' | 'background' | 'manual';
-  publicKey?: string;               // Public key for signature verification
-  requireSignature?: boolean;       // Reject unsigned bundles
+  publicKey?: string;               // RSA public key for RSA-SHA256 verification
+  requireSignature?: boolean;       // Reject unsigned bundles (default: true)
+  allowUnsignedDevelopmentUpdates?: boolean; // Explicit debug-only escape hatch
+  enableDeltaUpdates?: boolean;     // Use verified NUDELTA/1 patches when available
+  maxBundleSize?: number;           // Maximum compressed download (default: 100 MiB)
+  maxUncompressedBundleSize?: number; // Native extraction cap (default: 500 MiB)
   checksumAlgorithm?: 'SHA-256' | 'SHA-512'; // (default: 'SHA-256')
   checkInterval?: number;           // Auto-check interval
 }
@@ -227,6 +228,15 @@ Response — `200` with `available: false` when there is no update, `200` with:
   "downloadUrl": "https://cdn.example.com/bundles/1.2.0.zip",
   "checksum": "sha256-hex...",
   "signature": "base64signature...",
+  "signatureAlgorithm": "RSA-SHA256",
+  "delta": {
+    "format": "NUDELTA/1",
+    "fromVersion": "1.1.0",
+    "patchUrl": "https://cdn.example.com/delta.json",
+    "patchSize": 32768,
+    "patchChecksum": "sha256-hex...",
+    "targetChecksum": "sha256-hex..."
+  },
   "size": 1048576,
   "mandatory": false,
   "releaseNotes": "Bug fixes and improvements"
@@ -513,7 +523,7 @@ Web platform supports checking for updates only. Actual OTA updates require nati
 ## Security Best Practices
 
 1. **Always use HTTPS** for update URLs
-2. **Enable signature verification** with RSA/ECDSA keys
+2. **Keep signature verification enabled** with an RSA key (`RSA-SHA256`, PKCS#1 v1.5)
 3. **Use checksums** to verify bundle integrity
 4. **Test rollback** scenarios before production
 5. **Implement `notifyAppReady()`** to prevent auto-rollback on stable updates
