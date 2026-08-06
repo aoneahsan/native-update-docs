@@ -3,6 +3,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.2] - 2026-08-06
+
+### Fixed
+
+- Prevent update checks from offering an active bundle whose semantic version is equal to or older
+  than the device's current bundle, with the public TypeScript helper enforcing the same rule as a
+  defense-in-depth check.
+- Report the Android binary `versionName` from `current()` while the default bundled web assets are
+  active, so a newly installed store build cannot be mistaken for version `1.0.0` and downgraded.
+
+### Backend deploy required
+
+- Deploy the update-check downgrade guard and verify `/api/version` returns `2026.08.06.2`.
+
 ## [4.0.1] - 2026-08-05
 
 ### Fixed
