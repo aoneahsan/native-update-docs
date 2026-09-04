@@ -4,7 +4,7 @@ title: Public API — Overview
 description: Manage your apps, builds, and releases over HTTP with a personal access token. Deploy from CI, a script, or an AI agent — the same things the dashboard does.
 keywords: [native-update public api, access token, ota deploy api, ci deploy capacitor, native update rest api]
 last_update:
-  date: 2026-07-23
+  date: 2026-09-04
   author: Ahsan Mahmood
 ---
 
@@ -53,7 +53,10 @@ or CI.
    rotate a signing key, back up a keystore — is always allowed.
 
 Copy the token from that page whenever you need it again, or **Rotate** to issue
-a new secret — rotating stops the old one immediately.
+a new secret — rotating stops the old one immediately. Reveal is rate limited to
+**10 per minute**, on its own budget: ordinary dashboard browsing does not spend
+it. A token minted before recoverable storage has no copy to show — rotate it,
+and store the new secret this time.
 
 :::note Access tokens are the one thing this API cannot touch
 Creating, rotating, and deleting a token stays in the dashboard, always — there
