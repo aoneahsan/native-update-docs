@@ -43,7 +43,10 @@ or CI.
    rotate a signing key, back up a keystore — is always allowed.
 
 Copy the token from that page whenever you need it again, or **Rotate** to issue
-a new secret — rotating stops the old one immediately.
+a new secret — rotating stops the old one immediately. Reveal is rate limited to
+**10 per minute**, on its own budget: ordinary dashboard browsing does not spend
+it. A token minted before recoverable storage has no copy to show — rotate it,
+and store the new secret this time.
 
 :::note Access tokens are the one thing this API cannot touch
 Creating, rotating, and deleting a token stays in the dashboard, always — there

@@ -3,7 +3,7 @@
     "name": "public-api-overview",
     "path": "/raw/public-api-overview.md",
     "title": "Public API — Overview",
-    "bytes": 5230
+    "bytes": 5454
   },
   {
     "name": "public-api-endpoints",
@@ -27,6 +27,6 @@
     "name": "changelog",
     "path": "/raw/changelog.md",
     "title": "Changelog",
-    "bytes": 44068
+    "bytes": 45793
   }
 ]

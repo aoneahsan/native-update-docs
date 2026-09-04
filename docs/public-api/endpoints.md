@@ -185,6 +185,7 @@ curl -X POST \
   -F "channel=production" \
   -F "release_notes=Bug fixes" \
   -F "rollout_percentage=10" \
+  -F "signature=$(python3 -c 'import json,sys;print(json.load(open("bundle.sig"))["signature"])')" \
   $NU/apps/com.example.app/builds
 ```
 
@@ -197,6 +198,22 @@ curl -X POST \
 | `min_native_version` | no | Minimum native app version |
 | `rollout_percentage` | no | 1–100, default 100 |
 | `mandatory` | no | `true` forces the update on eligible devices. Default `false` |
+| `signature` | no | Base64 detached signature of the bundle bytes, RSA-SHA256 (**4.1.0+**) |
+
+:::tip Signing: two models, and `signature` is the one that keeps your private key
+If the app has a **server-side signing key**, the server signs each bundle for you and you can ignore
+this field. If you sign **locally** — `native-update bundle sign`, keeping the private key and
+compiling the public half into your binary — send the resulting signature here. A value you send
+**wins over server-side signing** and is never replaced.
+
+The CLI does it for you: `deploy` picks up the `.sig` sitting beside the bundle automatically, and
+**refuses** to upload one whose recorded checksum does not cover the bundle being sent.
+
+The server does **not** verify your signature — it never has your public key. Verification happens on
+the device against the key compiled into your app, where a bad signature fails closed. Before 4.1.0
+there was no way to send one at all, so `requireSignature: true` could never be satisfied by the
+local model.
+:::
 
 ```json
 { "data": {
