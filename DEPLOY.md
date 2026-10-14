@@ -1,6 +1,6 @@
 # Deploying native-update-docs
 
-**Deploys are automatic.** Every push to `main` runs `.github/workflows/deploy-docs.yml`, which builds the site (typecheck + `docusaurus build` with `onBrokenLinks: 'throw'`) and publishes it to **GitHub Pages** at:
+**Deploys are automatic.** Every push to `main` runs `.github/workflows/deploy-pages.yml`, which builds the site and publishes it to **GitHub Pages** at:
 
 > **https://nativeupdate-docs.aoneahsan.com**
 
@@ -9,7 +9,7 @@ There is no manual deploy step and no Firebase involvement (the old Firebase Hos
 ## The normal flow
 
 ```bash
-cd /Users/pc/Documents/ahsan-work/code/production-projects/native-update-docs
+cd /home/ahsan/Documents/01-code/production-projects/nativeupdate-root/native-update-docs
 yarn sync:from-plugin        # after any plugin release: refresh plugin-version.json,
                              # docs/ai-integration.md, docs/changelog.md, llms-full version
 yarn typecheck && yarn build # same gate CI runs; onBrokenLinks throws on dead links
@@ -25,20 +25,20 @@ The site is live ~2 minutes after the run finishes.
 Re-run the workflow without a new commit:
 
 ```bash
-gh workflow run deploy-docs.yml --repo aoneahsan/native-update-docs
+gh workflow run deploy-pages.yml --repo aoneahsan/native-update-docs
 ```
 
 ## GitHub Pages configuration (already done — reference only)
 
 - Pages build type: `workflow` (GitHub Actions source), enabled via `gh api -X POST repos/aoneahsan/native-update-docs/pages -f build_type=workflow`.
-- Custom domain: `nativeupdate-docs.aoneahsan.com`, set via `gh api -X PUT repos/aoneahsan/native-update-docs/pages -f cname=nativeupdate-docs.aoneahsan.com -f build_type=workflow`. No `static/CNAME` file — Actions-source Pages ignores it.
+- Custom domain: `nativeupdate-docs.aoneahsan.com`, carried by the tracked `static/CNAME` file and configured in GitHub Pages.
 - DNS (Hostinger, aoneahsan.com zone): `CNAME nativeupdate-docs → aoneahsan.github.io` (TTL 300).
 - HTTPS enforced once the Let's Encrypt cert issued: `gh api -X PUT repos/aoneahsan/native-update-docs/pages -f cname=nativeupdate-docs.aoneahsan.com -F https_enforced=true`.
 - Inspect state anytime: `gh api repos/aoneahsan/native-update-docs/pages --jq '{status, cname, https_enforced, cert: .https_certificate.state}'`.
 
 ## Prerequisites (local)
 
-- Node ≥ 18 (Node 24 recommended — matches CI) and Yarn 4.x (`yarn.lock` is Berry format; the repo deliberately has NO `packageManager` field — do not add one).
+- Node ≥ 18 and Yarn 4.17.1, pinned in `package.json`; CI currently uses Node 20.
 - `gh` CLI authed as the owner for the Pages API commands above.
 
 ## Gotchas

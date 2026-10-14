@@ -1,94 +1,19 @@
-# AGENTS.md — native-update-docs
+# Native Update Docs — AGENTS.md
 
-Mirror of `CLAUDE.md` for non-Claude AI agents. See `CLAUDE.md` for the full canonical version. Both files MUST be kept in sync.
+Public Docusaurus documentation for the `native-update` Capacitor plugin. This is a separate public Git repository on `main`; the private product repository is at `../native-update/`.
 
-## Task Speed Over Docs (IRON-SOLID — BEHAVIORAL)
+## Context and ownership
 
-Finish the real task fast + correctly FIRST; docs/trackers/sync are a footnote (≤~20% of effort) — never let recording outpace the fix. HARD STOP when doc work outpaces the change → ship, then ONE line if anything. No new summary/status/completion files unless asked; edit/delete over add; delete stale docs. Full rule: `~/.claude/CLAUDE.md`. (Est. 2026-06-19)
+- Last fleet context review: 2026-10-14. Next routine review: 2026-11-13. The workspace tracker is authoritative; a material tree change or a proven stale instruction may trigger an earlier review.
+- Read `../native-update/docs/docs-site/tracker.json` for the completed ten-batch authoring flow. That seven-day batch cooldown is separate from this fleet context review.
+- Verify API descriptions against the sibling product's source. Never invent a capability, method, version, or statistic.
+- This repository uses Yarn 4.17.1, Node >=18, and `yarn.lock`. `package.json` pins the package manager.
 
-## TL;DR
+## Release and deploy
 
-- Docusaurus 3 site for the `native-update` Capacitor plugin (https://www.npmjs.com/package/native-update, parent npm v4.0.1).
-- yarn only (`yarn@4.17.1`).
-- Status: all 10 docs batches COMPLETE — 58 `.md` pages, ~71k words (Diátaxis). Flow CLOSED.
-- Live URL: https://nativeupdate-docs.aoneahsan.com (GitHub Pages — auto-deploy on push via `.github/workflows/deploy-docs.yml`).
-- Plan + tracker live in the sibling repo: `/Users/pc/Documents/ahsan-work/code/production-projects/native-update/docs/docs-site/`.
-- Re-run protocol: read `tracker.json` FIRST. Resume at lowest pending batch. Honour 7-day cooldown after final batch.
-- Honest framing: no fabricated stats, no marketing claims unsupported by source code.
-- Every long page surfaces Ahsan Mahmood author credit via `.nu-author-card` div.
-- ONE commit per docs-site batch.
-- Build gates (2026-08-05): `yarn typecheck` exit 0 · `yarn build` exit 0.
+- The product `package.json` is the version source. After a plugin release, run `yarn sync:from-plugin` here and commit its generated version and page changes. Current checked-in `plugin-version.json` is 4.1.0.
+- Run `yarn typecheck` and `yarn build`. Preview the built site with `yarn serve` before pushing visible changes.
+- A push to `main` runs `.github/workflows/deploy-pages.yml` and deploys GitHub Pages. The custom domain is carried by `static/CNAME`; see `DEPLOY.md`. Confirm the Actions run before calling the deploy complete.
+- Do not put secrets in this public repository.
 
-## Hard checks before editing
-
-1. Did you read `native-update/docs/docs-site/tracker.json`? If not, do that first.
-2. Do you have the source-of-truth file open for the API you are documenting? If you are about to write a method signature, you should have just read it from `native-update/src/definitions.ts`.
-3. Did you invoke the matching skills for this batch (per the skill-bindings table in `CLAUDE.md`)?
-
-## Portfolio Info File — Weekly Update Rule
-
-- Canonical portfolio info file: `/Users/pc/Documents/ahsan-work/ahsan-notebook/static/assets/personal/projects-info-as-portfolio-item/apps/NATIVE-UPDATE-DOCS_portfolio-info_2026-05-29.md`
-- Update at least once per week (and on any material change). Keep the last-updated date in the filename.
-- Keep a max-10-entry update history inside the file. On each refresh: prepend today's row, delete the previous dated file, write the new one.
-- Tracker: `/Users/pc/Documents/ahsan-work/code/docs/tracking/portfolio-info-files-update-tracker.json`
-- Note: this is the **docs-site** portfolio file (category `apps`). The parent npm plugin has a SEPARATE file under `packages/NATIVE-UPDATE_portfolio-info_*.md` — do not conflate them.
-- Last applied: 2026-05-29
-
-## Package Manager Hierarchy: nvm → npm (global) → yarn (local) (IRON-SOLID)
-
-Three tiers, each tool ONLY for its tier — for the best, most reproducible dev results:
-- **`nvm`** → install/update Node.js (which bundles `npm`): `nvm install --lts`. Use nvm to get/update `npm` itself.
-- **`npm`** → ALL global packages: `npm install -g yarn` (install yarn globally if missing) + `npm install -g <pkg>` (every other global CLI).
-- **`yarn`** → ALL local project work: `yarn`, `yarn add <pkg>`, `yarn add -D <pkg>` inside the project.
-
-❌ NEVER use `npm`/`pnpm` for LOCAL installs. NEVER use `pnpm` at all. ✅ Only `yarn.lock` in the project — delete `package-lock.json` and `pnpm-lock.yaml`.
-
-## Package Upgrades: Use `npm-check-updates`
-
-For dependency upgrades use `npx -y npm-check-updates -u && yarn install` (latest STABLE), NOT `yarn upgrade --latest`. Full rule in global `~/.claude/CLAUDE.md`. Last applied: 2026-08-05 (Docusaurus 3.10.2, React 19.2.8, search-local 0.55.3; TypeScript remains 6.0.3 because Docusaurus 3.10.2's base config is not TypeScript 7 compatible).
-
-## Share Feature — Web + Mobile Contract (IRON-SOLID)
-
-All user-facing "share" actions follow the global contract: **web** (any browser, incl. mobile web) opens an in-app `WebShareModal` — a social grid (X, Facebook, LinkedIn, WhatsApp, Telegram, Reddit, Email web-intents) + a copy-link button; **native** (Capacitor) uses the OS share sheet via `@capacitor/share`. The web-vs-native split is decided at button-click via `Capacitor.isNativePlatform()`. ❌ Never use `navigator.share` as the primary web path with a silent clipboard fallback. **Full spec: `~/.claude/rules/share-feature.md`.**
-
-## Gitignore Hygiene (IRON-SOLID)
-`.gitignore` stays current with the project structure — ignore only recoverable artifacts (build/`dist`/`www`/`node_modules`/logs/caches/IDE), never lose source. Custom rules always present: `*.ignore.*`, `project-record-ignore/`. This is a **PUBLIC** repo -> secrets/`.env`/keystores are NEVER tracked.
-Full rule + private/public protocol: `~/.claude/rules/project-config.md`.
-Gitignore Last Verified: 2026-06-24
-
-## Last Updated
-
-2026-08-05
-
-
-## Sub-agents & Skills — Main-Context-First (IRON-SOLID)
-Default/built-in sub-agents (`general-purpose`, `Explore`, `Plan`, `claude`, `fork`, …) do NOT have
-access to `/skills`, so delegating to them silently SKIPS the skills RULE #0 requires. Do all
-skill-relevant work in the **MAIN context**; use a sub-agent ONLY when a **custom** agent exists in
-`.claude/agents/` for that job; a default `Explore`/`Plan` agent is allowed ONLY for read-only,
-no-skill search/exploration. When a relevant skill is missing, **install/enable it** rather than
-proceeding skill-less. (Owner directive 2026-07-11; full text in `~/.claude/CLAUDE.md`.)
-
-## Canonical domain + deploy + governance (2026-07-14)
-
-- Canonical docs domain: **https://nativeupdate-docs.aoneahsan.com** (GitHub Pages, Actions build type; DNS = Hostinger CNAME `nativeupdate-docs` -> `aoneahsan.github.io`). Firebase config removed (was never deployed).
-- Deploys are AUTOMATIC on push to `main` (`.github/workflows/deploy-docs.yml`); runbook: `DEPLOY.md`. Never add a `packageManager` field (yarn.lock is Berry v4; CI pins Yarn 4.17.1 via Corepack).
-- **Version + synced content contract:** `plugin-version.json`, `docs/ai-integration.md`, `docs/changelog.md`, and the llms-full.txt version row are GENERATED by `yarn sync:from-plugin` from the sibling private plugin repo (single source of truth = native-update/package.json). Run it after EVERY plugin release, commit the result — never hand-edit those files or hardcode a version anywhere.
-- Public-repo governance applied per `~/.claude/rules/public-repo-governance.md`: main-branch ruleset (PR + 1 approval + `build` check; owner-admin-only bypass), root `CONTRIBUTING.md`, contributor-access issue template.
-
-<!-- RULE:main-context-model-workflow v2026-07-16 -->
-## Main-Context + Skills + Model Workflow (IRON-SOLID — CRITICAL)
-1. **NO default/built-in sub-agents** (`general-purpose`, `Explore`, `Plan`, `claude`, `fork`, …) for ANY work in
-   this project — they cannot invoke /skills, which RULE #0 makes mandatory. Do ALL work (planning, implementation,
-   review, exploration) in the MAIN context. A sub-agent is allowed ONLY when a CUSTOM agent exists in
-   `.claude/agents/` for that exact job.
-2. **Skills always:** before any task, scan the available-skills list and invoke EVERY relevant skill; if a needed
-   skill is missing, download/enable/install it (or use the nearest installed equivalent and say so) — never
-   proceed skill-less.
-3. **Model workflow:** PLAN and REVIEW on **Fable 5**; EXECUTE the approved plan on **Opus 4.8**. Plans in
-   `~/.claude/plans/`; multi-phase features keep a resumable tracker (`docs/features/<slug>/00-tracker.json`),
-   resumed rather than re-planned from zero.
-
-Global records (rules, policy, audit reports) live in the `ahsan-notebook` repo at
-`static/assets/claude-code/`; the `~/.claude/…` paths are symlinks into it. Full text: `~/.claude/CLAUDE.md`.
-(Owner directives 2026-07-11 / 2026-07-14; fleet-rolled 2026-07-16.)
+**Last updated:** 2026-10-14.
