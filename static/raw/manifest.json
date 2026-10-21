@@ -9,7 +9,7 @@
     "name": "public-api-endpoints",
     "path": "/raw/public-api-endpoints.md",
     "title": "Public API — Endpoints",
-    "bytes": 16500
+    "bytes": 17641
   },
   {
     "name": "public-api-async-jobs",
@@ -27,6 +27,6 @@
     "name": "changelog",
     "path": "/raw/changelog.md",
     "title": "Changelog",
-    "bytes": 45793
+    "bytes": 46179
   }
 ]
