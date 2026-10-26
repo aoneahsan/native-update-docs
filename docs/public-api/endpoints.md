@@ -5,7 +5,7 @@ description: Every route on the public management API, with curl examples — to
 keywords: [native-update api endpoints, ota upload api, create app api, api key management api, signing key api, keystore backup api, promote build api, rollout api, curl native update]
 last_update:
   date: 2026-07-23
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Endpoints

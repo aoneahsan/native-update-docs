@@ -5,7 +5,7 @@ description: Reference for the core lifecycle methods of native-update — initi
 keywords: [native-update initialize, isInitialized, NativeUpdate cleanup, native-update lifecycle, plugin lifecycle]
 last_update:
   date: 2026-08-05
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Core — Lifecycle
@@ -177,5 +177,5 @@ import { PluginManager } from 'native-update';
 ---
 
 <div className="nu-author-card">
-Lifecycle reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-11</strong>. Documented by <a href="https://aoneahsan.com">Ahsan Mahmood</a>.
+Lifecycle reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-11</strong>. Documented by the Native Update team.
 </div>

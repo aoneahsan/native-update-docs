@@ -5,7 +5,7 @@ description: The Live Update API ships JavaScript bundles to installed Capacitor
 keywords: [native-update live update, capacitor OTA api, live update overview, native-update sync, native-update bundle]
 last_update:
   date: 2026-08-05
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Live Update — Overview
@@ -82,12 +82,12 @@ Three things are non-negotiable in production:
 
 ## What it costs to use
 
-Nothing on the SDK side. The npm package is MIT-licensed. You either:
+Nothing on the SDK side: the npm package is free to use in the apps you build, under the [Native Update License](/about#license). For the server side you either:
 
-- **Self-host the backend** — the reference Laravel + Nova implementation in this repo is also MIT, deployable to any PHP host. Setup guide ships in **Batch 6** of this docs site.
-- **Use the hosted [Native Update SaaS](https://nativeupdate.aoneahsan.com)** — free tier covers small apps; paid tiers documented at the marketing site.
+- **Use the hosted [Native Update service](https://nativeupdate.aoneahsan.com)** — a Free plan covers small apps; paid plans are on its pricing page.
+- **Run your own server** that implements the [API Contract](/backend/api-contract).
 
-You do not pay per device check, per download, or per bundle, and there are no telemetry hooks that ship to a third-party.
+The SDK has no telemetry hooks that ship to a third party.
 
 ## Frequently asked questions
 
@@ -112,7 +112,7 @@ falls back to the signed full ZIP. Set `enableDeltaUpdates: false` to force full
 
 ### What channels ship by default?
 
-The SDK does not enforce a channel name list. Common conventions: `production`, `staging`, `beta`, `dev`. Backend resources usually allow free-form channel strings — inspect `BuildChannel` in the Nova admin to confirm what your backend allows.
+The SDK does not enforce a channel name list. Common conventions: `production`, `staging`, `beta`, `dev`. Backend resources usually allow free-form channel strings — check your app's channel list in the dashboard to confirm what your backend allows.
 
 ### Can I update on emulators / simulators?
 
@@ -121,5 +121,5 @@ Set `allowEmulator: true` in the [config](./config). It is `false` by default to
 ---
 
 <div className="nu-author-card">
-Reference pages by <a href="https://aoneahsan.com">Ahsan Mahmood</a>. Source of truth: <code>src/definitions.ts</code> in the plugin repo. Spot a discrepancy? <a href="https://github.com/aoneahsan/native-update-docs/issues">Open an issue</a>.
+Reference pages by the Native Update team. Source of truth: <code>src/definitions.ts</code> in the plugin repo. Spot a discrepancy? <a href="https://nativeupdate.aoneahsan.com/contact">Tell us</a>.
 </div>

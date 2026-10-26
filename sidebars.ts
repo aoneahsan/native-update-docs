@@ -125,10 +125,8 @@ const sidebars: SidebarsConfig = {
       collapsed: true,
       items: [
         'backend/overview',
-        'backend/laravel-nova-self-host',
         'backend/node-express-minimal',
         'backend/api-contract',
-        'backend/nova-admin-overview',
       ],
     },
     {
@@ -147,7 +145,6 @@ const sidebars: SidebarsConfig = {
       collapsed: true,
       items: [
         'tutorials/first-ota-update',
-        'tutorials/backend-first-walkthrough',
       ],
     },
     {

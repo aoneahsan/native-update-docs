@@ -5,7 +5,7 @@ description: A side-by-side comparison of the four update strategies native-upda
 keywords: [native-update update strategies, ota immediate vs background, capacitor on-app-start update, update timing strategies, native-update updateStrategy]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Update strategies compared
@@ -124,6 +124,6 @@ Both are on the maintainers' wishlist; file an issue with the use case if you ne
 - [SDK Reference → Live Update → Config](/reference/sdk/live-update/config) — the field-by-field `updateStrategy` definition.
 - [SDK Reference → Background Update → Overview](/reference/sdk/background-update/overview) — the background-pre-download pairing.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

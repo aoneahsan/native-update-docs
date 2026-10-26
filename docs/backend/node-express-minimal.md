@@ -5,18 +5,18 @@ description: The example-apps/node-express reference is the smallest backend tha
 keywords: [native-update node express, minimal ota backend, capacitor express server, native-update http contract example]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Node + Express Minimal Backend
 
 The `example-apps/node-express/` directory in the `native-update` repository is the smallest backend that satisfies the SDK's HTTP contract. It is one file (`index.js`, around 160 lines), with no auth, no signing-key handling, no rollout logic, and no database — bundle metadata persists in a JSON file. Read it as a reference for what the contract demands, not as a starting point for production.
 
-If you want a turn-key production backend, read [Self-Host Laravel + Nova](./laravel-nova-self-host). If you want a starting skeleton with TODO markers in your preferred framework, run the [`backend create`](/reference/cli/backend-create) CLI command. The Express example sits between those two — useful for explaining the contract by example, useful in your test environment, not useful in production as written.
+If you want a turn-key production backend, use the [hosted service](./overview#option-a--the-hosted-native-update-service). If you want a starting skeleton with TODO markers in your preferred framework, run the [`backend create`](/reference/cli/backend-create) CLI command. The Express example sits between those two — useful for explaining the contract by example, useful in your test environment, not useful in production as written.
 
 ## What it implements
 
-Four endpoints, plus a health check. Since v3.1.3 the example implements the **real wire contract** — the same path, headers, and response field names the hosted Laravel backend uses:
+Four endpoints, plus a health check. Since v3.1.3 the example implements the **real wire contract** — the same path, headers, and response field names the hosted service uses:
 
 | Method | Path | Maps to SDK call |
 |---|---|---|
@@ -83,7 +83,7 @@ The contract, as the example now demonstrates:
 
 `X-API-Key` header — required; `401` without it. The example accepts one static key; real backends bind keys to apps.
 
-`version` — the SemVer string identifying the bundle (canonical field name, matching the Laravel reference). The example only offers versions **greater than** the device's `X-Current-Version` (proper SemVer compare, not string inequality).
+`version` — the SemVer string identifying the bundle (canonical field name, matching the hosted service). The example only offers versions **greater than** the device's `X-Current-Version` (proper SemVer compare, not string inequality).
 
 `bundleId` — correlates analytics events back to a build.
 
@@ -99,7 +99,7 @@ The contract, as the example now demonstrates:
 
 `releaseNotes` — human-readable string. Surfaced to your in-app update prompt.
 
-Still missing compared to Laravel: `minNativeVersion` (binary-version gate) and `expiresAt` with signed download URLs (the Laravel reference uses a 30-minute signed-route TTL; the example serves static IDs forever — **for production, generate signed URLs**). The analytics endpoints are also skipped, as noted above.
+Still missing compared to the hosted service: `minNativeVersion` (binary-version gate) and `expiresAt` with signed download URLs (the hosted service uses a 30-minute signed-URL lifetime; the example serves static IDs forever — **for production, generate signed URLs**). The analytics endpoints are also skipped, as noted above.
 
 ### The download endpoint
 
@@ -116,9 +116,9 @@ app.get('/v1/bundles/:id/download', async (req, res) => {
 
 Three things to upgrade for production:
 
-The lookup is by raw ID, which means anyone who has ever seen any download URL can re-fetch it forever. Production deployments use signed URLs that expire — see Laravel's `URL::temporarySignedRoute` for the canonical pattern, or pre-signed S3 URLs.
+The lookup is by raw ID, which means anyone who has ever seen any download URL can re-fetch it forever. Production deployments use signed URLs that expire — use HMAC-signed query strings or pre-signed S3 URLs.
 
-`res.download(filePath)` sends `Content-Disposition: attachment` and lets Express handle range requests. Add `Content-Length` and an `X-Bundle-Checksum` header to match the Laravel reference — the SDK uses both for resumable downloads and integrity logging.
+`res.download(filePath)` sends `Content-Disposition: attachment` and lets Express handle range requests. Add `Content-Length` and an `X-Bundle-Checksum` header to match the hosted service — the SDK uses both for resumable downloads and integrity logging.
 
 No rate limiting. A leaked URL can be hammered. Add `express-rate-limit` keyed on the download token if you adopt this for anything customer-facing.
 
@@ -168,15 +168,15 @@ The example does not record the `.sig` sidecar — if you carry signing through,
 
 `getMetadata()` and `saveMetadata()` read and write `metadata.json` on every request. This is fine for a single-process dev server and breaks immediately on a multi-process deploy or under any concurrency — two simultaneous uploads race the file and the loser's metadata is lost.
 
-Replace with SQLite (one binary file, zero ops overhead, handles concurrent writes via WAL) for ~50 lines of extra code, or with Postgres / MySQL once you outgrow that. The Laravel reference uses MySQL by default.
+Replace with SQLite (one binary file, zero ops overhead, handles concurrent writes via WAL) for ~50 lines of extra code, or with Postgres / MySQL once you outgrow that. 
 
 ## Adapting this to other frameworks
 
 The contract is small enough that translating to Hono, Fastify, Koa, FastAPI, Echo, or Gin is a same-day exercise. Three things to carry over:
 
-The response shape from `/api/updates/check` is the contract surface — match Laravel's field names (`version`, `bundleId`, `downloadUrl`, `checksum`, `signature`, `size`, `mandatory`, `releaseNotes`, `minNativeVersion`, `expiresAt`) and the SDK will work without modification.
+The response shape from `/api/updates/check` is the contract surface — match the contract's field names (`version`, `bundleId`, `downloadUrl`, `checksum`, `signature`, `size`, `mandatory`, `releaseNotes`, `minNativeVersion`, `expiresAt`) and the SDK will work without modification.
 
-The download endpoint should stream the bundle (not load it into memory) and emit `Content-Type: application/zip` + `Content-Length` + an integrity header. The Laravel reference uses `X-Bundle-Checksum`; copy that header name.
+The download endpoint should stream the bundle (not load it into memory) and emit `Content-Type: application/zip` + `Content-Length` + an integrity header. The hosted service uses `X-Bundle-Checksum`; copy that header name.
 
 Authentication on the public SDK endpoints is via the `X-API-Key` header. Hash the key on the server, scope each key to one app, and rate-limit per-key. Never log full API keys.
 
@@ -192,10 +192,10 @@ More than one channel with different access patterns. Channel scoping wants real
 
 A staging-vs-production environment split where the same code runs in both. JSON-file persistence breaks horizontal scaling. Move to a real DB.
 
-Multiple customers (multi-tenant). At that point you should be reading the Laravel reference, not adapting the Express example.
+Multiple customers (multi-tenant). At that point, use the hosted service or design a real multi-tenant server; don't stretch the Express example.
 
 Any auditing / observability requirement. Bare Express has nothing — add `pino` or use a real framework.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

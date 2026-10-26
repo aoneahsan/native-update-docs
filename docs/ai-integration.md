@@ -216,7 +216,7 @@ const stateListener = await NativeUpdate.addListener('updateStateChanged', (even
 
 Easiest path: use the hosted backend at [nativeupdate.aoneahsan.com](https://nativeupdate.aoneahsan.com)
 (free dashboard — register the app, upload bundles, get the `serverUrl` + API key).
-Self-hosting instead? Your server must implement this contract
+Running your own server instead? It must implement this contract
 (full spec: [server requirements](https://nativeupdate-docs.aoneahsan.com/backend/overview)):
 
 ### GET {serverUrl}/v1/updates/check?channel={channel}

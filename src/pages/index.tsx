@@ -30,11 +30,11 @@ const FEATURES: Feature[] = [
   },
   {
     title: 'Bundle integrity & signing',
-    body: 'SHA-256 / SHA-512 checksums and RSA / ECDSA signatures. Public-key verification on device. Optional certificate pinning. Signing CLI included.',
+    body: 'SHA-256 / SHA-512 checksums and RSA-SHA256 signatures. Public-key verification on device. Optional certificate pinning. Signing CLI included.',
   },
   {
-    title: 'Reference Laravel + Nova backend',
-    body: 'Self-host the update server in minutes. The CLI scaffolds a Laravel + Nova admin you can deploy anywhere — or use the hosted Native Update SaaS if you prefer.',
+    title: 'Hosted service or your own server',
+    body: 'Use the hosted Native Update service, with its dashboard, rollouts and analytics, or point the plugin at your own server that implements the documented HTTP contract.',
   },
 ];
 
@@ -94,11 +94,10 @@ function AuthorStrip(): ReactNode {
     <section className={styles.authorStrip}>
       <div className="container">
         <p>
-          Built and maintained by{' '}
-          <Link href="https://aoneahsan.com">Ahsan Mahmood</Link> —{' '}
-          <Link href="https://linkedin.com/in/aoneahsan">LinkedIn</Link> ·{' '}
-          <Link href="https://github.com/aoneahsan">GitHub</Link> ·{' '}
-          <Link href="https://www.npmjs.com/~aoneahsan">npm</Link>
+          Built and maintained by the Native Update team —{' '}
+          <Link to="/about">About Native Update</Link> ·{' '}
+          <Link href="https://nativeupdate.aoneahsan.com/contact">Contact</Link> ·{' '}
+          <Link href="https://www.npmjs.com/package/native-update">npm</Link>
         </p>
       </div>
     </section>

@@ -5,7 +5,7 @@ description: native-update keys generate produces an RSA-2048 or RSA-4096 key pa
 keywords: [native-update keys generate, ota bundle signing keys, rsa 4096 capacitor, native-update private key]
 last_update:
   date: 2026-08-05
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # `keys generate` — Generate a bundle-signing key pair
@@ -123,6 +123,6 @@ A safer rotation pattern is to ship multiple public keys and have the SDK accept
 - It does not validate the keys after generation. You can run `bundle sign` + `bundle verify` end-to-end with a tiny test bundle if you want a smoke test.
 - It does not encrypt the private key with a passphrase. The PKCS#8 file is unprotected — protect it at the filesystem layer.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

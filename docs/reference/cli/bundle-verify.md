@@ -5,7 +5,7 @@ description: native-update bundle verify confirms an OTA bundle's RSA-SHA256 sig
 keywords: [native-update bundle verify, ota signature verification, capacitor bundle integrity, native-update ci safety net]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # `bundle verify` — Verify a signed bundle with your public key
@@ -127,6 +127,6 @@ The device-side SDK performs the same five steps, with the bundle on the device'
 - **No partial / streaming verify.** Verification reads the full bundle into memory. For a 100+ MB bundle this is fine on a build machine but worth noting.
 - **No support for detached signatures over chunks.** The signature covers the whole ZIP. If you need chunked verification for very large bundles, file an issue.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

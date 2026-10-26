@@ -5,14 +5,14 @@ description: native-update is a Capacitor plugin that ships over-the-air JavaScr
 keywords: [capacitor, native-update, OTA, live updates, hot reload, app updates, in-app updates, app review, code-push alternative]
 last_update:
   date: 2026-08-05
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Introduction
 
-**`native-update` is a Capacitor plugin that ships over-the-air (OTA) JavaScript bundle updates, in-app store update prompts, and native review prompts to mobile apps — without rebuilding or resubmitting them.** It is a single SDK that wraps the four most-asked-for production update flows for hybrid mobile apps, with a reference Laravel + Nova backend you can self-host or replace with any HTTP server that follows the documented contract.
+**`native-update` is a Capacitor plugin that ships over-the-air (OTA) JavaScript bundle updates, in-app store update prompts, and native review prompts to mobile apps — without rebuilding or resubmitting them.** It is a single SDK that wraps the four most-asked-for production update flows for hybrid mobile apps, and it talks to the hosted Native Update service or to your own server that implements the documented HTTP contract.
 
-The package lives on npm at [`native-update`](https://www.npmjs.com/package/native-update), is MIT-licensed, and is built and maintained by [Ahsan Mahmood](https://aoneahsan.com).
+The package lives on npm at [`native-update`](https://www.npmjs.com/package/native-update) and is built and maintained by the Native Update team. From 4.1.2 it ships under the proprietary Native Update License; earlier versions keep the license they were published with.
 
 ## What it does
 
@@ -29,15 +29,15 @@ All four areas share one configuration object, one event bus, one logger, and on
 
 - **Capacitor app teams** who want CodePush-like OTA on Capacitor 8 — without depending on Microsoft's deprecated AppCenter.
 - **React, Vue, Angular, and vanilla-JS Capacitor apps** — the SDK is framework-agnostic; examples are framework-specific.
-- **Teams that want to self-host the update server** — the reference Laravel + Nova backend is part of this project, the CLI scaffolds it, and the HTTP contract is fully documented.
-- **Teams that want a hosted SaaS** — the same SDK talks to the hosted [Native Update SaaS](https://nativeupdate.aoneahsan.com) at the flip of a config flag.
+- **Teams that want to run their own update server** — the HTTP contract is fully documented, and the CLI scaffolds a starter server you build on.
+- **Teams that want a hosted service** — the same SDK talks to the hosted [Native Update service](https://nativeupdate.aoneahsan.com) with one config change.
 
 ## What it is not
 
 Honesty matters more than marketing. Some explicit non-claims:
 
-- **Not a full CodePush drop-in.** The HTTP contract is different. A migration guide is shipped (Batch 8 of this docs site).
-- **Not a hosted service.** This SDK is one half of the system. You either self-host the backend (reference implementation in `backend/`) or subscribe to the hosted SaaS.
+- **Not a full CodePush drop-in.** The HTTP contract is different. There is a [migration guide](/how-to/migrate-from-codepush).
+- **Not the whole system on its own.** This SDK is one half. The other half is a server: the hosted Native Update service, or your own server that implements the documented contract.
 - **Not an installer for native binary updates.** "App update" here means "ask the OS to update the binary via the App Store / Play Store" — not "download and install an APK on the user's behalf."
 - **Not a replacement for App Store / Play Store review.** OTA updates are restricted to JavaScript, HTML, CSS, and bundled assets. Native code changes still require a store submission. This matches Apple's [App Store Review Guideline 4.7](https://developer.apple.com/app-store/review/guidelines/#4.7) and is the same constraint CodePush operates under.
 
@@ -50,7 +50,7 @@ flowchart LR
     A -- download + verify signature --> A
     A -- reload web view --> A
     C[CLI: bundle / sign / publish] --> B
-    D[Nova admin] --> B
+    D[Dashboard] --> B
 ```
 
 1. The CLI builds a bundle from your built web app (`dist/`, `build/`, etc.), strips dev junk, signs it with your private key, and uploads it.
@@ -60,8 +60,8 @@ flowchart LR
 ## Where to go next
 
 - **First time?** → [Installation](/getting-started/installation), then [Quick Start](/getting-started/quick-start) (5 minutes).
-- **Already installed?** Reference docs for *Live Update (Batch 2), App Update (Batch 3), App Review (Batch 3), Background Updates (Batch 4)* ship in subsequent docs batches.
-- **Building the backend?** → Backend setup guide (Batch 6).
+- **Already installed?** → the reference for [Live Update](/reference/sdk/live-update/overview), [App Update](/reference/sdk/app-update/overview), [App Review](/reference/sdk/app-review/overview) and [Background Updates](/reference/sdk/background-update/overview).
+- **Choosing a backend?** → [Backend overview](/backend/overview).
 
 ---
 
@@ -77,7 +77,7 @@ The current major (`v4.x`) requires Capacitor 8. The plugin's peer dependency in
 
 ### What does it cost?
 
-The npm package is **MIT-licensed and free**. The reference backend is also free to self-host. The hosted SaaS at [nativeupdate.aoneahsan.com](https://nativeupdate.aoneahsan.com) has a free tier and paid tiers documented at the marketing site. You can swap between self-hosted and SaaS with one config change.
+The npm package is free to install and use in the apps you build, under the Native Update License. The hosted service at [nativeupdate.aoneahsan.com](https://nativeupdate.aoneahsan.com) has a Free plan and paid plans listed on its pricing page. You can also point the plugin at your own server that implements the documented contract; switching is one config change.
 
 ### Will Apple / Google approve apps that use this?
 
@@ -89,18 +89,16 @@ Yes — and v4 requires signed updates by default. The CLI ships `keys generate`
 
 ### How do I roll back a bad update?
 
-`NativeUpdate.reset()` rolls the device back to the bundle that shipped with the App Store / Play Store binary. From the server side, marking a bundle inactive in the Nova admin (or via the API) prevents new downloads — devices that already downloaded it can still be told to reset via a server-driven command in the next sync response.
+`NativeUpdate.reset()` rolls the device back to the bundle that shipped with the App Store / Play Store binary. From the server side, marking a bundle inactive in the dashboard (or via the API) prevents new downloads — devices that already downloaded it can still be told to reset via a server-driven command in the next sync response.
 
 ### Where is the source code?
 
-The npm package source lives at the npm page for `native-update`. This documentation repo lives at [aoneahsan/native-update-docs](https://github.com/aoneahsan/native-update-docs). The plugin source GitHub repo is currently private — making the documentation repo public is one of the reasons this docs site exists.
+Native Update is a SaaS product, not open source. The published package, including its compiled code and type definitions, is on [npm](https://www.npmjs.com/package/native-update); the product source is private. This documentation site is the public reference.
 
 ---
 
 <div className="nu-author-card">
-<strong>About the author</strong>
+<strong>About Native Update</strong>
 
-This plugin and documentation are built and maintained by <a href="https://aoneahsan.com">Ahsan Mahmood</a> — Senior full-stack engineer, Capacitor / React / Laravel / Firebase specialist, author of <a href="https://www.npmjs.com/~aoneahsan">50+ npm packages</a>.
-
-Reach me at <a href="mailto:aoneahsan@gmail.com">aoneahsan@gmail.com</a> · <a href="https://linkedin.com/in/aoneahsan">LinkedIn</a> · <a href="https://github.com/aoneahsan">GitHub</a> · WhatsApp <a href="https://wa.me/923046619706">+92 304 6619706</a>.
+Native Update and this documentation are built and maintained by the Native Update team. Questions or a gap in these docs? Reach us through the <a href="https://nativeupdate.aoneahsan.com/contact">contact page</a>.
 </div>

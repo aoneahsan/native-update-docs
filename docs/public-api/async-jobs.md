@@ -5,7 +5,7 @@ description: Uploads return 202 with a job id. How the job lifecycle works, how 
 keywords: [native-update async jobs, 202 accepted, poll job status, ci deploy wait, ota build processing]
 last_update:
   date: 2026-07-16
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Queued jobs

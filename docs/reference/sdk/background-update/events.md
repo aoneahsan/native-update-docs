@@ -5,7 +5,7 @@ description: Event reference for the Background Update API of native-update — 
 keywords: [backgroundUpdateProgress, backgroundUpdateNotification, native-update background events]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Background Update — Events
@@ -147,5 +147,5 @@ await NativeUpdate.removeAllListeners();
 ---
 
 <div className="nu-author-card">
-Event reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-11</strong>. Documented by <a href="https://aoneahsan.com">Ahsan Mahmood</a>.
+Event reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-11</strong>. Documented by the Native Update team.
 </div>

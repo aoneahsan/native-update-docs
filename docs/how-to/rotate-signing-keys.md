@@ -5,7 +5,7 @@ description: How to introduce a new bundle-signing keypair while keeping bundles
 keywords: [native-update key rotation, ota signing key rotation, rotate rsa key capacitor, revoke signing key, native-update emergency revoke]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # How-to: Rotate signing keys without breaking active bundles
@@ -185,6 +185,6 @@ If you see `SIGNATURE_VERIFICATION_FAILED`, the device's installed binary does n
 - [SDK Reference → Security → Overview](/reference/sdk/security/overview) — the three-layer security model.
 - [CLI Reference → keys generate](/reference/cli/keys-generate) — keypair generation options.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

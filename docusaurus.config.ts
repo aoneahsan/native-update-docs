@@ -12,7 +12,7 @@ const BLOG_PATH = '/blog';
 
 // ---------------------------------------------------------------------------
 // Native Update — Documentation site config
-// Author: Ahsan Mahmood (https://aoneahsan.com)
+// Maintained by the Native Update team (https://nativeupdate.aoneahsan.com)
 // Source plugin: https://www.npmjs.com/package/native-update
 // ---------------------------------------------------------------------------
 
@@ -75,20 +75,13 @@ const config: Config = {
         name: 'Native Update Documentation',
         url: 'https://nativeupdate-docs.aoneahsan.com',
         description:
-          'Documentation for native-update, a Capacitor plugin for over-the-air bundle updates, in-app store update checks, and review prompts. Author: Ahsan Mahmood.',
-        inLanguage: 'en',
+          'Documentation for Native Update: the native-update Capacitor plugin and the hosted service for over-the-air bundle updates, in-app store update checks, and review prompts.',
+        inLanguage: 'en-US',
         publisher: {
-          '@type': 'Person',
-          name: 'Ahsan Mahmood',
-          url: 'https://aoneahsan.com',
-          email: 'aoneahsan@gmail.com',
-          sameAs: [
-            'https://linkedin.com/in/aoneahsan',
-            'https://github.com/aoneahsan',
-            'https://www.npmjs.com/~aoneahsan',
-          ],
+          '@type': 'Organization',
+          name: 'Native Update',
+          url: 'https://nativeupdate.aoneahsan.com',
         },
-        license: 'https://opensource.org/licenses/MIT',
       }),
     },
     {
@@ -110,14 +103,14 @@ const config: Config = {
         url: 'https://www.npmjs.com/package/native-update',
         sameAs: 'https://nativeupdate.aoneahsan.com',
         author: {
-          '@type': 'Person',
-          name: 'Ahsan Mahmood',
-          url: 'https://aoneahsan.com',
+          '@type': 'Organization',
+          name: 'Native Update',
+          url: 'https://nativeupdate.aoneahsan.com',
         },
         description:
-          'Capacitor plugin for over-the-air bundle updates, in-app store update checks, and platform-native review prompts. MIT-licensed.',
+          'Capacitor plugin for over-the-air bundle updates, in-app store update checks, and platform-native review prompts.',
         softwareVersion: pluginVersion.version,
-        license: 'https://opensource.org/licenses/MIT',
+        license: 'https://nativeupdate.aoneahsan.com/terms',
       }),
     },
     {
@@ -128,20 +121,9 @@ const config: Config = {
       innerHTML: JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'Organization',
-        name: 'Ahsan Mahmood',
-        alternateName: 'aoneahsan',
-        url: 'https://aoneahsan.com',
-        email: 'aoneahsan@gmail.com',
-        sameAs: [
-          'https://linkedin.com/in/aoneahsan',
-          'https://github.com/aoneahsan',
-          'https://www.npmjs.com/~aoneahsan',
-          'https://aoneahsan.com',
-        ],
-        founder: {
-          '@type': 'Person',
-          name: 'Ahsan Mahmood',
-        },
+        name: 'Native Update',
+        url: 'https://nativeupdate.aoneahsan.com',
+        sameAs: ['https://www.npmjs.com/package/native-update'],
       }),
     },
   ],
@@ -187,7 +169,7 @@ const config: Config = {
           routeBasePath: '/',
           editUrl: 'https://github.com/aoneahsan/native-update-docs/edit/main/',
           showLastUpdateTime: true,
-          showLastUpdateAuthor: true,
+          showLastUpdateAuthor: false,
           breadcrumbs: true,
         },
         // Release notes: one post per published release, its body the changelog entry for that version.
@@ -209,7 +191,7 @@ const config: Config = {
             xslt: true,
             title: 'Native Update releases',
             description: 'Release notes for each published version of native-update, newest first.',
-            copyright: `Copyright © ${new Date().getFullYear()} Ahsan Mahmood. native-update is MIT-licensed.`,
+            copyright: `Copyright © ${new Date().getFullYear()} Native Update.`,
             language: 'en-US',
           },
         },
@@ -231,14 +213,28 @@ const config: Config = {
   ],
 
   // `/sitemap` and `/feed` for people, and `/feed.xml` beside `/sitemap.xml` for machines.
-  plugins: [sitePages({ blogPath: BLOG_PATH })],
+  plugins: [
+    sitePages({ blogPath: BLOG_PATH }),
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        // Pages removed or moved on 2026-10-26: the backend is a hosted service, not self-hostable.
+        redirects: [
+          { from: '/backend/laravel-nova-self-host', to: '/backend/overview' },
+          { from: '/backend/nova-admin-overview', to: '/backend/overview' },
+          { from: '/tutorials/backend-first-walkthrough', to: '/tutorials/first-ota-update' },
+          { from: '/about-the-author', to: '/about' },
+        ],
+      },
+    ],
+  ],
 
   themeConfig: {
     image: 'img/social-card.svg',
     metadata: [
-      { name: 'description', content: 'Documentation for native-update — Capacitor plugin for over-the-air bundle updates, in-app store update checks, and review prompts. Maintained by Ahsan Mahmood.' },
+      { name: 'description', content: 'Documentation for native-update — Capacitor plugin for over-the-air bundle updates, in-app store update checks, and review prompts. Maintained by the Native Update team.' },
       { name: 'keywords', content: 'capacitor, native-update, OTA, live updates, hot reload, app updates, in-app updates, app review, code-push alternative, mobile updates, capacitor ota, capacitor live update, capacitor hot reload, capacitor over-the-air, capacitor update plugin' },
-      { name: 'author', content: 'Ahsan Mahmood' },
+      { name: 'author', content: 'Native Update team' },
       { name: 'robots', content: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' },
       { name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:creator', content: '@aoneahsan' },
@@ -248,7 +244,6 @@ const config: Config = {
       { property: 'og:locale', content: 'en_US' },
       { property: 'og:image:width', content: '1200' },
       { property: 'og:image:height', content: '630' },
-      { property: 'article:author', content: 'Ahsan Mahmood' },
     ],
     colorMode: {
       defaultMode: 'light',
@@ -283,18 +278,13 @@ const config: Config = {
           position: 'left',
         },
         {
-          to: '/about-the-author',
-          label: 'Author',
+          to: '/about',
+          label: 'About',
           position: 'right',
         },
         {
           href: 'https://www.npmjs.com/package/native-update',
           label: 'npm',
-          position: 'right',
-        },
-        {
-          href: 'https://github.com/aoneahsan/native-update-docs',
-          label: 'GitHub',
           position: 'right',
         },
       ],
@@ -315,7 +305,6 @@ const config: Config = {
           items: [
             { label: 'npm package', href: 'https://www.npmjs.com/package/native-update' },
             { label: 'Marketing site', href: 'https://nativeupdate.aoneahsan.com' },
-            { label: 'Docs source', href: 'https://github.com/aoneahsan/native-update-docs' },
           ],
         },
         {
@@ -332,16 +321,15 @@ const config: Config = {
           ],
         },
         {
-          title: 'Built by Ahsan Mahmood',
+          title: 'Native Update team',
           items: [
-            { label: 'aoneahsan.com', href: 'https://aoneahsan.com' },
-            { label: 'LinkedIn', href: 'https://linkedin.com/in/aoneahsan' },
-            { label: 'GitHub', href: 'https://github.com/aoneahsan' },
-            { label: 'npm packages', href: 'https://www.npmjs.com/~aoneahsan' },
+            { label: 'About Native Update', to: '/about' },
+            { label: 'Contact', href: 'https://nativeupdate.aoneahsan.com/contact' },
+            { label: 'Terms of Service', href: 'https://nativeupdate.aoneahsan.com/terms' },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Ahsan Mahmood. Built with Docusaurus. native-update is MIT-licensed.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Native Update. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,

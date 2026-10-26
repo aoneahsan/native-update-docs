@@ -5,7 +5,7 @@ description: A conceptual explanation of the two-layer integrity model native-up
 keywords: [bundle integrity, ota bundle signing, sha-256 checksum capacitor, rsa-sha256 signature, native-update trust chain]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Bundle integrity and signing
@@ -58,9 +58,9 @@ The **device** holds the public key, compiled into the app's binary at the last 
 
 The **CI** holds the private key, granted via secret-manager access controlled by your team. CI signs every bundle and emits the `.sig` sidecar.
 
-The **backend** holds the bundle bytes and the signature. It does not need to verify the signature on its own — that's the device's job — but the reference Laravel implementation does verify on upload as a sanity check, so a mis-signed bundle never gets to the device in the first place. The backend trusts the CI's signing process (because it has the matching public key registered for the app), but cannot impersonate the CI without stealing the private key.
+The **backend** holds the bundle bytes and the signature. It does not need to verify the signature on its own — that's the device's job — but the hosted service does verify on upload as a sanity check, so a mis-signed bundle never gets to the device in the first place. The backend trusts the CI's signing process (because it has the matching public key registered for the app), but cannot impersonate the CI without stealing the private key.
 
-The **CDN / object store** holds the bundle bytes and serves them via signed URLs. It does not need the private key at all. The Laravel reference uses Laravel's signed-route URLs over the bundle store; cloud-native deployments use S3 / R2 pre-signed URLs. Compromise here can break availability (the attacker can serve a 503) but cannot break integrity (the attacker cannot produce a bundle the device accepts).
+The **CDN / object store** holds the bundle bytes and serves them via signed URLs. It does not need the private key at all. The hosted service uses signed URLs over the bundle store; cloud-native deployments use S3 / R2 pre-signed URLs. Compromise here can break availability (the attacker can serve a 503) but cannot break integrity (the attacker cannot produce a bundle the device accepts).
 
 The **network** (anyone between device and CDN — ISPs, WiFi operators, captive portals, government intermediaries) sees the bundle bytes in transit. Without TLS pinning, a malicious intermediary can swap the bytes — but the swap fails signature verification on the device. With certificate pinning (see [SDK Reference → Security → Certificate Pinning](/reference/sdk/security/certificate-pinning)), even the swap attempt fails earlier, before the bytes reach the SDK.
 
@@ -110,6 +110,6 @@ Signing protects you from the bundle being malicious. It does not protect you fr
 - [SDK Reference → Security → Certificate Pinning](/reference/sdk/security/certificate-pinning) — adds transport-layer integrity on top of bundle-layer integrity.
 - [Rotate signing keys without breaking active bundles](/how-to/rotate-signing-keys) — the operational side of key management.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

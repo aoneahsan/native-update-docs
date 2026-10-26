@@ -5,7 +5,7 @@ description: The App Review API of native-update wraps Google Play In-App Review
 keywords: [native-update app review, capacitor in-app review, SKStoreReviewController, play in-app review, requestReview]
 last_update:
   date: 2026-05-10
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # App Review — Overview
@@ -118,5 +118,5 @@ The native prompt UI is localised by the OS based on the device's primary langua
 ---
 
 <div className="nu-author-card">
-Reference pages by <a href="https://aoneahsan.com">Ahsan Mahmood</a>. Source of truth: <code>src/definitions.ts</code> in the plugin repo.
+Reference pages by the Native Update team. Source of truth: <code>src/definitions.ts</code> in the plugin repo.
 </div>

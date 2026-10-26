@@ -5,17 +5,14 @@ description: native-update backend create generates a starter Express / Firebase
 keywords: [native-update backend create, capacitor ota backend template, native-update express scaffold, native-update firebase functions scaffold, native-update vercel scaffold]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # `backend create` — Scaffold an Express, Firebase, or Vercel backend
 
 **`native-update backend create <type>` generates a starter backend project that exposes the HTTP contract the SDK expects.** It is a **scaffold**, not turn-key code: bundle lookup, persistent storage, signature verification, and rollout gating are all left as `TODO[SCAFFOLD-IMPLEMENT-BEFORE-DEPLOY]` markers because the right answer depends on your storage and database choices.
 
-If you want production-ready references instead of a scaffold, use:
-
-- `example-apps/node-express/` — a minimal but working HTTP-contract reference
-- `backend/` — the full Laravel + Nova SaaS implementation that powers the hosted Native Update service
+If you want a working reference instead of a scaffold, read [Node + Express Minimal Backend](/backend/node-express-minimal), a minimal but working HTTP-contract reference. If you'd rather not run a server, use the hosted Native Update service.
 
 ## Synopsis
 
@@ -34,7 +31,7 @@ npx native-update backend create-backend <type> [options]
 
 | Type | Generates | Best for |
 |---|---|---|
-| `express` | A Node.js + Express 5 server with rate-limiting, CORS, JWT auth, multer uploads. | Self-hosting on a VPS, Render, Fly.io, Railway, etc. |
+| `express` | A Node.js + Express 5 server with rate-limiting, CORS, JWT auth, multer uploads. | Running your own server on a VPS, Render, Fly.io, Railway, etc. |
 | `firebase` | Firebase Functions handlers wired into the same contract. | Teams already on Firebase. |
 | `vercel` | Vercel serverless functions wired into the same contract. | Teams already on Vercel; small footprint. |
 
@@ -157,13 +154,12 @@ Next steps:
 ## When NOT to use this command
 
 - **If you want a working backend in 30 minutes**, do not start here. Clone `example-apps/node-express/`, point it at your storage of choice, and ship that. The scaffold takes longer because every TODO is a decision point.
-- **If you want a hosted backend with no code at all**, sign up for the hosted Native Update SaaS instead.
-- **If you are running Laravel already**, use the `backend/` reference in the main repo. It is a complete, production-deployed application with Nova admin, signing key rotation, rollouts, license management, and PayPal billing.
+- **If you want a hosted backend with no code at all**, sign up for the hosted Native Update service instead.
 
 ## Why is it only a scaffold?
 
-The HTTP contract is small (`GET /api/latest`, `POST /api/bundles`, `GET /api/stats`), but the choices behind it are large: which DB? which object store? which auth model? which rollout policy? Picking defaults for any of them would produce an implementation that fits ~30% of users and frustrates the other 70%. The scaffold leaves those decision points marked and references the two complete implementations so you can copy whichever fits.
+The HTTP contract is small (`GET /api/latest`, `POST /api/bundles`, `GET /api/stats`), but the choices behind it are large: which DB? which object store? which auth model? which rollout policy? Picking defaults for any of them would produce an implementation that fits ~30% of users and frustrates the other 70%. The scaffold leaves those decision points marked and points at the working Express reference so you can copy what fits.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

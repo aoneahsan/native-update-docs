@@ -5,7 +5,7 @@ description: How to use channels (production, staging, beta, canary) to route di
 keywords: [native-update channels, ota release channels, capacitor staging beta, native-update setChannel, ota canary release]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # How-to: Manage release channels
@@ -29,7 +29,7 @@ The plugin treats them as opaque strings — name them whatever fits your org.
 
 ## Step 1 — Declare your channels on the App
 
-In the dashboard (or via Nova for self-hosted) open your App and edit the `channels` field — a JSON array of channel names the app accepts. The default is `["production"]`. Add the others:
+In the dashboard (or your own server's admin) open your App and edit the `channels` field — a JSON array of channel names the app accepts. The default is `["production"]`. Add the others:
 
 ```json
 ["production", "staging", "beta", "canary"]
@@ -86,13 +86,13 @@ Promotion = uploading the same artifact to a higher-cadence channel. Two pattern
 
 **Re-upload.** Run `bundle create --channel production` on the same source tree, sign, upload. The simpler path, but the bundle hash differs (the timestamp in the metadata file changes), which slightly muddies the audit trail.
 
-**Re-tag in the dashboard.** Some backends (the Laravel reference includes this) expose a `promote` endpoint that copies a build row to a new channel without rebuilding. The hosted SaaS dashboard has a "Promote to production" button on the Build view. Re-tagging keeps the exact same artifact bytes — preferable for compliance-heavy environments.
+**Re-tag in the dashboard.** Some backends (the hosted service includes this) expose a `promote` endpoint that copies a build row to a new channel without rebuilding. The hosted SaaS dashboard has a "Promote to production" button on the Build view. Re-tagging keeps the exact same artifact bytes — preferable for compliance-heavy environments.
 
 ## Common pitfalls
 
 **Devices stuck on the wrong channel.** A user opts into `beta`, hates it, opts out — but `setChannel('production')` only takes effect on next launch. The current bundle stays on the device until a newer one ships on the new channel. Force the switch by also calling `NativeUpdate.reset()` after `setChannel()` — this resets to the bundled-with-app bundle and re-syncs.
 
-**Channel mismatch with API key.** Some backends scope API keys to specific channels (the Laravel reference does not by default). If yours does, devices using a production-only key fail `check` calls when on the `staging` channel. The fix is one API key per app, scoped to all channels — see [API Contract → API key requirements](/backend/api-contract#api-key-requirements).
+**Channel mismatch with API key.** Some backends scope API keys to specific channels (the hosted service does not by default). If yours does, devices using a production-only key fail `check` calls when on the `staging` channel. The fix is one API key per app, scoped to all channels — see [API Contract → API key requirements](/backend/api-contract#api-key-requirements).
 
 **Channel name typos.** `Beta` ≠ `beta`. The string match is case-sensitive everywhere — config, dashboard, CLI, SDK. Standardise on lowercase.
 
@@ -116,6 +116,6 @@ If the device shows `channel=production` in the request, the `setChannel()` call
 - [Roll back a bad bundle](./roll-back-bundle) — use channels to roll back without affecting other cohorts.
 - [SDK Reference → Live Update → Methods → setChannel](/reference/sdk/live-update/methods#setchannel) — full method signature.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

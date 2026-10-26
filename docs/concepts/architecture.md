@@ -5,7 +5,7 @@ description: A diagrammed walkthrough of how the native-update system is layered
 keywords: [native-update architecture, ota system architecture, capacitor live update diagram, native-update data flow, ota trust boundaries]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Architecture
@@ -20,9 +20,9 @@ Five components participate. Each has one job; the seams between them are intent
 
 The **CLI** runs on developer machines and on CI. It bundles, signs, and verifies. It never runs on a device and never talks to the backend at runtime — its work is purely a build-time prerequisite for everything else.
 
-The **backend** is whichever of the three options you picked: the hosted SaaS, the self-hosted Laravel + Nova reference, or a custom server speaking the same contract. It owns release metadata (which bundle is current for which channel), authentication (API keys + Firebase tokens for the dashboard), and analytics writes.
+The **backend** is whichever option you picked: the hosted Native Update service, or your own server speaking the same contract. It owns release metadata (which bundle is current for which channel), authentication (API keys for devices, a signed-in session for the dashboard), and analytics writes.
 
-The **object store** holds the raw bundle ZIPs. The hosted SaaS uses FilesHub; the self-hosted reference can use FilesHub, Google Drive, S3, R2, or local disk. The store is always behind a signed-URL gate — devices never get a permanent URL to a bundle.
+The **object store** holds the raw bundle ZIPs. The hosted service uses FilesHub; your own server can use any object store, such as S3 or R2, or local disk. The store is always behind a signed-URL gate — devices never get a permanent URL to a bundle.
 
 The **device SDK** is the JavaScript + native code running inside your Capacitor app. It calls the backend, downloads from the object store, verifies, stages, and applies. The TypeScript layer in `src/web.ts` runs in the WebView; the Kotlin layer in `android/src/main/java/com/aoneahsan/nativeupdate/*.kt` runs on Android; the Swift layer in `ios/Plugin/*.swift` runs on iOS.
 
@@ -170,7 +170,7 @@ Two things move independently and you should know how:
 
 The **device-side SDK version** is whatever was in the `native-update` npm package at the last app-store-release build. Updating the npm package and running `yarn build` only updates the bundle, not the SDK. The SDK only changes via app-store releases. This is why API-stable behavior matters so much: a bug-fix-only release of the SDK still requires an app-store cycle to reach devices.
 
-The **backend version** moves whenever you redeploy (for self-hosted) or whenever the SaaS rolls out (you don't control this). The wire contract is the union of "what every SDK version expects" — backends never drop fields, only add. New fields the older SDK doesn't read are harmless; missing fields the older SDK expects break it.
+The **backend version** moves whenever you redeploy (for your own server) or whenever the hosted service rolls out (you don't control this). The wire contract is the union of "what every SDK version expects" — backends never drop fields, only add. New fields the older SDK doesn't read are harmless; missing fields the older SDK expects break it.
 
 The intersection rule: the backend must support the oldest SDK version still in active use on user devices. For most apps, that's app-store releases from the last 6–12 months. For enterprise apps with slower-updating user bases, it can be years. Plan accordingly when changing the wire contract — see [API Contract](/backend/api-contract).
 
@@ -180,6 +180,6 @@ The intersection rule: the backend must support the oldest SDK version still in 
 - [Security model](./security-model) — the threats this architecture defends against.
 - [Backend → API Contract](/backend/api-contract) — the exact wire format between SDK and backend.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

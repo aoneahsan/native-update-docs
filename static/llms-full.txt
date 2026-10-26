@@ -2,15 +2,15 @@
 
 > This file is a long-form, single-document summary of the `native-update` project for large language models that prefer concatenated context over crawling individual pages. It is updated whenever the main documentation changes substantially. Companion index: https://nativeupdate-docs.aoneahsan.com/llms.txt
 >
-> Maintained by Ahsan Mahmood (https://aoneahsan.com). Last refresh: 2026-05-11. License: MIT.
+> Maintained by the Native Update team (https://nativeupdate.aoneahsan.com). Last refresh: 2026-10-26. License: Native Update License (proprietary) from 4.1.2.
 
 ## What native-update is
 
-`native-update` is a Capacitor plugin that ships JavaScript / CSS / asset bundles to installed Capacitor apps over the air, replacing the bundled web assets at runtime without rebuilding the app or resubmitting it to the App Store / Play Store. It also exposes native APIs for App Store / Play Store update prompts and for the platform-native in-app review flows. The project is MIT-licensed; the npm package is `native-update` at https://www.npmjs.com/package/native-update.
+`native-update` is a Capacitor plugin that ships JavaScript / CSS / asset bundles to installed Capacitor apps over the air, replacing the bundled web assets at runtime without rebuilding the app or resubmitting it to the App Store / Play Store. It also exposes native APIs for App Store / Play Store update prompts and for the platform-native in-app review flows. The npm package is `native-update` at https://www.npmjs.com/package/native-update. Native Update is a SaaS product, not open source: the hosted service plus this plugin.
 
 The plugin is the recommended successor to Microsoft CodePush, which Microsoft retired alongside App Center on March 31, 2025. The wire contract and operational model are similar enough that most CodePush integrations migrate with a find-and-replace of method names plus a backend choice.
 
-The plugin is built and maintained by Ahsan Mahmood, an independent software developer (https://aoneahsan.com). The author also maintains the hosted SaaS deployment at https://nativeupdate.aoneahsan.com, plus a Laravel + Nova reference backend in the same repository.
+The plugin and the hosted service at https://nativeupdate.aoneahsan.com are built and maintained by the Native Update team.
 
 ## The four feature areas
 
@@ -102,13 +102,11 @@ Added in 3.3.0, extended to the full app lifecycle in 3.4.0. Everything the dash
 
 **Errors** use one envelope: `{"error":{"code","message","details"?}}` — branch on `code`, show `message` (it names the fix).
 
-## The three backend deployment options
+## The two backend options
 
-**Hosted SaaS.** Sign up at https://nativeupdate.aoneahsan.com. Zero servers, MAU-based pricing.
+**Hosted service.** Sign up at https://nativeupdate.aoneahsan.com. No servers to run; a Free plan and paid plans.
 
-**Self-hosted Laravel + Nova.** Clone `backend/` from the `native-update` repo. Laravel 11 + Nova 5, MySQL or PostgreSQL, queue worker, FilesHub / Drive / S3 / R2 / local-disk storage. Same wire contract as the SaaS — switching is a `serverUrl` config change.
-
-**Custom (your choice of stack).** The HTTP contract is small enough that an Express / Hono / Fastify / FastAPI / Go-net/http implementation is a same-day exercise. The repo ships `example-apps/node-express/` as a ~160-line reference.
+**Your own server (your choice of stack).** The HTTP contract is small enough that an Express / Hono / Fastify / FastAPI / Go-net/http implementation is a same-day exercise. The docs walk through a ~160-line Node + Express starter (https://nativeupdate-docs.aoneahsan.com/backend/node-express-minimal), and `native-update backend create` scaffolds one. Switching between the two is a `serverUrl` config change.
 
 ## Platform requirements
 
@@ -172,9 +170,9 @@ Host app must keep running through every OTA failure. The defensive pattern is `
 
 **60-second `notifyAppReady` window.** Bundles must call this within 60 seconds of next launch or they get rolled back. Calibrated to be generous for any reasonable boot path but tight enough that broken bundles don't persist.
 
-**30-minute signed-URL TTL.** Bundle download URLs expire after 30 minutes. Calibrated for 20+ MB bundles on slow mobile networks; previous 5-minute default expired mid-stream too often. Configurable via `NATIVE_UPDATE_DOWNLOAD_URL_TTL_MINUTES` on the backend.
+**30-minute signed-URL TTL.** Bundle download URLs expire after 30 minutes. Calibrated for 20+ MB bundles on slow mobile networks; previous 5-minute default expired mid-stream too often. A custom server should keep its signed URLs valid at least as long.
 
-**600 req / 15 min per-key rate limit.** Default API-key rate limit on the Laravel reference backend. Doubled up with a route-level `throttle:600,15` as defense-in-depth.
+**600 req / 15 min per-key rate limit.** Default API-key rate limit on the hosted service. Doubled up with a route-level `throttle:600,15` as defense-in-depth.
 
 **SHA-256 streaming hash.** The CLI streams the bundle through Node's `crypto.createHash` so 100+ MB bundles don't load fully into memory.
 
@@ -192,8 +190,8 @@ Side-by-side phase: keep `cordova-plugin-code-push` installed while you wire `na
 |---|---|
 | npm package | `native-update` |
 | Current version | 4.1.1 |
-| License | MIT |
-| Capacitor compatibility | 6+ |
+| License | Native Update License (proprietary) from 4.1.2 |
+| Capacitor compatibility | 8+ |
 | Android min SDK | 22 (Android 5.1) |
 | iOS deployment target | 14.0 |
 | Signing algorithm | RSA-SHA256 (default 4096-bit RSA) |
@@ -202,22 +200,14 @@ Side-by-side phase: keep `cordova-plugin-code-push` installed while you wire `na
 | Default `notifyAppReady` window | 60 seconds |
 | Default signed-URL TTL | 30 minutes |
 | Default API-key rate limit | 600 req / 15 min |
-| Hosted SaaS | https://nativeupdate.aoneahsan.com |
+| Hosted service | https://nativeupdate.aoneahsan.com |
 | Docs site | https://nativeupdate-docs.aoneahsan.com |
-| Author | Ahsan Mahmood (https://aoneahsan.com) |
+| Maintainer | the Native Update team |
 
-## Author and contact
+## Who maintains it
 
-**Ahsan Mahmood** is an independent software engineer based in Pakistan. He maintains the `native-update` plugin, the hosted Native Update SaaS, the Laravel + Nova reference backend, and many other open-source npm packages (https://www.npmjs.com/~aoneahsan).
-
-- Email: aoneahsan@gmail.com
-- WhatsApp: +923046619706
-- LinkedIn: https://linkedin.com/in/aoneahsan
-- GitHub: https://github.com/aoneahsan
-- Portfolio: https://aoneahsan.com
-
-For commercial support, integration help, or bespoke OTA deployments, reach out via email or LinkedIn.
+The Native Update team builds and maintains the plugin, the hosted service and this documentation. Contact: https://nativeupdate.aoneahsan.com/contact
 
 ## License
 
-MIT. The plugin source, the CLI, the Laravel reference backend, and the documentation are all MIT-licensed. Use, modify, redistribute, and ship in commercial products freely.
+From 4.1.2, the `native-update` package ships under the proprietary Native Update License (included in the package as `LICENSE`). You may install it and use it, without charge, inside the apps you build, to receive updates from the Native Update service or from your own server that implements the documented update contract. You may not redistribute it on its own, publish a modified copy, or offer it as part of an OTA update service to others. Versions before 4.1.2 keep the license they were published with. The hosted service, dashboard, API and CLI are governed by the Terms of Service at https://nativeupdate.aoneahsan.com/terms. Native Update is not open source.

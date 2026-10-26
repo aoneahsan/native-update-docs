@@ -5,7 +5,7 @@ description: Reference for the two App Review API methods in native-update — r
 keywords: [requestReview, canRequestReview, ReviewResult, CanRequestReviewResult, native-update app review methods]
 last_update:
   date: 2026-05-10
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # App Review — Methods
@@ -126,5 +126,5 @@ The full code list ships with the security reference in **Batch 4**.
 ---
 
 <div className="nu-author-card">
-Method reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-10</strong>. Documented by <a href="https://aoneahsan.com">Ahsan Mahmood</a>.
+Method reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-10</strong>. Documented by the Native Update team.
 </div>

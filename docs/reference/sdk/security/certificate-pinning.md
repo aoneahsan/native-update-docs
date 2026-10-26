@@ -5,7 +5,7 @@ description: Reference for the CertificatePinning and CertificatePin types in na
 keywords: [certificate pinning, native-update TLS, CertificatePin, SHA-256 pin, update server pinning, MITM defence]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Security — Certificate Pinning
@@ -152,5 +152,5 @@ Yes — captive portals MITM the connection by design, so a pin check fails. The
 ---
 
 <div className="nu-author-card">
-Reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-11</strong>. Documented by <a href="https://aoneahsan.com">Ahsan Mahmood</a>.
+Reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-11</strong>. Documented by the Native Update team.
 </div>

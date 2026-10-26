@@ -5,7 +5,7 @@ description: Ship your first OTA update with native-update in five minutes — i
 keywords: [native-update quick start, capacitor OTA quick start, first OTA update, capacitor live update tutorial]
 last_update:
   date: 2026-08-05
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Quick Start
@@ -162,8 +162,7 @@ npx native-update bundle sign \
   --algorithm SHA-256
 
 # 3. Upload to your server
-#    - If self-hosted Laravel + Nova: drag the .zip into the Nova "New Build" form
-#    - If hosted SaaS: same flow at https://nativeupdate.aoneahsan.com/dashboard
+#    - If hosted service: upload it in the dashboard at https://nativeupdate.aoneahsan.com/dashboard
 #    - If your own backend: POST the file + signature to your /v1/bundles endpoint
 
 # 4. (Optional) Verify the bundle locally
@@ -172,7 +171,7 @@ npx native-update bundle verify \
   --public-key ./public.pem
 ```
 
-Detailed CLI reference ships in **Batch 5** of this docs site.
+The full command list is in the [CLI reference](/reference/cli/overview).
 
 ## Verify it worked
 
@@ -195,7 +194,7 @@ If something does not work, check **[Common errors](#common-errors)** below befo
 | `QUOTA_EXCEEDED` | Local cache full. | Call `NativeUpdate.delete()` to clear old bundles. |
 | `PERMISSION_DENIED` | Could not write to the app's filesystem. | Capacitor's `@capacitor/filesystem` plugin is required at runtime — it ships as a Capacitor core dep. |
 
-Full error code reference (20+ codes, each with the exception classes that map to it) ships in **Batch 4**.
+Every error code, with the exception classes that map to it, is in the [error code reference](/reference/sdk/security/error-codes).
 
 ---
 
@@ -211,14 +210,14 @@ After the above, your app:
 
 What this Quick Start did not cover (but the full docs do):
 
-- **Channel management** — `production` vs `staging` vs `beta` vs custom channels (How-to in Batch 8)
-- **Background updates** — silent updates while the app is closed (Reference in Batch 4)
-- **In-app store update prompts** — pushing users to the App Store / Play Store (Reference in Batch 3)
-- **In-app review prompts** — showing the native rating sheet at the right moment (Reference in Batch 3)
-- **Production backend setup** — full Laravel + Nova guide (Setup in Batch 6)
+- **Channel management** — `production` vs `staging` vs `beta` vs custom channels ([how-to](/how-to/manage-channels))
+- **Background updates** — silent updates while the app is closed ([reference](/reference/sdk/background-update/overview))
+- **In-app store update prompts** — pushing users to the App Store / Play Store ([reference](/reference/sdk/app-update/overview))
+- **In-app review prompts** — showing the native rating sheet at the right moment ([reference](/reference/sdk/app-review/overview))
+- **Production backend** — the hosted service or your own server ([Backend overview](/backend/overview))
 
 ---
 
 <div className="nu-author-card">
-Built and maintained by <a href="https://aoneahsan.com">Ahsan Mahmood</a> — <a href="mailto:aoneahsan@gmail.com">aoneahsan@gmail.com</a> · <a href="https://linkedin.com/in/aoneahsan">LinkedIn</a> · <a href="https://github.com/aoneahsan">GitHub</a>.
+Built and maintained by the Native Update team. Questions? <a href="https://nativeupdate.aoneahsan.com/contact">Contact us</a>.
 </div>

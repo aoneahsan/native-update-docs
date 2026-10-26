@@ -5,7 +5,7 @@ description: native-update bundle create packages your built web directory (./di
 keywords: [native-update bundle create, ota bundle zip, capacitor live update package, native-update sha256, ota bundle metadata]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # `bundle create` — Package a web build into an OTA bundle
@@ -140,8 +140,8 @@ Next steps:
 - **Streaming SHA-256.** The checksum is computed by streaming the ZIP through Node's `crypto.createHash` — even 100+ MB bundles do not load fully into memory.
 - **Bundle ID format.** `bundle-<version>-<epoch_ms>` — the millisecond timestamp guarantees uniqueness even if you bundle the same version twice in quick succession.
 - **Reproducible builds.** Two `bundle create` runs over the same source tree will produce **different** checksums (the embedded `created` timestamp + `archiver` ordering both vary). Treat each bundle as immutable from creation onwards.
-- **No deduplication.** The CLI does not check whether you already shipped this version. Your backend should reject duplicate `version` + `channel` combinations — the bundled Laravel reference backend does (see `backend/app/Http/Controllers/Api/BuildController.php`).
+- **No deduplication.** The CLI does not check whether you already shipped this version. Your backend should reject duplicate `version` + `channel` combinations — the hosted service does.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

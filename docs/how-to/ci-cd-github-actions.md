@@ -5,7 +5,7 @@ description: A production-grade GitHub Actions workflow that builds, bundles, si
 keywords: [native-update github actions, ota cicd, capacitor ota pipeline, ota release automation, native-update ci secrets]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # How-to: Integrate with CI/CD (GitHub Actions)
@@ -22,7 +22,7 @@ A GitHub repository with Actions enabled. Public repos get unlimited free minute
 
 A signing keypair (`./keys/private-*.pem` + `./keys/public-*.pem`). The private key will live in GitHub Secrets, not in your repo.
 
-A backend with a programmatic upload endpoint. The hosted SaaS, the Laravel reference backend, and the Express scaffold all expose `POST /api/v1/bundles/upload` (or equivalent) — see [API Contract](/backend/api-contract).
+A backend with a programmatic upload endpoint. The hosted service and the Express starter both expose `POST /api/v1/bundles/upload` (or equivalent) — see [API Contract](/backend/api-contract).
 
 ## Step 1 — Store the private key as a GitHub Secret
 
@@ -31,7 +31,7 @@ GitHub Settings → Secrets and variables → Actions → New repository secret.
 | Name | Value |
 |---|---|
 | `NATIVE_UPDATE_PRIVATE_KEY` | Full contents of `keys/private-<timestamp>.pem` (including BEGIN/END lines). |
-| `NATIVE_UPDATE_BACKEND_URL` | `https://nativeupdatebe.aoneahsan.com` (or your self-hosted URL). |
+| `NATIVE_UPDATE_BACKEND_URL` | `https://nativeupdatebe.aoneahsan.com` (or your own server's URL). |
 | `NATIVE_UPDATE_API_KEY` | The API key the dashboard issued for your app. |
 
 The secret is encrypted at rest by GitHub. It is only decrypted into the runner's environment for the duration of a workflow run, and it is masked in logs (any echo of it shows `***`).
@@ -200,6 +200,6 @@ A few things that catch people:
 - [Rotate signing keys without breaking active bundles](./rotate-signing-keys) — the rotation flow during CI key updates.
 - [API Contract → /api/v1/bundles/upload](/backend/api-contract) — the upload endpoint shape.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

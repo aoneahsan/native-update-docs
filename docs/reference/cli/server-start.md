@@ -5,14 +5,14 @@ description: native-update server start runs a tiny Express server that serves b
 keywords: [native-update server start, local ota dev server, capacitor update test server, native-update express dev]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # `server start` — Run a local dev update server
 
 **`native-update server start` runs a tiny Express server that serves bundles from a local directory.** It exposes the same `/api/latest` and `/bundles/<filename>` endpoints the SDK expects, so you can test the device-side sync flow against your own machine — useful for verifying a bundle works before pushing it to a real backend.
 
-This is a **development tool**. It has no auth, no rate limiting, no persistence, and no rollout logic. Use the Laravel reference backend (`backend/`), the hosted SaaS, or a real production server for anything other than local testing.
+This is a **development tool**. It has no auth, no rate limiting, no persistence, and no rollout logic. Use the hosted service or a real production server for anything other than local testing.
 
 ## Synopsis
 
@@ -129,7 +129,7 @@ export default {
 - **No signature verification.** It serves whatever ZIP is in the bundle directory. The device-side SDK still verifies the signature (your `.sig` sidecar) — but this server does not enforce it.
 - **No auth.** Anyone on your network can hit `http://<your-ip>:3000`. Do not expose this beyond a trusted LAN.
 - **No rate limiting.** Trivially flood-able.
-- **No rollouts.** Always serves the newest bundle for the channel. Use the Laravel backend or hosted SaaS for staged rollouts.
+- **No rollouts.** Always serves the newest bundle for the channel. Use the hosted service for staged rollouts.
 - **No analytics.** Use [`monitor`](./monitor) against a real backend if you need download stats.
 - **No HTTPS.** Plain HTTP. For HTTPS-required testing (iOS App Transport Security, etc.), terminate TLS at a reverse proxy (`mkcert` + `caddy` is the easiest path).
 - **No persistence beyond files on disk.** Restarting wipes nothing; deleting the bundle directory wipes everything.
@@ -138,6 +138,6 @@ export default {
 
 `Ctrl+C` — Express handles `SIGINT` cleanly. The CLI itself does not install custom signal handlers for this command (unlike `monitor`).
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

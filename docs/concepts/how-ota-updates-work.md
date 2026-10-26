@@ -5,7 +5,7 @@ description: A conceptual walkthrough of the over-the-air update lifecycle in na
 keywords: [how ota updates work, capacitor ota internals, native-update lifecycle, bundle apply atomic swap, over-the-air update explained]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # How OTA updates work
@@ -20,7 +20,7 @@ OTA updates involve five components, not the one or two you might expect:
 
 The first is the **CLI**, which runs on your build machine and on CI. Its job is to take a built web directory (`./dist`, `./www`, whatever) and produce two artifacts: a deterministic ZIP and a sidecar signature file. Nothing in the runtime SDK knows about the ZIP-creation step — that's compile-time work.
 
-The second is your **backend** — the hosted SaaS, the self-hosted Laravel reference, or any custom server that speaks the contract. It receives the signed bundle, stores the bytes, and exposes two endpoints: a metadata endpoint that says "here is the newest active bundle for this channel" and a download endpoint that streams the bundle bytes through a short-lived signed URL.
+The second is your **backend** — the hosted Native Update service, or your own server that speaks the contract. It receives the signed bundle, stores the bytes, and exposes two endpoints: a metadata endpoint that says "here is the newest active bundle for this channel" and a download endpoint that streams the bundle bytes through a short-lived signed URL.
 
 The third is the **device-side SDK**, running inside your app's WebView. It calls the backend, downloads bundles, verifies them, stages them on disk, swaps the active bundle on next launch, and reports the outcome back to the backend.
 
@@ -90,6 +90,6 @@ This page is the conceptual model. For the details:
 - [Security model](./security-model) — the threat model and what's in scope.
 - [Error handling philosophy](./error-handling-philosophy) — why the SDK fails open on analytics and fails closed on signatures.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

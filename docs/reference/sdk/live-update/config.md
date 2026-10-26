@@ -5,7 +5,7 @@ description: Field-by-field reference for LiveUpdateConfig — every option that
 keywords: [LiveUpdateConfig, native-update config, native-update options, native-update channel, native-update publicKey]
 last_update:
   date: 2026-08-05
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Live Update — Config
@@ -330,5 +330,5 @@ still require HTTPS in development; use a trusted local TLS endpoint or tunnel.
 ---
 
 <div className="nu-author-card">
-Config reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-08-05</strong>. Documented by <a href="https://aoneahsan.com">Ahsan Mahmood</a>.
+Config reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-08-05</strong>. Documented by the Native Update team.
 </div>

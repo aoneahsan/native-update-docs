@@ -5,7 +5,7 @@ description: Everything you need to wire native-update into an Android Capacitor
 keywords: [native-update android, capacitor android ota, workmanager background update, play core in-app update, proguard rules native update]
 last_update:
   date: 2026-08-05
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Android Platform Guide
@@ -189,6 +189,6 @@ For background updates: call `NativeUpdate.enableBackgroundUpdates()`, force-sto
 - Read [SDK Reference → Background Update → Config](/reference/sdk/background-update/config) for the full constraint surface.
 - Check the merged `AndroidManifest.xml` after the first build for unexpected permission entries from other plugins (see Play Console rejection rules above).
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

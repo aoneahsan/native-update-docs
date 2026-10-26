@@ -5,14 +5,11 @@
   "site": {
     "name": "Native Update Documentation",
     "url": "https://nativeupdate-docs.aoneahsan.com",
-    "sourceRepository": "https://github.com/aoneahsan/native-update-docs",
-    "license": "MIT",
     "author": {
-      "name": "Ahsan Mahmood",
-      "url": "https://aoneahsan.com",
-      "email": "aoneahsan@gmail.com"
+      "name": "Native Update team",
+      "url": "https://nativeupdate.aoneahsan.com"
     },
-    "lastUpdated": "2026-05-11"
+    "lastUpdated": "2026-10-26"
   },
   "discovery": {
     "sitemap": "https://nativeupdate-docs.aoneahsan.com/sitemap.xml",
@@ -34,7 +31,7 @@
       "id": "tutorials",
       "title": "Tutorials",
       "url": "https://nativeupdate-docs.aoneahsan.com/tutorials/first-ota-update",
-      "pageCount": 2,
+      "pageCount": 1,
       "type": "Tutorial"
     },
     {
@@ -62,7 +59,7 @@
       "id": "backend",
       "title": "Backend",
       "url": "https://nativeupdate-docs.aoneahsan.com/backend/overview",
-      "pageCount": 5,
+      "pageCount": 3,
       "type": "Reference"
     },
     {
@@ -80,7 +77,7 @@
       "type": "Explanation"
     }
   ],
-  "totalPages": 58,
+  "totalPages": 55,
   "diataxisCoverage": {
     "tutorial": true,
     "howTo": true,

@@ -5,7 +5,7 @@ description: Security primitives in native-update — getSecurityInfo, SecurityC
 keywords: [native-update security, getSecurityInfo, SecurityConfig, certificate pinning, capacitor security, OTA security]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Security — Overview
@@ -188,7 +188,7 @@ You should not. The defence-in-depth value of signature verification comes from 
 
 ### How do I rotate the signing key without breaking older app versions?
 
-The plugin supports multiple public keys via your backend's signing-key resource (Nova `SigningKey` model). The flow: ship a new app version with both old and new public keys configured; deprecate the old key on the server after enough users have upgraded; eventually remove the old key from the next binary. The how-to ships in **Batch 8** alongside the channel-management guide.
+The plugin supports multiple public keys via your backend's signing keys (on the hosted service, the app's signing keys in the dashboard). The flow: ship a new app version with both old and new public keys configured; deprecate the old key on the server after enough users have upgraded; eventually remove the old key from the next binary. Step by step: [rotate signing keys](/how-to/rotate-signing-keys).
 
 ### Does certificate pinning break my app when the cert is renewed?
 
@@ -209,5 +209,5 @@ To the configured logger (`enableLogging`). The SDK does not phone home — no t
 ---
 
 <div className="nu-author-card">
-Reference pages by <a href="https://aoneahsan.com">Ahsan Mahmood</a>. Source of truth: <code>src/definitions.ts</code> in the plugin repo. Spot a discrepancy? <a href="https://github.com/aoneahsan/native-update-docs/issues">Open an issue</a>.
+Reference pages by the Native Update team. Source of truth: <code>src/definitions.ts</code> in the plugin repo. Spot a discrepancy? <a href="https://nativeupdate.aoneahsan.com/contact">Tell us</a>.
 </div>

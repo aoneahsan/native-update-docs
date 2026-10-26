@@ -5,7 +5,7 @@ description: Field-by-field reference for AppUpdateConfig — every option that 
 keywords: [AppUpdateConfig, native-update config, appStoreId, packageName, in-app update config]
 last_update:
   date: 2026-05-10
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # App Update — Config
@@ -153,5 +153,5 @@ const appUpdate: AppUpdateConfig = {
 ---
 
 <div className="nu-author-card">
-Config reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-10</strong>. Documented by <a href="https://aoneahsan.com">Ahsan Mahmood</a>.
+Config reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-10</strong>. Documented by the Native Update team.
 </div>

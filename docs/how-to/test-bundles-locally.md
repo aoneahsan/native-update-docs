@@ -5,7 +5,7 @@ description: Three local-test loops for OTA bundles — the bundle-verify smoke 
 keywords: [native-update local testing, ota dev server, capacitor bundle testing, native-update server start, ota lan testing]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # How-to: Test bundles in development
@@ -71,15 +71,9 @@ The dev server has no auth, no rate limiting, no signing-key verification. Do no
 
 For full-fidelity testing — including on-device signature verification and the actual install + rollback flow — run a real backend on your dev machine and point a real device at it.
 
-### Step A — Run the Laravel reference backend
+### Step A — Run your own backend
 
-```bash
-cd backend
-php artisan serve   # uses SERVER_PORT=5946 from .env
-php artisan queue:work   # in a second terminal
-```
-
-(See [Backend-first walkthrough](/tutorials/backend-first-walkthrough) for the full setup if you haven't done it.)
+Start a server that implements the [API Contract](/backend/api-contract) on your dev machine. The [Node + Express Minimal Backend](/backend/node-express-minimal) is the quickest starting point; it listens on port 3000.
 
 ### Step B — Point your app at your LAN IP
 
@@ -102,7 +96,7 @@ In `native-update.config.js`:
 ```js
 export default {
   // ...
-  serverUrl: 'http://192.168.1.42:5946',
+  serverUrl: 'http://192.168.1.42:3000',
 };
 ```
 
@@ -132,7 +126,7 @@ yarn build
 npx native-update bundle create ./dist --version 1.0.$BUILD_NUMBER --channel production
 npx native-update bundle sign  ./update-bundles/bundle-*.zip --key ./keys/private.pem
 
-# Upload via curl or Nova — see Backend → API Contract.
+# Upload via curl — see Backend → API Contract.
 # Then on the device:
 adb logcat | grep native-update
 ```
@@ -186,6 +180,6 @@ After each loop, confirm:
 - [Your first OTA update](/tutorials/first-ota-update) — the production happy path Loop 3 mirrors.
 - [Roll back a bad bundle](./roll-back-bundle) — what to exercise during Loop 3 testing.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

@@ -5,12 +5,12 @@ description: The exact HTTP contract every native-update backend must satisfy. S
 keywords: [native-update api contract, capacitor ota api spec, native-update http endpoints, native-update signed url, native-update api key auth]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # API Contract
 
-This page is the wire-format reference. It documents every endpoint the SDK calls, the headers it sends, the response shapes it expects, the error envelopes it tolerates, and the field-by-field semantics. Match this contract and any backend works — the hosted SaaS, the Laravel reference, the Express example, and your own custom server are all interchangeable behind the same `serverUrl`.
+This page is the wire-format reference. It documents every endpoint the SDK calls, the headers it sends, the response shapes it expects, the error envelopes it tolerates, and the field-by-field semantics. Match this contract and any backend works — the hosted service, the Express example, and your own custom server are all interchangeable behind the same `serverUrl`.
 
 The contract is small but exact: deviating from a field name silently breaks the SDK's parsing, and the SDK does not log helpful errors for malformed responses. Read this page in full before writing or auditing a backend.
 
@@ -45,7 +45,7 @@ The SDK only talks to `/api/v1/*` and the signed download URL. The dashboard / a
 
 ### API key requirements
 
-An API key is an opaque string the SDK sends as `X-API-Key`. The Laravel reference enforces:
+An API key is an opaque string the SDK sends as `X-API-Key`. The hosted service enforces:
 
 A key is scoped to exactly one app. The middleware looks up `apps.api_keys` by the key's first 12 characters (`key_prefix`), then bcrypt-verifies the full key against `key_hash`. The resolved `App` is attached to the request — every downstream handler queries by `$app->id`, never trusting client-supplied app IDs.
 
@@ -142,7 +142,7 @@ Field semantics:
 
 `version` (string, required) — the bundle's SemVer string. The SDK uses it to set `current_version` after a successful install, so it must round-trip identically.
 
-`bundleId` (string, required) — the bundle's UUID. The analytics endpoints key off this. The Laravel reference generates UUIDv7 — any UUID works, but it must be stable per bundle and unique across all bundles.
+`bundleId` (string, required) — the bundle's UUID. The analytics endpoints key off this. The hosted service generates UUIDv7 — any UUID works, but it must be stable per bundle and unique across all bundles.
 
 `downloadUrl` (string, required) — absolute URL. **Cannot be a relative path.** The SDK opens it directly. Must be short-lived in production; the SDK does not refresh it.
 
@@ -177,7 +177,7 @@ Error envelope (consistent across all endpoints):
 
 ## Endpoint: `GET /api/v1/bundles/{build}/download`
 
-Streams the bundle ZIP. Auth is via Laravel-signed query string — `signature=`, `expires=`, plus the payload (`app_id`, `checksum`, `device`) baked in at URL generation time.
+Streams the bundle ZIP. Auth is via a signed query string — `signature=`, `expires=`, plus the payload (`app_id`, `checksum`, `device`) baked in at URL generation time.
 
 **Headers:** none beyond what the OS HTTP client sends. `X-Bundle-Checksum` and `Content-Length` come back on the response — the SDK uses both for resumable downloads.
 
@@ -189,7 +189,7 @@ Streams the bundle ZIP. Auth is via Laravel-signed query string — `signature=`
 
 `404 Not Found` if the storage backend cannot find the file (e.g. the bundle was archived and the underlying file was purged).
 
-The signed URL TTL is configurable via `NATIVE_UPDATE_DOWNLOAD_URL_TTL_MINUTES` (default `30` in the Laravel reference). Older defaults were `5` and broke 20 MB+ downloads on slow mobile connections — don't go lower.
+The hosted service's signed URLs last 30 minutes. If your own server signs download URLs, keep them valid at least that long: a 5-minute lifetime broke 20 MB+ downloads on slow mobile connections.
 
 ## Endpoint: `POST /api/v1/analytics/mau`
 
@@ -231,7 +231,7 @@ Records that a bundle download completed or failed. Called by the SDK after each
 
 **Response:** `200 OK` `{"success": true}` or `404 BUILD_NOT_FOUND` if the bundle ID is unknown for the caller's app.
 
-The Laravel reference also increments `builds.downloads_count` on a successful event. Custom backends can skip the counter or maintain their own.
+The hosted service also increments `builds.downloads_count` on a successful event. Custom backends can skip the counter or maintain their own.
 
 ## Endpoint: `POST /api/v1/analytics/install`
 
@@ -257,7 +257,7 @@ Records install success, failure, or rollback after the SDK has tried to apply a
 
 **Response:** `200 OK` `{"success": true}` or `404 BUILD_NOT_FOUND`.
 
-The Laravel reference increments `builds.installs_count` on `complete` and `builds.rollbacks_count` on `rollback`. The dashboard surfaces these counters in the per-build view.
+The hosted service increments `builds.installs_count` on `complete` and `builds.rollbacks_count` on `rollback`. The dashboard surfaces these counters in the per-build view.
 
 ## Error envelope conventions
 
@@ -273,7 +273,7 @@ When in doubt, use the existing codes documented in [SDK Reference → Security 
 
 ## Field naming reminder
 
-Custom backends sometimes invent field names that "feel" cleaner — `latestVersion` instead of `version`, `url` instead of `downloadUrl`, `sha256` instead of `checksum`. **Don't.** The SDK matches the Laravel reference's field names exactly; renames break SDK parsing without throwing an error you can grep for.
+Custom backends sometimes invent field names that "feel" cleaner — `latestVersion` instead of `version`, `url` instead of `downloadUrl`, `sha256` instead of `checksum`. **Don't.** The SDK matches the hosted service's field names exactly; renames break SDK parsing without throwing an error you can grep for.
 
 The canonical names, repeated for emphasis:
 
@@ -291,6 +291,6 @@ The canonical names, repeated for emphasis:
 | `minNativeVersion` | string (SemVer) |
 | `expiresAt` | string (ISO 8601) |
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

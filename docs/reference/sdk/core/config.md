@@ -5,7 +5,7 @@ description: Field-by-field reference for PluginInitConfig — the single config
 keywords: [PluginInitConfig, NativeUpdate.initialize, native-update config, capacitor update config, apiKey, publicKey]
 last_update:
   date: 2026-08-05
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Core — Config (`PluginInitConfig`)
@@ -57,10 +57,10 @@ Override for the API base URL when it differs from the bundle-download URL (rare
 | | |
 |---|---|
 | Type | `string` |
-| Required | yes (when using the hosted SaaS or a Laravel backend that enforces keys) |
+| Required | yes (when using the hosted service, or your own server if it enforces keys) |
 | Default | — |
 
-App-bound API key issued by the Native Update dashboard (or the Nova admin in a self-hosted backend). Sent as the `X-API-Key` header on every request to the backend.
+App-bound API key issued by the Native Update dashboard (or by your own server, if you run one). Sent as the `X-API-Key` header on every request to the backend.
 
 :::warning Not persisted
 As of v2 the plugin does **not** persist the API key across sessions — the host app must pass it on every `initialize()` call. Read it from your env or from secure storage and supply it explicitly.
@@ -398,5 +398,5 @@ await NativeUpdate.initialize({
 ---
 
 <div className="nu-author-card">
-Config reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-11</strong>. Documented by <a href="https://aoneahsan.com">Ahsan Mahmood</a>.
+Config reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-11</strong>. Documented by the Native Update team.
 </div>

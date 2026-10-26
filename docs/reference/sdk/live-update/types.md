@@ -5,7 +5,7 @@ description: TypeScript type reference for the Live Update API of native-update.
 keywords: [native-update types, BundleInfo, SyncOptions, SyncResult, DownloadOptions, LatestVersion, ValidationResult]
 last_update:
   date: 2026-08-05
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Live Update — Types
@@ -220,5 +220,5 @@ Return value of [`validateUpdate()`](./methods#validateupdateoptions). The per-a
 ---
 
 <div className="nu-author-card">
-Type definitions verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-10</strong>. Documented by <a href="https://aoneahsan.com">Ahsan Mahmood</a>.
+Type definitions verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-10</strong>. Documented by the Native Update team.
 </div>

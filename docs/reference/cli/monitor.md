@@ -1,11 +1,11 @@
 ---
 sidebar_position: 8
 title: monitor — Watch live deployment stats
-description: native-update monitor polls a self-hosted backend's /api/stats endpoint every 5 seconds and renders a terminal dashboard with current version, channel, download totals, and recent activity. Useful for tracking a rollout in real time.
+description: native-update monitor polls a backend's /api/stats endpoint every 5 seconds and renders a terminal dashboard with current version, channel, download totals, and recent activity. Useful for tracking a rollout in real time.
 keywords: [native-update monitor, ota deployment dashboard, capacitor update stats cli, native-update terminal dashboard]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # `monitor` — Watch live deployment stats from your terminal
@@ -36,7 +36,7 @@ npx native-update monitor --server <url> [options]
 npx native-update monitor --server http://localhost:3000
 ```
 
-(Note: the dev server shipped with `native-update server start` does **not** implement `/api/stats` — `monitor` is intended for real backends. The hosted SaaS, the Laravel reference backend, and any production deployment of `native-update` should expose this endpoint.)
+(Note: the dev server shipped with `native-update server start` does **not** implement `/api/stats` — `monitor` is intended for real backends. A production backend that implements the contract should expose this endpoint.)
 
 ### Monitor a production backend with auth
 
@@ -95,7 +95,7 @@ The CLI is permissive — every field is optional. Missing fields show as `N/A` 
 }
 ```
 
-The hosted Native Update SaaS, the Laravel reference backend (`backend/`), and any production deployment of `native-update` should implement this contract.
+A production backend that implements the update contract should implement this one too.
 
 ## Polling, retries, and failure handling
 
@@ -124,6 +124,6 @@ The hosted Native Update SaaS, the Laravel reference backend (`backend/`), and a
 - **No colour-blind mode.** The dashboard uses `chalk` with default colour assumptions. Set `NO_COLOR=1` to strip colours entirely.
 - **No headless mode.** Stats render with `console.clear()` between ticks — fine for an interactive terminal, not great for log aggregation. For log shipping, hit `/api/stats` with `curl` on a cron instead.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

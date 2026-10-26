@@ -5,7 +5,7 @@ description: The Background Update API of native-update runs battery-aware and n
 keywords: [native-update background update, capacitor background updates, WorkManager, BGTaskScheduler, silent updates, capacitor background fetch]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Background Update — Overview
@@ -133,5 +133,5 @@ Not via this API. The plugin's background task is single-purpose: check for upda
 ---
 
 <div className="nu-author-card">
-Reference pages by <a href="https://aoneahsan.com">Ahsan Mahmood</a>. Source of truth: <code>src/definitions.ts</code> in the plugin repo. Spot a discrepancy? <a href="https://github.com/aoneahsan/native-update-docs/issues">Open an issue</a>.
+Reference pages by the Native Update team. Source of truth: <code>src/definitions.ts</code> in the plugin repo. Spot a discrepancy? <a href="https://nativeupdate.aoneahsan.com/contact">Tell us</a>.
 </div>

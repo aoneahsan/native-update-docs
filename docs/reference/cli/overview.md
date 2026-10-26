@@ -5,7 +5,7 @@ description: The native-update CLI ships with the npm package and provides proje
 keywords: [native-update cli, capacitor cli, ota bundle cli, native-update commands, bundle signing cli]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # CLI — Overview
@@ -24,7 +24,7 @@ You do not need a global install. The CLI ships in the `native-update` package's
 | Sign a bundle with a private key | [`bundle sign`](./bundle-sign) | RSA-SHA256, emits a `.sig` JSON sidecar |
 | Verify a signature with a public key (CI safety net) | [`bundle verify`](./bundle-verify) | Exits 1 if signature is invalid |
 | Run a tiny Express server that serves bundles locally | [`server start`](./server-start) | Dev-only — for testing the device-side flow |
-| Watch live deployment stats from a self-hosted backend | [`monitor`](./monitor) | Polls `/api/stats` every 5 s, terminal dashboard |
+| Watch live deployment stats from a backend that serves `/api/stats` | [`monitor`](./monitor) | Polls `/api/stats` every 5 s, terminal dashboard |
 | Generate an Express / Firebase / Vercel backend scaffold | [`backend create`](./backend-create) | **Scaffold, not turn-key** — see warnings on that page |
 
 ## Installing the CLI
@@ -139,6 +139,6 @@ Node 18 or higher, matching the plugin's `engines.node` field. The CLI uses ESM 
 
 The CLI lives in the `cli/` directory of the [`native-update` repository](https://www.npmjs.com/package/native-update). Each command is a single `cli/commands/*.js` file plus a `commander`-based dispatcher in `cli/index.js`.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

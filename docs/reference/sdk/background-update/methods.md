@@ -5,7 +5,7 @@ description: Reference for all 8 Background Update API methods in native-update 
 keywords: [enableBackgroundUpdates, scheduleBackgroundCheck, triggerBackgroundCheck, requestNotificationPermissions, native-update background methods]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Background Update — Methods
@@ -23,7 +23,7 @@ import type {
 } from 'native-update';
 ```
 
-All methods return `Promise<T>`. Errors surface as typed `UpdateError` rejections (see [Security — Error Codes](../security/error-codes) for the full catalogue once Batch 4's security pages are linked into the sidebar).
+All methods return `Promise<T>`. Errors surface as typed `UpdateError` rejections (see [Security — Error Codes](../security/error-codes) for the full catalogue).
 
 ---
 
@@ -239,5 +239,5 @@ Both stores penalise apps that immediately re-prompt after a denial. Use `getNot
 ---
 
 <div className="nu-author-card">
-Method reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-11</strong>. Documented by <a href="https://aoneahsan.com">Ahsan Mahmood</a>.
+Method reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-11</strong>. Documented by the Native Update team.
 </div>

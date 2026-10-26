@@ -5,7 +5,7 @@ description: native-update bundle sign produces an RSA-SHA256 signature of an OT
 keywords: [native-update bundle sign, rsa sha256 ota signing, capacitor bundle signature, native-update sig sidecar]
 last_update:
   date: 2026-08-05
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # `bundle sign` — Sign a bundle with your private key
@@ -115,7 +115,7 @@ Next steps:
 
 ## Important: ship the `.sig` alongside the bundle
 
-Your backend must serve **both** files. The hosted Native Update SaaS handles this automatically (upload the signed ZIP and the SaaS keeps the signature record). The Laravel reference backend stores the signature in the `builds.signature` column. The minimal Node/Express scaffold expects you to wire this up — see [`backend create`](./backend-create).
+Your backend must serve **both** files. The hosted Native Update SaaS handles this automatically (upload the signed ZIP and the SaaS keeps the signature record). The minimal Node/Express scaffold expects you to wire this up — see [`backend create`](./backend-create).
 
 If your backend serves the bundle but not the signature, the SDK rejects the bundle and reports `SIGNATURE_VERIFICATION_FAILED` — that is the failure mode by design.
 
@@ -135,6 +135,6 @@ npx native-update bundle verify ./bundle.signed.zip --key ./keys/public.pem
 - **Bundle content is unchanged.** The signed ZIP is a byte-for-byte copy of the input (or the input file itself if no `--output` is passed and the names happen to match). The signature is the only new artifact.
 - **Reproducibility.** Signing the same bundle twice with the same key produces the same signature (deterministic RSA-SHA256 in Node's `crypto`).
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

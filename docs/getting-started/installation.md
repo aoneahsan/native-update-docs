@@ -5,7 +5,7 @@ description: Install the native-update Capacitor plugin into a new or existing C
 keywords: [native-update install, capacitor plugin install, native-update setup, OTA install]
 last_update:
   date: 2026-08-05
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Installation
@@ -144,11 +144,11 @@ The package is small (under 60 KB minified) and tree-shakeable. Importing only w
 ## Next steps
 
 - **[Quick Start](/getting-started/quick-start)** — wire your first OTA update in 5 minutes (3 of which are downloading native build tools).
-- **CLI reference** (Batch 5) — for `keys generate`, `bundle create`, `bundle sign`.
-- **Backend setup** (Batch 6) — to self-host the update server.
+- **[CLI reference](/reference/cli/overview)** — for `keys generate`, `bundle create`, `bundle sign`.
+- **[Backend overview](/backend/overview)** — the hosted service, or your own server.
 
 ---
 
 <div className="nu-author-card">
-Maintained by <a href="https://aoneahsan.com">Ahsan Mahmood</a>. Found a bug or unclear step? Open an issue at <a href="https://github.com/aoneahsan/native-update-docs/issues">native-update-docs/issues</a>.
+Maintained by the Native Update team. Found a bug or an unclear step? <a href="https://nativeupdate.aoneahsan.com/contact">Tell us</a>.
 </div>

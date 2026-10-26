@@ -5,7 +5,7 @@ description: native-update init scaffolds a native-update.config.js file by prom
 keywords: [native-update init, capacitor ota config, native-update.config.js, native-update setup]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # `init` — Scaffold native-update config
@@ -116,6 +116,6 @@ If you passed `--backend express` (or `firebase` / `vercel`), the CLI will also 
 - The generated config uses ESM (`export default { … }`). If your project is CommonJS, convert the export accordingly or move the file under a `"type": "module"` package.
 - `init` does **not** edit `AndroidManifest.xml`, `Info.plist`, or `capacitor.config.ts`. Platform setup is documented in the Platform Guides.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

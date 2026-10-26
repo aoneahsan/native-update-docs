@@ -1,5 +1,5 @@
 # Native Update Docs — robots.txt
-# Maintained by Ahsan Mahmood (https://aoneahsan.com)
+# Maintained by the Native Update team (https://nativeupdate.aoneahsan.com)
 # Last updated: 2026-05-11
 #
 # This file is the public crawl policy for https://nativeupdate-docs.aoneahsan.com.

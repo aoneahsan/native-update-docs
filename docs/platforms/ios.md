@@ -5,7 +5,7 @@ description: Everything you need to wire native-update into an iOS Capacitor app
 keywords: [native-update ios, capacitor ios ota, bgtaskscheduler permitted identifiers, skstorereviewcontroller throttling, ios background app refresh native update, app store review guidelines ota]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # iOS Platform Guide
@@ -235,6 +235,6 @@ e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWith
 - Read [SDK Reference → Background Update → Overview](/reference/sdk/background-update/overview) for the cross-platform scheduling model.
 - Read [SDK Reference → App Review → Overview](/reference/sdk/app-review/overview) for the recommended call-site pattern around Apple's review-prompt throttle.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

@@ -5,7 +5,7 @@ description: How to revert devices to a previous bundle after a bad release. Cov
 keywords: [native-update rollback, ota rollback, capacitor revert bundle, native-update bad release, rollout percentage rollback]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # How-to: Roll back a bad bundle
@@ -85,7 +85,7 @@ Wire this into a debug menu, a server-controlled feature flag, or a deep-link ha
 
 Every rollback (Layers 1, 2, and 3) fires a `rollback` event into your analytics. The Build row's `Rollbacks` counter goes up. The dashboard's per-build view shows the rollback rate over time — a healthy bundle has ~0% rollbacks; >5% is a yellow flag; >20% is a red flag and warrants Layer 2 intervention.
 
-The Laravel reference backend's `BuildController` increments the counter via the `/api/v1/analytics/install` endpoint when the SDK reports `status: rollback`. Custom backends should match this — see [API Contract](/backend/api-contract).
+The hosted service increments the counter via the `/api/v1/analytics/install` endpoint when the SDK reports `status: rollback`. Custom backends should match this — see [API Contract](/backend/api-contract).
 
 ## After the rollback
 
@@ -123,13 +123,13 @@ curl https://your-backend.example.com/api/v1/updates/check \
 # → {"available":false,"message":"..."} -- the bad build is no longer served
 ```
 
-If a device on 1.3.9 still sees 1.4.0 offered, your backend cached the old response. Wait for cache TTL or flush manually (the Laravel reference uses a 30-second cache by default; configurable via `NATIVE_UPDATE_CHECK_CACHE_TTL_SECONDS`).
+If a device on 1.3.9 still sees 1.4.0 offered, your backend cached the old response. Wait for cache TTL or flush manually (the hosted service caches check responses for 30 seconds by default).
 
 ## Related
 
 - [SDK Reference → Live Update → Methods → rollback](/reference/sdk/live-update/methods) — full method signature.
 - [Manage release channels](./manage-channels) — channels let you roll back to one cohort without affecting others.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

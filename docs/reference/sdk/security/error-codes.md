@@ -5,7 +5,7 @@ description: Complete UpdateErrorCode catalogue for native-update — every code
 keywords: [UpdateErrorCode, native-update error codes, NETWORK_ERROR, VERIFICATION_ERROR, SIGNATURE_ERROR, capacitor update errors]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Security — Error Codes
@@ -165,5 +165,5 @@ Both styles work — the `code` field is always populated even on instances of t
 ---
 
 <div className="nu-author-card">
-Error code catalogue verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-11</strong>. Documented by <a href="https://aoneahsan.com">Ahsan Mahmood</a>.
+Error code catalogue verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-11</strong>. Documented by the Native Update team.
 </div>

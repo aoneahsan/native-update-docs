@@ -5,7 +5,7 @@ description: Enum reference for the Live Update API of native-update — UpdateS
 keywords: [native-update enums, UpdateStrategy, UpdateMode, BundleStatus, SyncStatus, ChecksumAlgorithm, UpdateErrorCode]
 last_update:
   date: 2026-05-10
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Live Update — Enums
@@ -89,7 +89,7 @@ Lifecycle state of a bundle on the device. Available on [`BundleInfo.status`](./
 
 ## `UpdateErrorCode` (Live-Update subset) {#updateerrorcode}
 
-`UpdateErrorCode` is shared across the whole plugin. The codes you are most likely to encounter when working with Live Update are below; the full catalogue ships with the Security batch (Batch 4).
+`UpdateErrorCode` is shared across the whole plugin. The codes you are most likely to encounter when working with Live Update are below; the full catalogue is in the [error code reference](../security/error-codes).
 
 ### Network
 
@@ -136,5 +136,5 @@ Lifecycle state of a bundle on the device. Available on [`BundleInfo.status`](./
 ---
 
 <div className="nu-author-card">
-Enum values verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-10</strong>. Documented by <a href="https://aoneahsan.com">Ahsan Mahmood</a>.
+Enum values verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-10</strong>. Documented by the Native Update team.
 </div>

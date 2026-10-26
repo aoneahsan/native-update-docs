@@ -5,7 +5,7 @@ description: Event reference for the Live Update API of native-update — downlo
 keywords: [native-update events, downloadProgress, updateStateChanged, native-update addListener]
 last_update:
   date: 2026-05-10
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Live Update — Events
@@ -153,5 +153,5 @@ This removes every listener added via `addListener()` across all event types in 
 ---
 
 <div className="nu-author-card">
-Event reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-10</strong>. Documented by <a href="https://aoneahsan.com">Ahsan Mahmood</a>.
+Event reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-10</strong>. Documented by the Native Update team.
 </div>

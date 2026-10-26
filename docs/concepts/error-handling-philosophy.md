@@ -5,7 +5,7 @@ description: Why native-update fails open on analytics writes, fails closed on s
 keywords: [native-update error handling, ota fail open fail closed, native-update error codes, capacitor ota resilience, ota analytics fail-open]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Error handling philosophy
@@ -151,6 +151,6 @@ Together these properties make `native-update` something you can put in a critic
 - [Roll back a bad bundle](/how-to/roll-back-bundle) — what to do when a bundle gets past verification but breaks at runtime.
 - [Architecture](./architecture) — the boundaries between SDK code, native code, and backend code where errors propagate.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

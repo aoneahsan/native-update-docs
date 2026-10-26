@@ -5,7 +5,7 @@ description: The App Update API of native-update wraps Google Play In-App Update
 keywords: [native-update app update, capacitor in-app updates, play in-app updates, ios app store version check, openAppStore]
 last_update:
   date: 2026-05-10
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # App Update â€” Overview
@@ -133,5 +133,5 @@ No. App Update prompts and App Review prompts are independent. See [App Review â
 ---
 
 <div className="nu-author-card">
-Reference pages by <a href="https://aoneahsan.com">Ahsan Mahmood</a>. Source of truth: <code>src/definitions.ts</code> in the plugin repo. Spot a discrepancy? <a href="https://github.com/aoneahsan/native-update-docs/issues">Open an issue</a>.
+Reference pages by the Native Update team. Source of truth: <code>src/definitions.ts</code> in the plugin repo. Spot a discrepancy? <a href="https://nativeupdate.aoneahsan.com/contact">Tell us</a>.
 </div>

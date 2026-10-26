@@ -5,7 +5,7 @@ description: What native-update can and cannot do when running in a browser, the
 keywords: [native-update web, capacitor web ota, native-update browser, service worker updates capacitor, pwa update prompt]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Web Platform Guide
@@ -156,6 +156,6 @@ If the import fails, your bundler is tree-shaking the web implementation — mak
 - Read [Android Platform Guide](./android) and [iOS Platform Guide](./ios) — the surfaces where the real OTA work happens.
 - For PWA-style updates, the [`native-update` SDK Reference → Live Update → Overview](/reference/sdk/live-update/overview) covers the cross-platform `getLatest()` semantics.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

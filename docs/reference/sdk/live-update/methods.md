@@ -5,7 +5,7 @@ description: Complete reference for all 20 Live Update API methods in native-upd
 keywords: [native-update methods, live update api, native-update sync, native-update download, native-update applyUpdate]
 last_update:
   date: 2026-08-05
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Live Update — Methods
@@ -354,5 +354,5 @@ These come from the `UpdateErrorCode` enum and are the ones you are most likely 
 ---
 
 <div className="nu-author-card">
-Method reference by <a href="https://aoneahsan.com">Ahsan Mahmood</a>. All signatures verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-10</strong>.
+Method reference by the Native Update team. All signatures verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-10</strong>.
 </div>

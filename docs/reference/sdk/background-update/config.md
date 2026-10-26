@@ -5,7 +5,7 @@ description: Field-by-field reference for BackgroundUpdateConfig and Notificatio
 keywords: [BackgroundUpdateConfig, NotificationPreferences, BackgroundUpdateType, NotificationPriority, taskIdentifier, requireWifi]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Background Update — Config
@@ -301,5 +301,5 @@ const backgroundUpdate: BackgroundUpdateConfig = {
 ---
 
 <div className="nu-author-card">
-Config reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-11</strong>. Documented by <a href="https://aoneahsan.com">Ahsan Mahmood</a>.
+Config reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-11</strong>. Documented by the Native Update team.
 </div>

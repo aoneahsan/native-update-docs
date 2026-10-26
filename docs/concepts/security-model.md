@@ -5,7 +5,7 @@ description: The threat model native-update is designed to defend against, the t
 keywords: [native-update security model, ota threat model, capacitor secure updates, native-update certificate pinning, ota three-layer security]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Security model
@@ -76,7 +76,7 @@ Honesty about limits matters here. The system does NOT defend against:
 
 **Compromise of the private signing key.** If your CI's secret manager leaks the private key, an attacker can sign bundles your devices accept. The mitigation is operational (HSMs, restricted CI access, audit logs, emergency rotation) — see [How-to: Rotate signing keys](/how-to/rotate-signing-keys).
 
-**Compromise of your dashboard / Nova admin login.** A leaked admin session can upload arbitrary bundles, mark them active, push them to 100% rollout. The mitigations are SaaS-side: 2FA on dashboard logins, audit logs of admin actions, suspension flows for compromised accounts. Self-hosters are responsible for their own admin auth hygiene.
+**Compromise of your dashboard login.** A leaked dashboard session can upload arbitrary bundles, mark them active, push them to 100% rollout. On the hosted service, dashboard sign-in is Google-only (so your Google account's 2-Step Verification protects it), admin actions are logged, and compromised accounts can be suspended. On your own server, admin auth is yours to secure.
 
 **Bundles that contain malicious-but-legitimately-signed code.** A disgruntled developer with CI access could push code that exfiltrates data; the signing model just confirms it came from your CI. The mitigation is code review of every release, branch protection on `main`, required reviewers on PRs touching anything that ships into a bundle.
 
@@ -112,9 +112,9 @@ Apps in financial, health, or government verticals usually have explicit complia
 
 **FIPS 140-2 / 140-3 cryptographic-module compliance.** The plugin uses platform-default crypto (OpenSSL on Android, CommonCrypto / SwiftCrypto on iOS). If you need FIPS validation, you need to verify your specific OS version's crypto module is in scope — that's an OS-level question, not a plugin question.
 
-**SOC 2 / HIPAA audit trails.** The Laravel reference backend logs every signing-key access, every build upload, every admin action. Self-hosted deployments inherit this; SaaS deployments depend on the SaaS provider's controls. Audit your provider's SOC 2 report, not the plugin's behaviour.
+**SOC 2 / HIPAA audit trails.** The hosted service logs signing-key access, build uploads and admin actions. If a compliance audit depends on that trail, confirm with us what it records before you rely on it, or keep the trail in your own server. Audit the backend you use, not the plugin's behaviour.
 
-**Air-gapped deployments.** Some regulated environments forbid devices from reaching the public internet. The self-hosted Laravel reference works fine on a private network; the device-side SDK doesn't care whether `serverUrl` is `https://updates.example.com` or `https://internal.example.lan`.
+**Air-gapped deployments.** Some regulated environments forbid devices from reaching the public internet. Your own server that implements the contract can run on a private network; the device-side SDK doesn't care whether `serverUrl` is `https://updates.example.com` or `https://internal.example.lan`.
 
 ## Where to go next
 
@@ -123,6 +123,6 @@ Apps in financial, health, or government verticals usually have explicit complia
 - [SDK Reference → Security → Overview](/reference/sdk/security/overview) — the runtime API for inspecting the security state on-device.
 - [How-to: Rotate signing keys](/how-to/rotate-signing-keys) — the operational practice the model assumes you follow.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

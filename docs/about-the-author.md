@@ -1,72 +1,32 @@
 ---
 sidebar_position: 99
-title: About the Author
-description: native-update is built and maintained by Ahsan Mahmood, a senior full-stack engineer specialising in Capacitor, React, Laravel, and Firebase.
-keywords: [Ahsan Mahmood, aoneahsan, native-update author, capacitor plugin developer]
+slug: /about
+title: About Native Update
+description: Native Update is a SaaS product for Capacitor apps, built and maintained by the Native Update team. How to reach us, and how the plugin is licensed.
+keywords: [Native Update, native-update, Capacitor OTA updates, Native Update team, Native Update License]
 last_update:
-  date: 2026-05-10
-  author: Ahsan Mahmood
+  date: 2026-10-26
+  author: Native Update team
 ---
 
-# About the Author
+# About Native Update
 
-`native-update` is designed, built, maintained, and supported by **Ahsan Mahmood** — a senior full-stack engineer based in Pakistan, specialising in Capacitor, React, Laravel, and Firebase. The plugin is the consolidation of update flows shipped across multiple production apps where rolling out fixes through the App Store and Play Store review queues was too slow for the kind of bugs users actually care about.
+Native Update ships a signed fix to every installed copy of your Capacitor app without waiting for store review, and tells you who has it. It's a SaaS product: a hosted service (dashboard, API, CLI) where you upload signed bundles, roll them out by percentage and pick a plan, plus the npm plugin [`native-update`](https://www.npmjs.com/package/native-update) your app installs to receive them.
 
-If this plugin saved you a sprint, a quick mention to a teammate, a star on the [docs repo](https://github.com/aoneahsan/native-update-docs), or a recommendation on LinkedIn is the most valuable kind of feedback. Hiring me for a Capacitor / React / Laravel / Firebase project is the second most valuable.
+Live updates carry web-layer changes; native changes still ship through the store.
 
----
+The Native Update team builds and maintains the service, the plugin and this documentation.
 
-## Reach me
+## Reach us
 
-| Channel | Address |
+| Need | Where |
 |---|---|
-| Personal site | [aoneahsan.com](https://aoneahsan.com) |
-| Email | [aoneahsan@gmail.com](mailto:aoneahsan@gmail.com) |
-| LinkedIn | [linkedin.com/in/aoneahsan](https://linkedin.com/in/aoneahsan) |
-| GitHub | [github.com/aoneahsan](https://github.com/aoneahsan) |
-| npm | [npmjs.com/~aoneahsan](https://www.npmjs.com/~aoneahsan) — 50+ published packages |
-| WhatsApp | [+92 304 6619706](https://wa.me/923046619706) |
-| Phone | +92 304 6619706 |
+| A question, a bug or a gap in these docs | [Contact page](https://nativeupdate.aoneahsan.com/contact) |
+| Plans and pricing | [nativeupdate.aoneahsan.com](https://nativeupdate.aoneahsan.com) |
+| The package | [npmjs.com/package/native-update](https://www.npmjs.com/package/native-update) |
 
-I respond to email and LinkedIn DMs within 24 hours on weekdays.
+## License
 
----
+From version 4.1.2, the `native-update` package ships under the proprietary Native Update License, included in the package as `LICENSE`. You may install it and use it, without charge, inside the apps you build, to receive updates from the Native Update service or from your own server that implements the [documented update contract](/backend/api-contract). Versions published before 4.1.2 keep the license they were published with. Use of the hosted service, dashboard, API and CLI is governed by the [Terms of Service](https://nativeupdate.aoneahsan.com/terms).
 
-## What I do
-
-- **Capacitor plugin development** — `native-update` is one of several plugins I maintain. I have shipped plugins covering analytics, biometrics, file storage, deep linking, in-app purchases, and OTA updates.
-- **React + TypeScript front-ends** — TanStack Router / Query, Radix UI, shadcn, react-hook-form + Zod, performance-first patterns.
-- **Laravel back-ends** — REST + GraphQL APIs, Nova admin panels, Sanctum / Passport auth, Horizon queues, multi-tenant architectures.
-- **Firebase** — Firestore data modelling, security rules, Authentication (with custom claims), Cloud Functions, Hosting, App Hosting.
-- **Capacitor mobile apps** — full lifecycle from `cap init` through Play Store and App Store submission, including the boring but critical bits (privacy policies, data-safety forms, certificate management).
-
----
-
-## Hire me
-
-If you are building a Capacitor app and your team is feeling the same pain that motivated this plugin — long review queues, manual signing pipelines, brittle update flows — I do consulting and project work. Email or LinkedIn is the fastest way in.
-
-For one-off support around `native-update` itself, opening a GitHub issue is the right channel; I respond there too.
-
----
-
-## Other open-source work
-
-A small selection of packages I maintain on npm under [`@aoneahsan`](https://www.npmjs.com/~aoneahsan):
-
-- `native-update` — this plugin
-- (Batch 10 of this docs site will deep-link a curated list of the most useful sibling packages)
-
----
-
-## Why I publish documentation as a separate repo
-
-The plugin source code lives in a private GitHub repository while the project matures and the SaaS commercial side is built out. Documentation should not be gated by that decision — so this docs site lives in its own public repo at [aoneahsan/native-update-docs](https://github.com/aoneahsan/native-update-docs).
-
-That separation has a side benefit: search engines and AI assistants index public GitHub repos heavily, and the public docs repo plus this hosted Docusaurus site give the plugin two distinct discoverability surfaces beyond the npm page.
-
----
-
-<div className="nu-author-card">
-<strong>Thanks for reading.</strong> If you ship something cool with <code>native-update</code>, tag me — <a href="https://linkedin.com/in/aoneahsan">@aoneahsan on LinkedIn</a> — and I will share it.
-</div>
+Native Update is not open source. The product source is private; this documentation site is the public reference.

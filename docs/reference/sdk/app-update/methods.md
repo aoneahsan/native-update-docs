@@ -5,7 +5,7 @@ description: Reference for all 5 App Update API methods in native-update — get
 keywords: [getAppUpdateInfo, performImmediateUpdate, startFlexibleUpdate, completeFlexibleUpdate, openAppStore, native-update methods]
 last_update:
   date: 2026-05-10
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # App Update — Methods
@@ -157,10 +157,10 @@ On iOS this opens `itms-apps://itunes.apple.com/app/id<appId>`. On Android it op
 | `INSTALL_ERROR` | Play install step failed | Log to your monitoring; retry after a short delay or fall back to `openAppStore()`. |
 | `INVALID_CONFIG` | `openAppStore()` called without an ID | Configure `appStoreId` and `packageName` in [config](./config). |
 
-Full code list ships in **Batch 4** alongside the security reference.
+The full code list is in the [error code reference](../security/error-codes).
 
 ---
 
 <div className="nu-author-card">
-Method reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-10</strong>. Documented by <a href="https://aoneahsan.com">Ahsan Mahmood</a>.
+Method reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-10</strong>. Documented by the Native Update team.
 </div>

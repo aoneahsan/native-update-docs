@@ -1,11 +1,11 @@
 ---
 sidebar_position: 8
 title: Restrict an API key to your app (ship the key safely)
-description: Lock a native-update API key to specific web origins, Android apps (package + signing certificate), and iOS bundle ids so it can be shipped inside your app without a self-hosted proxy. Covers the dashboard flow, getting signing-cert fingerprints with keytool, the plugin version requirement, and what the restrictions do and do not protect.
+description: Lock a native-update API key to specific web origins, Android apps (package + signing certificate), and iOS bundle ids so it can be shipped inside your app without a proxy server of your own. Covers the dashboard flow, getting signing-cert fingerprints with keytool, the plugin version requirement, and what the restrictions do and do not protect.
 keywords: [native-update api key restrictions, restrict api key origin, android signing cert sha256 api key, ios bundle id api key, ship api key in app, capacitor ota api key security]
 last_update:
   date: 2026-07-14
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # How-to: Restrict an API key to your app

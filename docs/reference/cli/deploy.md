@@ -5,7 +5,7 @@ description: Deploy a bundle from CI or your terminal with an access token — d
 keywords: [native-update deploy, ota ci deploy, native-update cli access token, promote build cli, rollout cli]
 last_update:
   date: 2026-07-16
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # `deploy` and the remote commands
@@ -32,7 +32,7 @@ and in the process list, where CI logs can pick it up.
 | Token | `NATIVE_UPDATE_TOKEN` | `-t, --token` | — (required) |
 | Backend | `NATIVE_UPDATE_SERVER` | `-s, --server` | `https://nativeupdatebe.aoneahsan.com` |
 
-Set `NATIVE_UPDATE_SERVER` only when self-hosting.
+Set `NATIVE_UPDATE_SERVER` only when you run your own server.
 
 ## `deploy`
 

@@ -5,7 +5,7 @@ description: Field-by-field reference for AppReviewConfig — every option that 
 keywords: [AppReviewConfig, native-update review config, minimumDaysSinceInstall, customTriggers, webReviewUrl]
 last_update:
   date: 2026-05-10
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # App Review — Config
@@ -92,9 +92,8 @@ customTriggers: ['purchase_complete', 'nps_positive']
 Then your code emits each trigger once at the right moment:
 
 ```typescript
-// (Trigger emission API ships with the Background Update + analytics
-// reference in Batch 4. Until then, your app's own analytics layer can
-// store these triggers in @capacitor/preferences directly.)
+// The plugin does not record these triggers itself; store them in your
+// app's own analytics or storage layer.
 ```
 
 If `customTriggers` is non-empty, **all** of them must have fired before [`canRequestReview()`](./methods#canrequestreview) returns `canRequest: true`.
@@ -170,5 +169,5 @@ const appReview: AppReviewConfig = {
 ---
 
 <div className="nu-author-card">
-Config reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-10</strong>. Documented by <a href="https://aoneahsan.com">Ahsan Mahmood</a>.
+Config reference verified against <code>src/definitions.ts</code> in the plugin repo as of <strong>2026-05-10</strong>. Documented by the Native Update team.
 </div>

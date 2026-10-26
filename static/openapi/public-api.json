@@ -6,29 +6,18 @@
     "summary": "Run an app's whole lifecycle with a personal access token — apps, API keys, signing keys, keystore backups, builds, and releases.",
     "description": "Everything the Native Update dashboard does — create and configure apps, mint and rotate API keys, manage a signing key, back up a keystore, upload a bundle, publish it, promote it between channels, adjust a rollout — over HTTP. Intended for CI, scripts, and agents.\n\n**Authentication:** `Authorization: Bearer nu_pat_…`. An access token is a user-level secret with no origin restrictions: keep it in a CI secret or server environment variable, never in a browser or a repository. This plane sends no CORS headers on purpose.\n\n**Not the same as an app API key.** `nu_app_…` keys authenticate the plugin inside your app against `/api/v1/updates/check`; they are rejected here.\n\n**Scoping:** a token reaches the apps selected for it in the dashboard, or — when created with `all_apps` — every app you own, including apps created later. Creating an app with an explicitly-scoped token auto-attaches it. Anything out of scope answers 404 — never 403 — so the API cannot be used to discover other people's apps.\n\n**Permissions:** every valid token may `manage` (read; create and edit apps; mint, rotate and restrict API keys; create and rotate a signing key; upload, publish, promote and roll out builds; upload and download a keystore). The three delete permissions — `builds.delete`, `apps.delete`, `keys.delete` — are opt-in and off by default.\n\n**Access tokens are dashboard-only.** There is no endpoint to create, rotate, or delete a token here; a leaked token can never mint another token or widen its own reach.\n\n**Uploads are queued:** POSTing a bundle returns 202 with a job id. Poll `GET /jobs/{jobId}` until `completed` or `failed`. A 202 means accepted, not live.",
     "contact": {
-      "name": "Ahsan Mahmood",
-      "email": "aoneahsan@gmail.com",
-      "url": "https://aoneahsan.com"
+      "name": "Native Update team",
+      "url": "https://nativeupdate.aoneahsan.com/contact"
     },
     "license": {
-      "name": "MIT",
-      "identifier": "MIT"
+      "name": "Native Update License (proprietary)",
+      "url": "https://nativeupdate.aoneahsan.com/terms"
     }
   },
   "servers": [
     {
       "url": "https://nativeupdatebe.aoneahsan.com/api/public/v1",
-      "description": "Hosted backend"
-    },
-    {
-      "url": "{origin}/api/public/v1",
-      "description": "Self-hosted backend",
-      "variables": {
-        "origin": {
-          "default": "https://your-backend.example.com",
-          "description": "Origin of your own deployment"
-        }
-      }
+      "description": "Hosted Native Update service"
     }
   ],
   "security": [

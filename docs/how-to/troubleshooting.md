@@ -5,7 +5,7 @@ description: Diagnose the most common native-update failures — updates not det
 keywords: [native-update troubleshooting, capacitor ota not working, update not detected, download fails, rollback after update, native-update debug]
 last_update:
   date: 2026-07-14
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # How-to: Troubleshoot updates
@@ -131,4 +131,4 @@ console.log('security info:', await NativeUpdate.getSecurityInfo());
 
 ## Still stuck?
 
-Gather the plugin version, platform + OS version, the `sync()` result status, and any `updateStateChanged` events, then email [aoneahsan@gmail.com](mailto:aoneahsan@gmail.com).
+Gather the plugin version, platform + OS version, the `sync()` result status, and any `updateStateChanged` events, then send them to us through the [contact page](https://nativeupdate.aoneahsan.com/contact).

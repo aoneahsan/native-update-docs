@@ -5,12 +5,12 @@ description: A step-by-step walkthrough from a fresh Capacitor project to a veri
 keywords: [native-update tutorial, capacitor ota tutorial, first ota update, native-update getting started, capacitor live update setup]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Your first OTA update — end to end
 
-By the end of this tutorial you will have published a single change to a running app over the air and watched the device pick it up. The path takes ~30 minutes if you already have a Capacitor app, plus another ~30 minutes if you are starting fresh. You will use the hosted Native Update SaaS for the backend — the same flow works for self-hosted Laravel or your own backend with one config change.
+By the end of this tutorial you will have published a single change to a running app over the air and watched the device pick it up. The path takes ~30 minutes if you already have a Capacitor app, plus another ~30 minutes if you are starting fresh. You will use the hosted Native Update service for the backend — the same flow works against your own server that implements the contract, with one config change.
 
 This tutorial is the "happy path." It deliberately glosses over channels, rollouts, key rotation, and CI — each of those gets its own how-to in this section. Read this once, get it working, then come back for the production-grade details.
 
@@ -201,15 +201,15 @@ That's it. You just shipped an OTA update.
 
 ## What you did not do
 
-This tutorial deliberately skipped: channel management (you only used `production`), rollouts (you shipped to 100% of users instantly), backend self-hosting (you used the SaaS), CI integration (you ran the CLI by hand), signing-key rotation, and rollback. Each one has its own how-to in this section.
+This tutorial deliberately skipped: channel management (you only used `production`), rollouts (you shipped to 100% of users instantly), running your own server (you used the hosted service), CI integration (you ran the CLI by hand), signing-key rotation, and rollback. Each one has its own how-to in this section.
 
 ## Next steps
 
-- [Backend-first walkthrough](./backend-first-walkthrough) — the same flow with self-hosted Laravel instead of the SaaS.
+- [Backend overview](/backend/overview) — the hosted service, or your own server that implements the contract.
 - [Manage release channels](/how-to/manage-channels) — production vs staging vs beta.
 - [Integrate with CI/CD](/how-to/ci-cd-github-actions) — automate steps 6–8 from this tutorial.
 - [Test bundles in development](/how-to/test-bundles-locally) — iterate without uploading to the SaaS.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.

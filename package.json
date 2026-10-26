@@ -8,7 +8,7 @@
     "email": "aoneahsan@gmail.com",
     "url": "https://aoneahsan.com"
   },
-  "license": "MIT",
+  "license": "UNLICENSED",
   "homepage": "https://nativeupdate-docs.aoneahsan.com",
   "repository": {
     "type": "git",
@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@docusaurus/core": "^3.10.2",
+    "@docusaurus/plugin-client-redirects": "^3.10.2",
     "@docusaurus/plugin-content-docs": "^3.10.2",
     "@docusaurus/preset-classic": "^3.10.2",
     "@docusaurus/theme-common": "^3.10.2",

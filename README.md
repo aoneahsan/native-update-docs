@@ -6,9 +6,9 @@ Public documentation site for the [`native-update`](https://www.npmjs.com/packag
 - **Docs source**: this repo
 - **Plugin source (private)**: separate repo
 - **Marketing site + dashboard**: https://nativeupdate.aoneahsan.com
-- **Author**: [Ahsan Mahmood](https://aoneahsan.com)
+- **Maintained by**: the Native Update team
 
-Built with [Docusaurus 3](https://docusaurus.io/). Every push to `main` deploys automatically to GitHub Pages via `.github/workflows/deploy-docs.yml` (see `DEPLOY.md`).
+Built with [Docusaurus 3](https://docusaurus.io/). Every push to `main` deploys automatically to GitHub Pages via `.github/workflows/deploy-pages.yml` (see `DEPLOY.md`).
 
 ---
 
@@ -36,7 +36,7 @@ native-update-docs/
 │   ├── tutorials/           # End-to-end walkthroughs (Batch 8)
 │   ├── how-to/              # Problem-oriented guides (Batch 8)
 │   ├── concepts/            # Explanations (Batch 9)
-│   └── about-the-author.md
+│   └── about-the-author.md  # served at /about
 ├── src/
 │   ├── css/custom.css       # Brand palette + dark mode tuning
 │   └── pages/index.tsx      # Homepage
@@ -52,9 +52,9 @@ native-update-docs/
 
 - **One H1 per page** — Docusaurus uses it for the page title and breadcrumbs.
 - **Frontmatter required** on every doc:
-  - `title`, `description` (40–160 chars, AI-extractable), `keywords`, `last_update.date`, `last_update.author`.
+  - `title`, `description` (40–160 chars, AI-extractable), `keywords`, `last_update.date`, `last_update.author` (`Native Update team`).
   - Optional: `sidebar_position` for ordering.
-- **Author credit** at the bottom of every long page via the `.nu-author-card` div.
+- **Team credit** at the bottom of long pages: "Maintained by the Native Update team". No personal bylines.
 - **Honesty over marketing** — say what the plugin does NOT do as clearly as what it does.
 - **No fabricated stats** — cite sources by name (Capacitor, Apple guidelines, etc.).
 - **Code blocks** must compile / run as written. Use TypeScript over JavaScript.
@@ -67,4 +67,4 @@ All planned content batches are complete; the site is the **canonical documentat
 
 ## License
 
-MIT — same as the plugin. Built by [Ahsan Mahmood](https://aoneahsan.com) ([aoneahsan@gmail.com](mailto:aoneahsan@gmail.com), [LinkedIn](https://linkedin.com/in/aoneahsan)).
+Native Update is not open source. From 4.1.2 the `native-update` package ships under the proprietary Native Update License (in the package as `LICENSE`); earlier versions keep the license they were published with. Use of the hosted service is governed by its [Terms of Service](https://nativeupdate.aoneahsan.com/terms). Built and maintained by the Native Update team.

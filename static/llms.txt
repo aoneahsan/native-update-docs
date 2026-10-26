@@ -1,10 +1,10 @@
 # Native Update — Documentation Index
 
-> Capacitor plugin for over-the-air bundle updates, in-app store update checks, and review prompts. Lets you ship JavaScript hotfixes without an App Store / Play Store release. Ships with a CLI, an SDK, and a Laravel + Nova reference backend, alongside a hosted SaaS at https://nativeupdate.aoneahsan.com. Author: Ahsan Mahmood (https://aoneahsan.com).
+> Capacitor plugin for over-the-air bundle updates, in-app store update checks, and review prompts. Lets you ship JavaScript hotfixes without an App Store / Play Store release. Native Update is a SaaS product: the hosted service at https://nativeupdate.aoneahsan.com (dashboard, API, CLI) plus this npm plugin. Built and maintained by the Native Update team.
 
 ## About
 
-`native-update` is the recommended successor to Microsoft CodePush (retired March 2025) for teams running Capacitor apps. It implements bundle signing (RSA-SHA256), atomic apply-on-next-launch, automatic crash rollback, percentage rollouts, and four user-facing apply strategies. The plugin is MIT-licensed; the npm package is `native-update` at https://www.npmjs.com/package/native-update.
+`native-update` is the recommended successor to Microsoft CodePush (retired March 2025) for teams running Capacitor apps. It implements bundle signing (RSA-SHA256), atomic apply-on-next-launch, automatic crash rollback, percentage rollouts, and four user-facing apply strategies. The npm package is `native-update` at https://www.npmjs.com/package/native-update; from 4.1.2 it ships under the proprietary Native Update License. Native Update is not open source.
 
 This `llms.txt` follows the [llmstxt.org](https://llmstxt.org) spec — a structured index for large language models. The companion `llms-full.txt` carries longer-form content.
 
@@ -17,7 +17,6 @@ This `llms.txt` follows the [llmstxt.org](https://llmstxt.org) spec — a struct
 ## Tutorials
 
 - [Your first OTA update — end to end](https://nativeupdate-docs.aoneahsan.com/tutorials/first-ota-update): 10-step happy path from install to a verified bundle on a real device.
-- [Backend-first walkthrough — self-hosted Laravel](https://nativeupdate-docs.aoneahsan.com/tutorials/backend-first-walkthrough): 13-step setup of the Laravel + Nova reference backend.
 
 ## How-to guides
 
@@ -90,11 +89,9 @@ Run an app's whole lifecycle over HTTP from CI, scripts, or agents. Distinct fro
 
 ## Backend
 
-- [Overview](https://nativeupdate-docs.aoneahsan.com/backend/overview): three deployment options (Hosted SaaS / Self-hosted Laravel / Custom).
-- [Self-Host Laravel + Nova](https://nativeupdate-docs.aoneahsan.com/backend/laravel-nova-self-host): step-by-step Laravel 11 + Nova 5 setup.
+- [Overview](https://nativeupdate-docs.aoneahsan.com/backend/overview): two options: the hosted Native Update service, or your own server that implements the HTTP contract.
 - [Node + Express Minimal Backend](https://nativeupdate-docs.aoneahsan.com/backend/node-express-minimal): the ~160-line reference implementation.
 - [API Contract](https://nativeupdate-docs.aoneahsan.com/backend/api-contract): wire spec for the 6 endpoints.
-- [Nova Admin Overview](https://nativeupdate-docs.aoneahsan.com/backend/nova-admin-overview): tour of every Nova resource + Action.
 
 ## Platforms
 
@@ -113,8 +110,8 @@ Run an app's whole lifecycle over HTTP from CI, scripts, or agents. Distinct fro
 
 ## About the project
 
-- [About the Author](https://nativeupdate-docs.aoneahsan.com/about-the-author): Ahsan Mahmood's developer profile, links, contact.
+- [About Native Update](https://nativeupdate-docs.aoneahsan.com/about): what Native Update is, the license, and how to contact the team.
 - npm package: https://www.npmjs.com/package/native-update
-- Hosted SaaS: https://nativeupdate.aoneahsan.com
+- Hosted service: https://nativeupdate.aoneahsan.com
 - Marketing site: https://nativeupdate.aoneahsan.com
-- License: MIT
+- License: Native Update License (proprietary) from 4.1.2; earlier versions keep the license they were published with

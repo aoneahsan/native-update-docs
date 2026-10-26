@@ -5,7 +5,7 @@ description: Manage your apps, builds, and releases over HTTP with a personal ac
 keywords: [native-update public api, access token, ota deploy api, ci deploy capacitor, native update rest api]
 last_update:
   date: 2026-09-04
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # Public Management API

@@ -5,7 +5,7 @@ description: A practical migration guide from Microsoft CodePush (App Center) to
 keywords: [codepush migration, native-update vs codepush, app center retirement migration, capacitor codepush alternative, react-native-code-push migration]
 last_update:
   date: 2026-05-11
-  author: Ahsan Mahmood
+  author: Native Update team
 ---
 
 # How-to: Migrate from CodePush
@@ -40,7 +40,7 @@ Pick a `native-update` backend deployment. Three options (see [Backend → Overv
 
 The hosted SaaS at [nativeupdate.aoneahsan.com](https://nativeupdate.aoneahsan.com) is the closest analogue to CodePush-as-a-service — zero servers, pay-as-you-go.
 
-Self-hosted Laravel from `backend/` in the `native-update` repo if you want the same data ownership you would have had with on-prem CodePush.
+Your own server that implements the [API Contract](/backend/api-contract) if you want the data ownership you would have had with on-prem CodePush.
 
 The Express scaffold from `example-apps/node-express/` if you want a minimal contract for your test environment.
 
@@ -161,6 +161,6 @@ The dashboard's Build view shows downloads + installs incrementing as your test 
 - [Your first OTA update](/tutorials/first-ota-update) — the end-to-end happy path you are reproducing for each app.
 - [SDK Reference → Live Update → Methods](/reference/sdk/live-update/methods) — full method list to map your remaining CodePush call sites.
 
-## Authored by
+## Maintained by
 
-[Ahsan Mahmood](/about-the-author) — author and maintainer of `native-update`.
+The [Native Update team](/about) maintains `native-update` and this page.
