@@ -5,6 +5,10 @@ import type * as Preset from '@docusaurus/preset-classic';
 // mirrored into this committed file by `yarn sync:from-plugin` (CI cannot read
 // the private plugin repo). Never hardcode the version anywhere in this repo.
 import pluginVersion from './plugin-version.json';
+import sitePages, { withLastmod } from './plugins/site-pages';
+
+/** The blog's route: the blog plugin's `routeBasePath` below, with its leading slash. */
+const BLOG_PATH = '/blog';
 
 // ---------------------------------------------------------------------------
 // Native Update — Documentation site config
@@ -38,15 +42,7 @@ const config: Config = {
     // NOTE: no global rel=canonical here — Docusaurus already emits a correct
     // per-page canonical from `url`; a global one would override it on every
     // page (pre-existing SEO bug removed 2026-07-14).
-    {
-      tagName: 'link',
-      attributes: {
-        rel: 'alternate',
-        type: 'application/rss+xml',
-        title: 'Native Update Docs',
-        href: 'https://nativeupdate-docs.aoneahsan.com/sitemap.xml',
-      },
-    },
+    // The RSS and Atom <link rel="alternate"> tags come from the blog plugin's feedOptions below.
     {
       tagName: 'meta',
       attributes: {
@@ -167,7 +163,7 @@ const config: Config = {
     '@docusaurus/theme-mermaid',
     [
       '@easyops-cn/docusaurus-search-local',
-      { hashed: true, indexBlog: false, docsRouteBasePath: '/' },
+      { hashed: true, indexBlog: true, docsRouteBasePath: '/', blogRouteBasePath: BLOG_PATH },
     ],
   ],
 
@@ -194,18 +190,48 @@ const config: Config = {
           showLastUpdateAuthor: true,
           breadcrumbs: true,
         },
-        blog: false,
+        // Release notes: one post per published release, its body the changelog entry for that version.
+        blog: {
+          path: 'blog',
+          routeBasePath: 'blog',
+          blogTitle: 'Native Update releases',
+          blogDescription: 'Release notes for each published version of native-update, newest first.',
+          blogSidebarTitle: 'Recent releases',
+          showReadingTime: false,
+          // A post's last update comes from git: shown under the post, and its sitemap lastmod.
+          showLastUpdateTime: true,
+          showLastUpdateAuthor: false,
+          onInlineAuthors: 'throw',
+          onInlineTags: 'throw',
+          onUntruncatedBlogPosts: 'throw',
+          feedOptions: {
+            type: ['rss', 'atom'],
+            xslt: true,
+            title: 'Native Update releases',
+            description: 'Release notes for each published version of native-update, newest first.',
+            copyright: `Copyright © ${new Date().getFullYear()} Ahsan Mahmood. native-update is MIT-licensed.`,
+            language: 'en-US',
+          },
+        },
         theme: {
           customCss: './src/css/custom.css',
         },
         sitemap: {
-          changefreq: 'weekly',
-          priority: 0.7,
+          // Every URL carries a truthful lastmod and nothing else: search engines ignore changefreq and priority.
           lastmod: 'date',
+          changefreq: null,
+          priority: null,
+          ignorePatterns: ['/tags/**', `${BLOG_PATH}/tags/**`, `${BLOG_PATH}/archive`, `${BLOG_PATH}/authors/**`, '/search'],
+          // A page git cannot date (the blog list, a category index, /sitemap, /feed) takes the newest date it lists.
+          createSitemapItems: async ({ defaultCreateSitemapItems, ...params }) =>
+            withLastmod(await defaultCreateSitemapItems(params), BLOG_PATH),
         },
       } satisfies Preset.Options,
     ],
   ],
+
+  // `/sitemap` and `/feed` for people, and `/feed.xml` beside `/sitemap.xml` for machines.
+  plugins: [sitePages({ blogPath: BLOG_PATH })],
 
   themeConfig: {
     image: 'img/social-card.svg',
@@ -290,6 +316,19 @@ const config: Config = {
             { label: 'npm package', href: 'https://www.npmjs.com/package/native-update' },
             { label: 'Marketing site', href: 'https://nativeupdate.aoneahsan.com' },
             { label: 'Docs source', href: 'https://github.com/aoneahsan/native-update-docs' },
+          ],
+        },
+        {
+          title: 'Site',
+          // Files written after the pages are built (feeds, sitemap, llms.txt) are invisible to the link checker,
+          // so they use `pathname://`, which links to the file as it is without routing.
+          items: [
+            { label: 'Releases', to: BLOG_PATH },
+            { label: 'Feed', to: '/feed' },
+            { label: 'Sitemap', to: '/sitemap' },
+            { label: 'feed.xml', href: 'pathname:///feed.xml' },
+            { label: 'sitemap.xml', href: 'pathname:///sitemap.xml' },
+            { label: 'llms.txt', href: 'pathname:///llms.txt' },
           ],
         },
         {
