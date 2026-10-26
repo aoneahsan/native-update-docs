@@ -12,6 +12,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.1.2] - 2026-10-26
+
+### Changed
+
+- **License.** From this version the package is published under the Native Update License (see `LICENSE`):
+  free to install and use in the apps you build, with a Native Update account or your own server that
+  implements the documented update contract, and not to be redistributed on its own. Versions before 4.1.2
+  remain under the MIT license they were published with. Native Update is a hosted service, not an open-source
+  project.
+- The README and the AI integration guide no longer describe a self-hostable Laravel backend; the hosted
+  service or your own contract server are the two supported backends. No code or API change.
+
 ## [4.1.1] - 2026-10-21
 
 ### Changed
