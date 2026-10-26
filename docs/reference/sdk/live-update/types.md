@@ -157,6 +157,8 @@ Return value of [`getLatest()`](./methods#getlatest). All fields except `availab
 | `signature` | `string` | no | RSA-SHA256 signature over the bundle. |
 | `signatureAlgorithm` | `'RSA-SHA256'` | no | Wire signature algorithm. |
 | `delta` | `DeltaUpdateInfo` | no | Verified patch metadata when a patch exists for the current bundle. |
+| `held` | `boolean` | no | Since 4.2.0. `true` when the hosted service has a newer release but has paused delivery because the developer account is over its plan limits past the grace period. `available` stays `false`. |
+| `heldMessage` | `string` | no | Since 4.2.0. The reason sent with `held`, ready to show to your users. |
 
 ---
 
@@ -177,6 +179,8 @@ Return value of [`checkForUpdate()`](./methods#checkforupdate). Adds the device'
 | `signature` | `string` | no | Expected signature (when signed). |
 | `signatureAlgorithm` | `'RSA-SHA256'` | no | Wire signature algorithm. |
 | `delta` | `DeltaUpdateInfo` | no | Patch metadata, including source version, URL, size, and checksums. |
+| `held` | `boolean` | no | Since 4.2.0. A newer release (`latestVersion`) exists but delivery is paused by a billing hold on the developer account; nothing is downloaded. |
+| `heldMessage` | `string` | no | Since 4.2.0. The reason sent with `held`. |
 
 ### `DeltaUpdateInfo`
 

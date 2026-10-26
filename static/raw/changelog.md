@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2.0] - 2026-10-26
+
+### Added
+
+- **Billing hold on the update check.** `checkForUpdate()` and `getLatest()` now return `held: true`, the
+  held `version`/`latestVersion` and a `heldMessage` when the hosted service has a newer release for the app
+  but has paused delivery because the developer account has been over its plan limits for longer than the
+  grace period. `available` stays `false`, so nothing is downloaded; an app may show `heldMessage` to its
+  users. Web, Android and iOS. Servers that do not send the field are unaffected.
+
 ## [4.1.2] - 2026-10-26
 
 ### Changed

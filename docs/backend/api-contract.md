@@ -111,6 +111,22 @@ The SDK accepts any of these `message` values; it only checks `available`. Reaso
 - The bundle's platform field doesn't include the device's platform.
 - The `min_native_version` requires a newer store build.
 
+**Response (billing hold, hosted service only):** `200 OK`. A newer release exists, but the developer account
+has been over its plan limits for longer than the grace period, so no bundle is served. From 4.2.0 the SDK
+surfaces it as `held` / `heldMessage`; older SDKs read it as "no update".
+
+```json
+{
+  "available": false,
+  "held": true,
+  "code": "BILLING_HOLD",
+  "version": "2.0.0",
+  "message": "An update is available. Delivery is paused until the app's developer renews their Native Update plan."
+}
+```
+
+A server you run yourself never needs to send it.
+
 **Response (update available):** `200 OK`
 
 ```json
