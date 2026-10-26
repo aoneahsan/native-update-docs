@@ -121,7 +121,7 @@ Never `await` a review call inline with critical user flows — wrap it in a fir
 | `CONDITIONS_NOT_MET` | Plugin-side throttle blocked the call | Skip silently; respect the throttle. |
 | `QUOTA_EXCEEDED` | Some platforms surface this when their internal cap is exhausted | Skip silently; quota resets eventually. |
 
-The full code list ships with the security reference in **Batch 4**.
+The full code list is in the [error code reference](../security/error-codes).
 
 ---
 

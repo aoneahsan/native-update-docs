@@ -101,7 +101,7 @@ No. The plugin only swaps the web layer (JavaScript, HTML, CSS, fonts, images, J
 
 ### How does rollback decide what is "broken"?
 
-If `notifyAppReady()` is not called within the first session on a new bundle, the next cold start treats the bundle as failed and reverts. You can also force a rollback from your server (Batch 6 covers the contract for this).
+If `notifyAppReady()` is not called within the first session on a new bundle, the next cold start treats the bundle as failed and reverts. You can also force a rollback from your server (the [API contract](/backend/api-contract) covers it).
 
 ### Does it support delta updates?
 

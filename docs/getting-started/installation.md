@@ -62,7 +62,7 @@ Open the iOS workspace once after `cap sync`:
 cd ios/App && open App.xcworkspace
 ```
 
-The pod is now in your project. You do not normally need to touch `Info.plist` for the live-update feature, but **background updates** require these capabilities and Info.plist keys (covered in detail in the *Platform — iOS* guide, Batch 7):
+The pod is now in your project. You do not normally need to touch `Info.plist` for the live-update feature, but **background updates** require these capabilities and Info.plist keys (covered in detail in the [iOS platform guide](/platforms/ios)):
 
 - Capability: **Background Modes** → **Background fetch** and **Background processing**
 - Info.plist: `BGTaskSchedulerPermittedIdentifiers` array containing your plugin's task identifier
@@ -76,7 +76,7 @@ The pod is now in your project. You do not normally need to touch `Info.plist` f
 - `POST_NOTIFICATIONS` (Android 13+, only if you enable background-update notifications)
 - `FOREGROUND_SERVICE` and `FOREGROUND_SERVICE_DATA_SYNC` (only if you opt into background downloads)
 
-Inspect the merged manifest at `android/app/build/intermediates/merged_manifests/*/AndroidManifest.xml` after a build to confirm. Detailed permission audit lives in the *Platform — Android* guide, Batch 7.
+Inspect the merged manifest at `android/app/build/intermediates/merged_manifests/*/AndroidManifest.xml` after a build to confirm. The detailed permission audit is in the [Android platform guide](/platforms/android).
 
 ## Step 5 — Verify the install
 

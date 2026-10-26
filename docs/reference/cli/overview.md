@@ -114,7 +114,7 @@ This is the most-asked support question, so it lives in the overview:
 
 - **It does not upload bundles for you.** The CLI produces a ZIP + `.sig` + metadata JSON. Your backend or release pipeline uploads them. The hosted SaaS uses the dashboard or a separate upload script.
 - **It does not call the device-side SDK.** Methods like `NativeUpdate.sync()` only exist on a real device or browser; the CLI runs on Node.
-- **It does not edit your `AndroidManifest.xml` or `Info.plist`.** Platform setup is documented in the Platform Guides (Batch 7) — `init` only writes the JS-side config.
+- **It does not edit your `AndroidManifest.xml` or `Info.plist`.** Platform setup is in the [platform guides](/platforms/android) — `init` only writes the JS-side config.
 - **The `backend create` scaffolds are not production-ready.** They are starting points with `TODO[SCAFFOLD-IMPLEMENT-BEFORE-DEPLOY]` markers — see the [`backend create`](./backend-create) page.
 
 ## FAQ
