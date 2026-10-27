@@ -48,7 +48,7 @@ See [Bundle integrity and signing](./bundle-integrity-and-signing) for the full 
 
 Even a perfectly delivered bundle can crash your app. The runtime layer is the SDK's defenses against bad code (not against attackers): the `notifyAppReady()` heartbeat, the automatic crash rollback, the bundle history that lets the SDK revert to a known-good version.
 
-The runtime layer makes a strict assumption: every bundle must call `notifyAppReady()` within the configured window (default 60s from launch). Bundles that don't are presumed crashed and rolled back. This means **a bundle that breaks `notifyAppReady()` itself triggers a rollback** — the developer mistake of "I refactored the SDK init out of the boot path" auto-corrects to the previous bundle. Defense in depth includes defense against developer bugs, not just attackers.
+The runtime layer makes a strict assumption: every bundle must call `notifyAppReady()` once it has booted. A bundle that reaches two cold starts in a row without the call is presumed crashed and rolled back on the next launch. This means **a bundle that breaks `notifyAppReady()` itself triggers a rollback** — the developer mistake of "I refactored the SDK init out of the boot path" auto-corrects to the previous bundle. Defense in depth includes defense against developer bugs, not just attackers.
 
 ## What's in scope
 

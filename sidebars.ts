@@ -22,6 +22,12 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'Dashboard',
+      collapsed: true,
+      items: ['dashboard/ai-assistants', 'dashboard/jobs', 'dashboard/referrals', 'dashboard/support'],
+    },
+    {
+      type: 'category',
       label: 'SDK Reference',
       collapsed: false,
       items: [

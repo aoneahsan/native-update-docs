@@ -40,7 +40,7 @@ A single OTA release moves through eleven steps from CI to user-visible bundle.
 8. **Signature verify.** SDK runs RSA-SHA256 verification against the public key compiled into the app. Mismatch → reject + delete.
 9. **Stage.** SDK unpacks the ZIP into a fresh directory under app data, writes a `pending` marker. The active bundle is unchanged.
 10. **Atomic swap on next launch.** On next cold start, the SDK swaps the WebView's bundle path to the new directory.
-11. **Verify-or-roll-back.** Within 60 seconds (configurable), your app must call `NativeUpdate.notifyAppReady()`. If it does, the bundle flips from `pending` to `verified`. If not, the SDK assumes a crash and rolls back to the previous bundle on next launch.
+11. **Verify-or-roll-back.** Your app calls `NativeUpdate.notifyAppReady()` once it has booted. If it does, the bundle flips from `pending` to `verified`. If two cold starts in a row end without the call, the SDK assumes a crash loop and the next launch rolls back to the previous bundle. There is no timer.
 
 Bundles are append-only on the device — the SDK keeps the previous verified bundle around so it can roll back without needing to re-download.
 
@@ -168,7 +168,7 @@ Host app must keep running through every OTA failure. The defensive pattern is `
 
 ## Performance and operational defaults
 
-**60-second `notifyAppReady` window.** Bundles must call this within 60 seconds of next launch or they get rolled back. Calibrated to be generous for any reasonable boot path but tight enough that broken bundles don't persist.
+**Two failed boots, then rollback.** A new bundle that reaches two cold starts in a row without `notifyAppReady()` is rolled back on the next launch. There is no timer, so slow boots are never rolled back for being slow.
 
 **30-minute signed-URL TTL.** Bundle download URLs expire after 30 minutes. Calibrated for 20+ MB bundles on slow mobile networks; previous 5-minute default expired mid-stream too often. A custom server should keep its signed URLs valid at least as long.
 
@@ -197,7 +197,7 @@ Side-by-side phase: keep `cordova-plugin-code-push` installed while you wire `na
 | Signing algorithm | RSA-SHA256 (default 4096-bit RSA) |
 | Checksum algorithm | SHA-256 |
 | Default channel | `production` |
-| Default `notifyAppReady` window | 60 seconds |
+| Failed boots before automatic rollback | 2 (no timer) |
 | Default signed-URL TTL | 30 minutes |
 | Default API-key rate limit | 600 req / 15 min |
 | Hosted service | https://nativeupdate.aoneahsan.com |

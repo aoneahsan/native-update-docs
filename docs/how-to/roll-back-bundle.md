@@ -16,16 +16,19 @@ You shipped 1.4.0 and rollback alerts are firing. This how-to covers three layer
 
 If the bad bundle prevents your app from booting at all, the SDK rolls back on its own. The mechanism:
 
-`NativeUpdate.notifyAppReady()` is the SDK's "the new bundle works" signal. The SDK calls it from your app code, typically inside the boot sequence. If a bundle is applied and `notifyAppReady()` is never called within the configured window (default 60 seconds from launch), the SDK assumes the bundle crashed before reaching the call, reverts to the previous verified bundle, and marks the failed bundle as `failed` so it won't be retried.
+`NativeUpdate.notifyAppReady()` is the SDK's "the new bundle works" signal. The SDK calls it from your app code, typically inside the boot sequence. If a bundle is applied and two cold starts in a row end without `notifyAppReady()`, the SDK assumes the bundle crashes before reaching the call: the next launch reverts to the previous verified bundle and marks the failed bundle as `failed` so it won't be retried. There is no timer, so a slow boot is not treated as a failure.
 
 You did not have to do anything to get this — it is on by default. Verify the bundle was rolled back:
 
-```bash
-adb logcat | grep native-update
-# [native-update] applied bundle 1.4.0
-# [native-update] notifyAppReady NOT called within 60s — rolling back
-# [native-update] rolled back to bundle 1.3.9
+```ts
+import { NativeUpdate } from 'native-update';
+
+// After the rollback launch, the active bundle is the previous verified one again.
+const active = await NativeUpdate.current();
+console.log(active.version); // 1.3.9, not the 1.4.0 that never confirmed
 ```
+
+The native reason is `auto-rollback after 3 failed cold starts`: two failed boots, and the third launch rolls back.
 
 If your app calls `notifyAppReady()` and crashes only later in the session, the automatic rollback does not kick in — the bundle is already marked verified. Use Layer 2 or 3 below.
 

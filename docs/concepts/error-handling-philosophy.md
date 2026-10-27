@@ -125,9 +125,9 @@ Notice the bootstrap is fire-and-forget. The app's main render path does not `aw
 
 Two specific defaults shape the SDK's failure surface:
 
-**The 60-second `notifyAppReady` window.** When a freshly-applied bundle is staged, it has 60 seconds from the next launch to call `notifyAppReady()` or it gets rolled back. The 60-second figure is generous for any reasonable boot path, tight enough that a crashing bundle doesn't persist across multiple launches.
+**Two failed boots, then rollback.** A freshly-applied bundle stays `pending` until your app calls `notifyAppReady()`. Every cold start that never reaches the call counts as one failed boot; after two failed boots in a row, the next launch reverts to the previous verified bundle and marks the new one `failed`. There is no timer, so a slow boot is never rolled back for being slow.
 
-Could the window be longer? Yes — but a longer window means a crashing bundle stays in place longer before rolling back, and slow rollbacks compound the user-visible damage. Could it be shorter? Yes — but legitimate slow boots (cold cache, slow networks resolving fonts, complex animations) sometimes take 10-20 seconds, and you don't want to roll back legitimate slow starts.
+Could the limit be one? It could, but a single crash on a bad network or a killed process would then throw away a good bundle. Could it be higher? It could, but every extra attempt is another launch where the user sees a crashing app. Two is the point where a crash loop is clear and a one-off failure is forgiven.
 
 **The 30-minute signed download URL TTL.** When the check endpoint mints a signed URL, the URL is valid for 30 minutes. The figure is calibrated for slow mobile downloads of 20+ MB bundles (the previous 5-minute default routinely expired mid-stream on hotel WiFi). Longer TTLs make replay attacks easier; shorter TTLs make legitimate downloads fail.
 
