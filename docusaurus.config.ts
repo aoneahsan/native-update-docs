@@ -230,7 +230,7 @@ const config: Config = {
   ],
 
   themeConfig: {
-    image: 'img/social-card.svg',
+    image: 'img/social-card.png',
     metadata: [
       { name: 'description', content: 'Documentation for native-update — Capacitor plugin for over-the-air bundle updates, in-app store update checks, and review prompts. Maintained by the Native Update team.' },
       { name: 'keywords', content: 'capacitor, native-update, OTA, live updates, hot reload, app updates, in-app updates, app review, code-push alternative, mobile updates, capacitor ota, capacitor live update, capacitor hot reload, capacitor over-the-air, capacitor update plugin' },

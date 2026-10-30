@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2.1] - 2026-10-30
+
+### Fixed
+
+- **Android release builds with R8.** The plugin now ships its R8 rules to every app that uses it
+  (`consumerProguardFiles`), so an app's release build with `minifyEnabled true` needs no rules of its own.
+  Before, an app without Google Play services on its classpath stopped with `Missing class
+  com.google.android.gms.common.annotation.NoNullnessRewrite` (referenced by Play Core's review library).
+  Remove any `-dontwarn` your app added for it. No API change.
+
 ## [4.2.0] - 2026-10-26
 
 ### Added
