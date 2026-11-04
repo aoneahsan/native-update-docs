@@ -20,7 +20,7 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start --port 5960 --host 0.0.0.0",
-    "build": "docusaurus build",
+    "build": "NODE_OPTIONS=--no-experimental-webstorage docusaurus build",
     "swizzle": "docusaurus swizzle",
     "clear": "docusaurus clear",
     "serve": "docusaurus serve --port 5961",
@@ -50,7 +50,7 @@
     "@docusaurus/types": "^3.10.2",
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
-    "typescript": "~6.0.3"
+    "typescript": "~7.0.2"
   },
   "browserslist": {
     "production": [
