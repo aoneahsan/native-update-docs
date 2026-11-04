@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunknative_update_docs=globalThis.webpackChunknative_update_docs||[]).push([[1903],{1912(a){a.exports=JSON.parse('{"blogBasePath":"/blog","blogTitle":"Native Update releases","authorsListPath":"/blog/authors"}')}}]);

@@ -1,0 +1,117 @@
+# Native Update — Documentation Index
+
+> Capacitor plugin for over-the-air bundle updates, in-app store update checks, and review prompts. Lets you ship JavaScript hotfixes without an App Store / Play Store release. Native Update is a SaaS product: the hosted service at https://nativeupdate.aoneahsan.com (dashboard, API, CLI) plus this npm plugin. Built and maintained by the Native Update team.
+
+## About
+
+`native-update` is the recommended successor to Microsoft CodePush (retired March 2025) for teams running Capacitor apps. It implements bundle signing (RSA-SHA256), atomic apply-on-next-launch, automatic crash rollback, percentage rollouts, and four user-facing apply strategies. The npm package is `native-update` at https://www.npmjs.com/package/native-update; from 4.1.2 it ships under the proprietary Native Update License. Native Update is not open source.
+
+This `llms.txt` follows the [llmstxt.org](https://llmstxt.org) spec — a structured index for large language models. The companion `llms-full.txt` carries longer-form content.
+
+## Getting Started
+
+- [Introduction](https://nativeupdate-docs.aoneahsan.com/intro): What native-update is, who it's for, and the four feature areas it covers.
+- [Installation](https://nativeupdate-docs.aoneahsan.com/getting-started/installation): npm install + peer-dependency notes + platform setup quick reference.
+- [Quick Start](https://nativeupdate-docs.aoneahsan.com/getting-started/quick-start): 5-minute first OTA update.
+
+## Tutorials
+
+- [Your first OTA update — end to end](https://nativeupdate-docs.aoneahsan.com/tutorials/first-ota-update): 10-step happy path from install to a verified bundle on a real device.
+
+## How-to guides
+
+- [Manage release channels](https://nativeupdate-docs.aoneahsan.com/how-to/manage-channels): production, staging, beta, canary cohorts.
+- [Rotate signing keys without breaking active bundles](https://nativeupdate-docs.aoneahsan.com/how-to/rotate-signing-keys): scheduled multi-key transition + emergency revoke path.
+- [Roll back a bad bundle](https://nativeupdate-docs.aoneahsan.com/how-to/roll-back-bundle): three-layer strategy from automatic crash-rollback to explicit per-device rollback.
+- [Migrate from CodePush](https://nativeupdate-docs.aoneahsan.com/how-to/migrate-from-codepush): concept mapping plus side-by-side migration.
+- [Integrate with CI/CD (GitHub Actions)](https://nativeupdate-docs.aoneahsan.com/how-to/ci-cd-github-actions): production workflow with secret management.
+- [Test bundles in development](https://nativeupdate-docs.aoneahsan.com/how-to/test-bundles-locally): three local-test loops in increasing fidelity.
+
+## SDK Reference
+
+### Core
+- [Lifecycle](https://nativeupdate-docs.aoneahsan.com/reference/sdk/core/lifecycle): `initialize`, `isInitialized`, `configure`, `reset`, `cleanup`.
+- [PluginInitConfig](https://nativeupdate-docs.aoneahsan.com/reference/sdk/core/config): the top-level plugin configuration object.
+
+### Live Update (OTA)
+- [Overview](https://nativeupdate-docs.aoneahsan.com/reference/sdk/live-update/overview): when to use Live Update; mental model; state diagram.
+- [Methods](https://nativeupdate-docs.aoneahsan.com/reference/sdk/live-update/methods): all 20 methods grouped by lifecycle, channels, downloads, validation.
+- [Types](https://nativeupdate-docs.aoneahsan.com/reference/sdk/live-update/types): `BundleInfo`, `SyncOptions`, `SyncResult`, `DownloadOptions`, etc.
+- [Enums](https://nativeupdate-docs.aoneahsan.com/reference/sdk/live-update/enums): `UpdateStrategy`, `UpdateMode`, `BundleStatus`, `SyncStatus`, `ChecksumAlgorithm`.
+- [Events](https://nativeupdate-docs.aoneahsan.com/reference/sdk/live-update/events): `downloadProgress`, `updateStateChanged`.
+- [Config](https://nativeupdate-docs.aoneahsan.com/reference/sdk/live-update/config): `LiveUpdateConfig` field-by-field.
+
+### App Update
+- [Overview](https://nativeupdate-docs.aoneahsan.com/reference/sdk/app-update/overview): when to use App Update; platform behaviour matrix.
+- [Methods](https://nativeupdate-docs.aoneahsan.com/reference/sdk/app-update/methods): 5 methods including `getAppUpdateInfo`, `performImmediateUpdate`, `startFlexibleUpdate`.
+- [Types](https://nativeupdate-docs.aoneahsan.com/reference/sdk/app-update/types): `AppUpdateInfo` with 10 fields + decision matrix.
+- [Events](https://nativeupdate-docs.aoneahsan.com/reference/sdk/app-update/events): 7 events covering install lifecycle.
+- [Config](https://nativeupdate-docs.aoneahsan.com/reference/sdk/app-update/config): `AppUpdateConfig` field-by-field.
+
+### App Review
+- [Overview](https://nativeupdate-docs.aoneahsan.com/reference/sdk/app-review/overview): Apple 3-prompts-per-365-days rule + Android Play Review throttling.
+- [Methods](https://nativeupdate-docs.aoneahsan.com/reference/sdk/app-review/methods): `canRequestReview`, `requestReview`.
+- [Config](https://nativeupdate-docs.aoneahsan.com/reference/sdk/app-review/config): launches/days/lastPrompt throttling knobs.
+
+### Background Update
+- [Overview](https://nativeupdate-docs.aoneahsan.com/reference/sdk/background-update/overview): WorkManager (Android) + BGTaskScheduler (iOS) scheduling.
+- [Methods](https://nativeupdate-docs.aoneahsan.com/reference/sdk/background-update/methods): 8 methods for enable/disable/schedule/trigger.
+- [Config](https://nativeupdate-docs.aoneahsan.com/reference/sdk/background-update/config): 12-field config + notification preferences.
+- [Events](https://nativeupdate-docs.aoneahsan.com/reference/sdk/background-update/events): `backgroundUpdateProgress`, `backgroundUpdateNotification`.
+
+### Security
+- [Overview](https://nativeupdate-docs.aoneahsan.com/reference/sdk/security/overview): three-layer security model.
+- [Error Codes](https://nativeupdate-docs.aoneahsan.com/reference/sdk/security/error-codes): full `UpdateErrorCode` catalogue grouped by domain.
+- [Certificate Pinning](https://nativeupdate-docs.aoneahsan.com/reference/sdk/security/certificate-pinning): types + SHA-256 SPKI pin extraction + operational checklist.
+
+## CLI Reference
+
+- [Overview](https://nativeupdate-docs.aoneahsan.com/reference/cli/overview): install, global flags, exit codes.
+- [init](https://nativeupdate-docs.aoneahsan.com/reference/cli/init): scaffold `native-update.config.js`.
+- [keys generate](https://nativeupdate-docs.aoneahsan.com/reference/cli/keys-generate): RSA / EC keypair generation.
+- [bundle create](https://nativeupdate-docs.aoneahsan.com/reference/cli/bundle-create): package web build into an OTA bundle.
+- [bundle sign](https://nativeupdate-docs.aoneahsan.com/reference/cli/bundle-sign): RSA-SHA256 sign with private key.
+- [bundle verify](https://nativeupdate-docs.aoneahsan.com/reference/cli/bundle-verify): verify signature with public key.
+- [server start](https://nativeupdate-docs.aoneahsan.com/reference/cli/server-start): local development update server.
+- [monitor](https://nativeupdate-docs.aoneahsan.com/reference/cli/monitor): polling dashboard for backend stats.
+- [backend create](https://nativeupdate-docs.aoneahsan.com/reference/cli/backend-create): scaffold Express / Firebase / Vercel backend.
+- [deploy & remote commands](https://nativeupdate-docs.aoneahsan.com/reference/cli/deploy): manage apps and releases from CI with an access token (`NATIVE_UPDATE_TOKEN`) — `deploy --wait`, `token info`, `apps list|create|show|update|delete`, `apps keys list|create|show|rotate|reveal|revoke|deprecate|restrict|delete`, `apps signing show|create|rotate`, `apps keystore upload|info|download|delete`, `builds list|promote|rollout|status|delete`, `jobs status`.
+
+## Public API (access tokens)
+
+Run an app's whole lifecycle over HTTP from CI, scripts, or agents. Distinct from the device plane: `nu_pat_…` access tokens (user-level, server/CI only, no CORS) vs `nu_app_…` app API keys (in-app).
+
+- [Overview](https://nativeupdate-docs.aoneahsan.com/public-api/overview): access tokens vs app API keys; scoping (out-of-scope → 404, never 403; `all_apps` tokens reach every app you own, including apps created later); permissions (implied `manage` + opt-in `builds.delete` / `apps.delete` / `keys.delete`); the guarantee that access tokens themselves are dashboard-only; envelopes; rate limits.
+- [Endpoints](https://nativeupdate-docs.aoneahsan.com/public-api/endpoints): every route with curl — token introspection; app CRUD (create/edit/delete); API keys (list/create/show/rotate/reveal/restrict/revoke/deprecate/delete); the signing key (show/create/rotate); the private keystore backup (info/upload/download/delete); builds (list/upload/update/promote/rollout/delete, incl. the `mandatory` flag, the `BUILD_NOT_READY` guard, and rollout pause/resume); job status.
+- [Queued jobs](https://nativeupdate-docs.aoneahsan.com/public-api/async-jobs): uploads return 202 + a job id; 202 means accepted, not live — poll until `completed` or `failed`.
+- [OpenAPI 3.1 spec](https://nativeupdate-docs.aoneahsan.com/openapi/public-api.json): machine-readable contract (v1.1.0) for the whole plane.
+- [Raw Markdown for AI agents](https://nativeupdate-docs.aoneahsan.com/raw/manifest.json): front-matter-stripped copies of the public-API, AI-integration, and changelog pages at `/raw/<name>.md`, indexed by `/raw/manifest.json`.
+
+## Backend
+
+- [Overview](https://nativeupdate-docs.aoneahsan.com/backend/overview): two options: the hosted Native Update service, or your own server that implements the HTTP contract.
+- [Node + Express Minimal Backend](https://nativeupdate-docs.aoneahsan.com/backend/node-express-minimal): the ~160-line reference implementation.
+- [API Contract](https://nativeupdate-docs.aoneahsan.com/backend/api-contract): wire spec for the 6 endpoints.
+
+## Platforms
+
+- [Android](https://nativeupdate-docs.aoneahsan.com/platforms/android): permissions, manifest additions, WorkManager constraints, Play Core, ProGuard, Play Console rejection rules.
+- [iOS](https://nativeupdate-docs.aoneahsan.com/platforms/ios): Info.plist, BGTaskScheduler, UIBackgroundModes, ATS, Privacy manifest, App Store Review Guideline 2.5.2.
+- [Web](https://nativeupdate-docs.aoneahsan.com/platforms/web): when web target activates, service-worker integration path, three legitimate use cases.
+
+## Concepts
+
+- [How OTA updates work](https://nativeupdate-docs.aoneahsan.com/concepts/how-ota-updates-work): five-moving-parts framing + 11-step lifecycle.
+- [Bundle integrity and signing](https://nativeupdate-docs.aoneahsan.com/concepts/bundle-integrity-and-signing): SHA-256 + RSA-SHA256 two-layer model + trust chain.
+- [Update strategies compared](https://nativeupdate-docs.aoneahsan.com/concepts/update-strategies-compared): immediate vs on-app-start vs on-app-resume vs manual.
+- [Architecture](https://nativeupdate-docs.aoneahsan.com/concepts/architecture): system diagrams (build-time, deploy-time, runtime, trust boundaries).
+- [Security model](https://nativeupdate-docs.aoneahsan.com/concepts/security-model): threat model + in-scope vs out-of-scope.
+- [Error handling philosophy](https://nativeupdate-docs.aoneahsan.com/concepts/error-handling-philosophy): fail-closed on correctness, fail-open on availability.
+
+## About the project
+
+- [About Native Update](https://nativeupdate-docs.aoneahsan.com/about): what Native Update is, the license, and how to contact the team.
+- npm package: https://www.npmjs.com/package/native-update
+- Hosted service: https://nativeupdate.aoneahsan.com
+- Marketing site: https://nativeupdate.aoneahsan.com
+- License: Native Update License (proprietary) from 4.1.2; earlier versions keep the license they were published with

@@ -1,0 +1,20 @@
+/* TEAM */
+
+Maintainer: the Native Update team
+Site: https://nativeupdate.aoneahsan.com
+Contact: https://nativeupdate.aoneahsan.com/contact
+
+/* THANKS */
+
+To the Capacitor team at Ionic for the plugin architecture this project
+plugs into. To the Microsoft CodePush team for setting the bar on what
+OTA tooling can be. To everyone who reported a bug or pointed out a typo in the docs.
+
+/* SITE */
+
+Last update: 2026-10-26
+Standards: HTML5, CSS3, Markdown, JSON-LD
+Components: Docusaurus 3 (https://docusaurus.io/),
+            React 18, TypeScript 5, Mermaid 10
+Software: Visual Studio Code
+Hosting: GitHub Pages

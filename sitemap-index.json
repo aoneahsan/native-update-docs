@@ -1,0 +1,87 @@
+{
+  "$schema": "https://nativeupdate-docs.aoneahsan.com/sitemap-index.json",
+  "name": "Native Update Documentation Sitemap Index",
+  "description": "Machine-readable site index complementing sitemap.xml. Lists the main content hubs and their canonical URLs for search engines, AI crawlers, and answer-engine bots.",
+  "site": {
+    "name": "Native Update Documentation",
+    "url": "https://nativeupdate-docs.aoneahsan.com",
+    "author": {
+      "name": "Native Update team",
+      "url": "https://nativeupdate.aoneahsan.com"
+    },
+    "lastUpdated": "2026-10-26"
+  },
+  "discovery": {
+    "sitemap": "https://nativeupdate-docs.aoneahsan.com/sitemap.xml",
+    "robots": "https://nativeupdate-docs.aoneahsan.com/robots.txt",
+    "llms": "https://nativeupdate-docs.aoneahsan.com/llms.txt",
+    "llmsFull": "https://nativeupdate-docs.aoneahsan.com/llms-full.txt",
+    "humans": "https://nativeupdate-docs.aoneahsan.com/humans.txt",
+    "security": "https://nativeupdate-docs.aoneahsan.com/.well-known/security.txt"
+  },
+  "sections": [
+    {
+      "id": "getting-started",
+      "title": "Getting Started",
+      "url": "https://nativeupdate-docs.aoneahsan.com/getting-started/installation",
+      "pageCount": 2,
+      "type": "How-to"
+    },
+    {
+      "id": "tutorials",
+      "title": "Tutorials",
+      "url": "https://nativeupdate-docs.aoneahsan.com/tutorials/first-ota-update",
+      "pageCount": 1,
+      "type": "Tutorial"
+    },
+    {
+      "id": "how-to",
+      "title": "How-to guides",
+      "url": "https://nativeupdate-docs.aoneahsan.com/how-to/manage-channels",
+      "pageCount": 6,
+      "type": "How-to"
+    },
+    {
+      "id": "reference-sdk",
+      "title": "SDK Reference",
+      "url": "https://nativeupdate-docs.aoneahsan.com/reference/sdk/live-update/overview",
+      "pageCount": 23,
+      "type": "Reference"
+    },
+    {
+      "id": "reference-cli",
+      "title": "CLI Reference",
+      "url": "https://nativeupdate-docs.aoneahsan.com/reference/cli/overview",
+      "pageCount": 9,
+      "type": "Reference"
+    },
+    {
+      "id": "backend",
+      "title": "Backend",
+      "url": "https://nativeupdate-docs.aoneahsan.com/backend/overview",
+      "pageCount": 3,
+      "type": "Reference"
+    },
+    {
+      "id": "platforms",
+      "title": "Platforms",
+      "url": "https://nativeupdate-docs.aoneahsan.com/platforms/android",
+      "pageCount": 3,
+      "type": "Reference"
+    },
+    {
+      "id": "concepts",
+      "title": "Concepts",
+      "url": "https://nativeupdate-docs.aoneahsan.com/concepts/how-ota-updates-work",
+      "pageCount": 6,
+      "type": "Explanation"
+    }
+  ],
+  "totalPages": 55,
+  "diataxisCoverage": {
+    "tutorial": true,
+    "howTo": true,
+    "reference": true,
+    "explanation": true
+  }
+}

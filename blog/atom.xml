@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="atom.xsl"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://nativeupdate-docs.aoneahsan.com/blog</id>
+    <title>Native Update releases</title>
+    <updated>2026-10-21T00:00:00.000Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://nativeupdate-docs.aoneahsan.com/blog"/>
+    <subtitle>Release notes for each published version of native-update, newest first.</subtitle>
+    <icon>https://nativeupdate-docs.aoneahsan.com/img/favicon.svg</icon>
+    <rights>Copyright © 2026 Native Update.</rights>
+    <entry>
+        <title type="html"><![CDATA[Native Update 4.1.1]]></title>
+        <id>https://nativeupdate-docs.aoneahsan.com/blog/native-update-4-1-1</id>
+        <link href="https://nativeupdate-docs.aoneahsan.com/blog/native-update-4-1-1"/>
+        <updated>2026-10-21T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Native Update 4.1.1 release notes: refreshed Capacitor 8, CLI, build, lint and test dependencies, with no change to the public plugin API.]]></summary>
+        <content type="html"><![CDATA[<p>Native Update 4.1.1 was published on npm on 2026-10-21. The full release history is in the <a class="" href="https://nativeupdate-docs.aoneahsan.com/changelog">changelog</a>.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="411---2026-10-21">[4.1.1] - 2026-10-21<a href="https://nativeupdate-docs.aoneahsan.com/blog/native-update-4-1-1#411---2026-10-21" class="hash-link" aria-label="Direct link to [4.1.1] - 2026-10-21" title="Direct link to [4.1.1] - 2026-10-21" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="changed">Changed<a href="https://nativeupdate-docs.aoneahsan.com/blog/native-update-4-1-1#changed" class="hash-link" aria-label="Direct link to Changed" title="Direct link to Changed" translate="no">​</a></h3>
+<ul>
+<li class="">Refreshed the supported Capacitor 8, CLI, build, lint and test dependencies without changing the public
+plugin API. TypeScript remains on the fleet-safe 6.0 line.</li>
+<li class="">Refreshed the bundled CLI's Chalk and Express dependencies and verified both ESM and CommonJS package
+entry points plus the installed CLI help path from the candidate tarball.</li>
+</ul>]]></content>
+        <category label="Release" term="Release"/>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Native Update 4.1.0]]></title>
+        <id>https://nativeupdate-docs.aoneahsan.com/blog/native-update-4-1-0</id>
+        <link href="https://nativeupdate-docs.aoneahsan.com/blog/native-update-4-1-0"/>
+        <updated>2026-09-05T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Native Update 4.1.0 release notes: a locally signed bundle can now be uploaded with its signature, and deploy picks up the sibling .sig file.]]></summary>
+        <content type="html"><![CDATA[<p>Native Update 4.1.0 was published on npm on 2026-09-05. The full release history is in the <a class="" href="https://nativeupdate-docs.aoneahsan.com/changelog">changelog</a>.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="410---2026-09-05">[4.1.0] - 2026-09-05<a href="https://nativeupdate-docs.aoneahsan.com/blog/native-update-4-1-0#410---2026-09-05" class="hash-link" aria-label="Direct link to [4.1.0] - 2026-09-05" title="Direct link to [4.1.0] - 2026-09-05" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="fixed">Fixed<a href="https://nativeupdate-docs.aoneahsan.com/blog/native-update-4-1-0#fixed" class="hash-link" aria-label="Direct link to Fixed" title="Direct link to Fixed" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>A locally-signed bundle can now actually be uploaded (ISSUE-08).</strong> <code>builds.signature</code> existed, the model
+exposed it and <code>/v1/updates/check</code> already served it — but no upload validation accepted a signature and
+neither store path set one from input. So <code>native-update bundle sign</code> produced a detached <code>.sig</code> that
+nothing could carry to the server, every build landed <code>signature: null</code>, and an app configured
+<code>requireSignature: true</code> rejected the download <strong>on device</strong>, indistinguishable from "no update arrived".
+<code>POST /apps/{app}/builds</code> now accepts an optional <code>signature</code> on both the dashboard and public planes,
+stores it, and serves it on the update-check.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="added">Added<a href="https://nativeupdate-docs.aoneahsan.com/blog/native-update-4-1-0#added" class="hash-link" aria-label="Direct link to Added" title="Direct link to Added" translate="no">​</a></h3>
+<ul>
+<li class=""><code>native-update deploy --signature &lt;file&gt;</code>, and <strong>automatic pick-up of the sibling <code>.sig</code></strong> that
+<code>bundle sign</code> writes — the documented local-signing flow now works end to end without a new flag to learn.</li>
+<li class=""><code>bundle sign</code> records <code>bundleSha256</code> in its <code>.sig</code>, and <code>deploy</code> <strong>refuses</strong> to upload a signature whose
+checksum does not cover the bundle being sent. The server cannot detect that mismatch (it holds no public
+key to check against), so without this guard a stale <code>.sig</code> would publish a release every device rejects.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="notes">Notes<a href="https://nativeupdate-docs.aoneahsan.com/blog/native-update-4-1-0#notes" class="hash-link" aria-label="Direct link to Notes" title="Direct link to Notes" translate="no">​</a></h3>
+<ul>
+<li class="">A caller-supplied signature <strong>wins over server-side signing</strong> and is never silently replaced — signing a
+consumer's bundle with the server key would produce a release that fails on device while every server-side
+check looked healthy.</li>
+<li class="">The server deliberately does <strong>not</strong> verify a caller-supplied signature: it never holds that public key.
+Verification happens on the device, against the key compiled into the binary, where it fails closed.</li>
+</ul>]]></content>
+        <category label="Release" term="Release"/>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Native Update 4.0.0]]></title>
+        <id>https://nativeupdate-docs.aoneahsan.com/blog/native-update-4-0-0</id>
+        <link href="https://nativeupdate-docs.aoneahsan.com/blog/native-update-4-0-0"/>
+        <updated>2026-08-05T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Native Update 4.0.0 release notes: real delta delivery, Capacitor 8 and current toolchain requirements, RSA-SHA256 signatures and locked configuration.]]></summary>
+        <content type="html"><![CDATA[<p>Native Update 4.0.0 was published on npm on 2026-08-05. The full release history is in the <a class="" href="https://nativeupdate-docs.aoneahsan.com/changelog">changelog</a>.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="400---2026-08-05">[4.0.0] - 2026-08-05<a href="https://nativeupdate-docs.aoneahsan.com/blog/native-update-4-0-0#400---2026-08-05" class="hash-link" aria-label="Direct link to [4.0.0] - 2026-08-05" title="Direct link to [4.0.0] - 2026-08-05" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="added">Added<a href="https://nativeupdate-docs.aoneahsan.com/blog/native-update-4-0-0#added" class="hash-link" aria-label="Direct link to Added" title="Direct link to Added" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Real delta delivery.</strong> The canonical backend generates deterministic <code>NUDELTA/1</code> copy/literal
+patches from the last three compatible active builds, stores only patches smaller than 85% of the
+full target archive, and advertises them on the existing update-check response. Web, Android, and
+iOS validate the patch checksum, source checksum, operation bounds, target size, and final target
+checksum; every failure falls back to the signed full bundle.</li>
+<li class="">Active GitHub Actions gates for the plugin, website, Laravel backend, Android, iOS, CLI, examples,
+dependency audits, publish-artifact inspection, and the no-source-map policy.</li>
+<li class="">Focused TypeScript delta tests and Laravel reconstruction/signed-download tests; the backend suite
+now contains 426 passing tests (1,253 assertions), alongside 83 Android plugin tests.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="changed">Changed<a href="https://nativeupdate-docs.aoneahsan.com/blog/native-update-4-0-0#changed" class="hash-link" aria-label="Direct link to Changed" title="Direct link to Changed" translate="no">​</a></h3>
+<ul>
+<li class="">Requires Capacitor 8, Node.js 24.16+, Java 21, Android API 26+, Android compile/target SDK 36,
+Gradle 8.14.5, and current supported dependencies across every monorepo unit.</li>
+<li class="">Standardizes the wire and all verifiers on <code>RSA-SHA256</code> (RSASSA-PKCS1-v1_5 with SHA-256), matching
+the backend signer. Removed false RSA-PSS/ECDSA fallback claims.</li>
+<li class="">Configuration is immutable after initialization. <code>setUpdateUrl()</code> remains a deprecated no-op;
+changing locked settings requires <code>reset()</code> followed by a new <code>initialize()</code>/<code>configure()</code> call.</li>
+<li class="">Android sensitive configuration now uses a non-exportable Android Keystore AES-256-GCM key rather
+than deprecated EncryptedSharedPreferences. iOS Keychain entries are device-only.</li>
+<li class="">Reveal endpoints for retrievable API/access-token secrets are POST-only, rate-limited, audited,
+and return no-store headers. Keystore replacement validates ZIP structure and uploads the new
+private object before deleting the old one.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="fixed">Fixed<a href="https://nativeupdate-docs.aoneahsan.com/blog/native-update-4-0-0#fixed" class="hash-link" aria-label="Direct link to Fixed" title="Direct link to Fixed" translate="no">​</a></h3>
+<ul>
+<li class="">Native bridge return/argument shape drift, omitted iOS bridge methods, double-resolved
+initialization calls, nonfunctional background helper instances, fake worker responses, download
+cancellation tracking, boot-time signed-ZIP deletion, and inconsistent HTTPS/host/path checks.</li>
+<li class="">PayPal subscription plan changes now call the vendor-supported revise operation.</li>
+<li class="">The published examples and marketing snippets now use the real package name, v4 configuration
+shape, signed manifest fields, delta-aware download helper, and Capacitor 8 APIs.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="backend-deploy-required">Backend deploy required<a href="https://nativeupdate-docs.aoneahsan.com/blog/native-update-4-0-0#backend-deploy-required" class="hash-link" aria-label="Direct link to Backend deploy required" title="Direct link to Backend deploy required" translate="no">​</a></h3>
+<ul>
+<li class="">Apply <code>2026_08_05_000001_create_delta_patches_table.php</code>, rebuild Laravel caches, restart PHP-FPM
+when needed for OPcache, and verify <code>/api/version</code> returns <code>2026.08.05.1</code>.</li>
+</ul>]]></content>
+        <category label="Release" term="Release"/>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Native Update 3.4.0]]></title>
+        <id>https://nativeupdate-docs.aoneahsan.com/blog/native-update-3-4-0</id>
+        <link href="https://nativeupdate-docs.aoneahsan.com/blog/native-update-3-4-0"/>
+        <updated>2026-07-23T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Native Update 3.4.0 release notes: the full app lifecycle on the Public Management API, the all_apps token scope and new CLI commands.]]></summary>
+        <content type="html"><![CDATA[<p>Native Update 3.4.0 was published on npm on 2026-07-23. The full release history is in the <a class="" href="https://nativeupdate-docs.aoneahsan.com/changelog">changelog</a>.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="340---2026-07-23">[3.4.0] - 2026-07-23<a href="https://nativeupdate-docs.aoneahsan.com/blog/native-update-3-4-0#340---2026-07-23" class="hash-link" aria-label="Direct link to [3.4.0] - 2026-07-23" title="Direct link to [3.4.0] - 2026-07-23" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="added">Added<a href="https://nativeupdate-docs.aoneahsan.com/blog/native-update-3-4-0#added" class="hash-link" aria-label="Direct link to Added" title="Direct link to Added" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Full app lifecycle on the Public Management API.</strong> Beyond builds, the
+<code>/api/public/v1</code> plane now creates, edits, and deletes <strong>apps</strong>; manages an
+app's <strong>API keys</strong> (list, create, rotate, reveal, restrict, revoke, deprecate,
+delete — the secret is only ever shown on create/rotate/reveal); manages its
+<strong>signing key</strong> (show public key + fingerprint, create, rotate — the private
+key never leaves the server); and stores a private <strong>keystore backup</strong> (upload
+and download a <code>.zip</code> up to 10 MB, held with private visibility and only ever
+streamed back through the API, never a public URL). CI or an agent can now
+provision and run an app end to end without the dashboard. Machine-readable
+spec: <a href="https://nativeupdate-docs.aoneahsan.com/openapi/public-api.json" target="_blank" rel="noopener noreferrer" class="">https://nativeupdate-docs.aoneahsan.com/openapi/public-api.json</a>
+(now v1.1.0), with a front-matter-stripped Markdown mirror at <code>/raw/*.md</code>
+indexed by <code>/raw/manifest.json</code>.</li>
+<li class=""><strong><code>all_apps</code> token scope.</strong> An access token can now cover <strong>every app you own</strong>
+— the ones you have and any created later — instead of a fixed ticked list.
+Creating an app with a specifically-scoped token auto-attaches the new app to
+it. <code>GET /token</code> reports <code>all_apps</code>.</li>
+<li class=""><strong>Two more opt-in delete permissions.</strong> Alongside <code>builds.delete</code>, a token can
+be granted <code>apps.delete</code> and <code>keys.delete</code> (both off by default). Deleting an
+app or a key without the matching permission answers
+<code>403 TOKEN_PERMISSION_DENIED</code>. Access tokens themselves stay <strong>dashboard-only</strong>
+— nothing on the API can create, rotate, or delete one.</li>
+<li class=""><strong>Build controls:</strong> a <code>mandatory</code> flag on upload and edit; a <code>BUILD_NOT_READY</code>
+guard so a build cannot be forced <code>active</code> before its upload job completes; and
+rollout pause/resume via <code>enabled</code>, alongside the percentage (<code>0</code> halts).</li>
+<li class=""><strong>New CLI commands</strong> for the whole surface: <code>apps create|show|update|delete</code>,
+<code>apps keys list|create|show|rotate|reveal|revoke|deprecate|restrict|delete</code>,
+<code>apps signing show|create|rotate</code>, and
+<code>apps keystore upload|info|download|delete</code>. Auth via <code>NATIVE_UPDATE_TOKEN</code>, as
+with <code>deploy</code>.</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="backend">Backend<a href="https://nativeupdate-docs.aoneahsan.com/blog/native-update-3-4-0#backend" class="hash-link" aria-label="Direct link to Backend" title="Direct link to Backend" translate="no">​</a></h3>
+<ul>
+<li class="">Requires a deploy: new public-plane controllers and routes for app CRUD,
+API-key management, signing keys, and the keystore backup; migrations for the
+keystore backup and the <code>all_apps</code> token flag; and a permissions seeder re-run
+for the new <code>apps.delete</code> and <code>keys.delete</code> permissions. 423 PHPUnit tests pass.</li>
+</ul>]]></content>
+        <category label="Release" term="Release"/>
+    </entry>
+</feed>
