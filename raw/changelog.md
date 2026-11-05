@@ -3,6 +3,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2.2] - 2026-11-04
+
+### Fixed
+
+- **"Capacitor plugin "App" already registered" in every app.** The bundled builds inlined `@capacitor/app` (and
+  `@capacitor/device`), so the plugin registered a second time beside the app's own copy. Every `@capacitor/*` package
+  is now external, and `@capacitor/app` and `@capacitor/device` are declared as optional peers. No API change.
+
+### Changed
+
+- `ora` 10 in the CLI (Node 22 floor, already below this package's own). Dependencies at latest stable.
+
 ## [4.2.1] - 2026-10-30
 
 ### Fixed
