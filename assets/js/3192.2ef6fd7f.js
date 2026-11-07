@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunknative_update_docs=globalThis.webpackChunknative_update_docs||[]).push([[3192],{13192(e,a,c){c.d(a,{createArchitectureServices:()=>t.S});var t=c(84549);c(80184)}}]);
