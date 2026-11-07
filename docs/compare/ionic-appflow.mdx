@@ -1,0 +1,56 @@
+---
+title: "Moving from Ionic Appflow to Native Update"
+sidebar_label: "Ionic Appflow"
+description: "Ionic stopped new Appflow sales, and access ends on December 31, 2027. How to move a Capacitor app's live updates to native-update, and what it does not replace."
+keywords: [appflow alternative, ionic appflow migration, appflow end of life, capacitor live updates]
+last_update:
+  date: 2026-11-07
+  author: Native Update team
+---
+
+import {CheckedLine, CompareFacts, RivalLink} from '@site/src/components/CompareFacts';
+
+# Moving from Ionic Appflow
+
+<CheckedLine slug="ionic-appflow" />
+
+Ionic stopped selling Appflow to new customers in February 2025 and says existing customers keep access <RivalLink href="https://ionic.io/blog/important-announcement-the-future-of-ionics-commercial-products">through December 31, 2027</RivalLink>. You have time. Move on a normal release, not in a rush.
+
+Native Update replaces Appflow's live updates. It doesn't replace its cloud builds, so keep building your native app in your own CI or on your own machine.
+
+If your Appflow app is React Native, stop here: Native Update serves Capacitor only today, and React Native, Flutter and native packages are not available yet.
+
+## 1. Add the plugin and a key
+
+```bash
+yarn add native-update
+npx cap sync
+npx native-update keys generate --type rsa --size 4096
+```
+
+Capacitor 8 is required; [the installation page](/getting-started/installation) lists the rest. Create your app on [the dashboard](https://nativeupdate.aoneahsan.com/login).
+
+## 2. Swap the live update calls
+
+Replace the Appflow live update code in your boot path with the [Quick Start](/getting-started/quick-start) setup. Bundles here must be signed, and [the device checks the signature](/concepts/bundle-integrity-and-signing) before a bundle can run.
+
+```ts
+await NativeUpdate.notifyAppReady();
+const result = await NativeUpdate.sync();
+```
+
+## 3. Map your environments
+
+Test, QA and production become [channels](/how-to/manage-channels). A percentage rollout is set on each release.
+
+## 4. Move the release step in CI
+
+```bash
+npx native-update deploy ./dist --app com.example.app --rollout 5 --wait
+```
+
+[The CI guide](/how-to/ci-cd-github-actions) has a full pipeline. Remove the old plugin in one store build, and keep Appflow live until that build has spread.
+
+## The facts, dated
+
+<CompareFacts slug="ionic-appflow" />

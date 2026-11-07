@@ -31,7 +31,7 @@ This guide does NOT apply if you were running CodePush primarily for its analyti
 | Mandatory updates | The bundle's `mandatory` boolean (in the dashboard or via the upload API). |
 | Rollouts (% deployment) | `Rollout %` field on each build. |
 | Rollback (via CLI / portal) | Set the build's `Rollout %` to `0` or toggle `Is Active` — see [Roll back a bad bundle](./roll-back-bundle). |
-| Diff packages | Not implemented — every bundle is a full ZIP. (Capacitor bundles are typically much smaller than RN bundles, so the diff savings matter less.) |
+| Diff packages | Delta patches: only the files that changed travel, and a delta that can't apply falls back to the full bundle. |
 | Signing (optional in CodePush) | Mandatory in `native-update` — see Step 3 below. |
 
 ## Step 1 — Stand up the backend

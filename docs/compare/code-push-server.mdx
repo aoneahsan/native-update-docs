@@ -1,0 +1,29 @@
+---
+title: "Microsoft code-push-server and Native Update"
+sidebar_label: "code-push-server"
+description: "Microsoft's standalone CodePush server is archived. For React Native, Native Update is no replacement today; for Capacitor or Cordova, here is where to go. Dated facts."
+keywords: [code-push-server alternative, app center codepush retired, codepush migration]
+last_update:
+  date: 2026-11-07
+  author: Native Update team
+---
+
+import {CheckedLine, CompareFacts, RivalLink} from '@site/src/components/CompareFacts';
+
+# Microsoft code-push-server and Native Update
+
+<CheckedLine slug="code-push-server" />
+
+Microsoft retired hosted App Center CodePush on March 31, 2025, and archived this standalone server on May 20, 2025. It still runs, and it's free, but the repository is read-only.
+
+## If your app is React Native
+
+Native Update serves Capacitor only today. React Native, Flutter and native packages are not available yet, so we can't take this app. [The list](/compare) has services that say they serve React Native.
+
+## If your app is Capacitor or Cordova
+
+This one is a real move, and it has its own guide: [Migrate from CodePush](/how-to/migrate-from-codepush) maps each CodePush call and walks through running both side by side.
+
+## The facts, dated
+
+<CompareFacts slug="code-push-server" />

@@ -1,0 +1,53 @@
+---
+title: "From Capawesome's App Update and App Review plugins to Native Update"
+sidebar_label: "Capawesome plugins"
+description: "Replace @capawesome/capacitor-app-update and @capawesome/capacitor-app-review with one package: the method names, the Play update flow and the store review prompt."
+keywords: [capawesome app update alternative, capacitor in-app update, capacitor in-app review]
+last_update:
+  date: 2026-11-07
+  author: Native Update team
+---
+
+import {CheckedLine, CompareFacts, RivalLink} from '@site/src/components/CompareFacts';
+
+# From Capawesome's update and review plugins
+
+<CheckedLine slug="capawesome-app-update-review" />
+
+`@capawesome/capacitor-app-update` and `@capawesome/capacitor-app-review` are two small MIT plugins that do one job each, for free. If that's all you need, keep them. Moving only makes sense when you also want live updates and would rather run all three from one package.
+
+## 1. Add the plugin
+
+```bash
+yarn add native-update
+npx cap sync
+```
+
+[Requirements](/getting-started/installation) are the same as for any Capacitor 8 plugin. Then [initialize it once at boot](/getting-started/quick-start).
+
+## 2. Replace the Play update flow
+
+Native Update's flow lives in the [App Update API](/reference/sdk/app-update/methods): `getAppUpdateInfo()`, `performImmediateUpdate()`, `startFlexibleUpdate()`, `completeFlexibleUpdate()` and `openAppStore()`.
+
+```ts
+const info = await NativeUpdate.getAppUpdateInfo();
+```
+
+iOS has no in-app update flow, so [the overview](/reference/sdk/app-update/overview) explains what happens there.
+
+## 3. Replace the review prompt
+
+Use [`canRequestReview()` and `requestReview()`](/reference/sdk/app-review/methods). The store decides whether the dialog appears, on every library, and [the limits are written down here](/reference/sdk/app-review/overview).
+
+## 4. Remove the two plugins
+
+```bash
+yarn remove @capawesome/capacitor-app-update @capawesome/capacitor-app-review
+npx cap sync
+```
+
+This changes native code, so it ships in a store build.
+
+## The facts, dated
+
+<CompareFacts slug="capawesome-app-update-review" />

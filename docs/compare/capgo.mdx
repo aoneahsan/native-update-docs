@@ -1,0 +1,72 @@
+---
+title: "Moving from Capgo to Native Update"
+sidebar_label: "Capgo"
+description: "Replace Capgo's updater in a Capacitor app with native-update: a signing key, one config, your first signed release, then remove the old plugin. Prices and features dated."
+keywords: [capgo alternative, capgo migration, capacitor live update migration]
+last_update:
+  date: 2026-11-07
+  author: Native Update team
+---
+
+import {CheckedLine, CompareFacts, RivalLink} from '@site/src/components/CompareFacts';
+
+# Moving from Capgo
+
+<CheckedLine slug="capgo" />
+
+Capgo and Native Update do the same core job in the same place: a plugin in your Capacitor app that fetches a web bundle. So this is a real move, and it takes one store release to finish, because the plugin is native code. Devices on your old build keep talking to Capgo until they update.
+
+Stay if the open source stack is why you chose Capgo. Native Update's plugin and service aren't open source.
+
+## Before you start
+
+You need a Capacitor 8 project and Node 24.16 or newer. Check the [requirements](/getting-started/installation) first, since older Capacitor versions aren't supported.
+
+## 1. Install the plugin
+
+Add `native-update`, then try the steps below on a staging build before your production app.
+
+```bash
+yarn add native-update
+npx cap sync
+```
+
+## 2. Create the app and a signing key
+
+Sign in at [the dashboard](https://nativeupdate.aoneahsan.com/login), create an app with your real Capacitor `appId`, and copy the API key. Then [generate a key pair](/reference/cli/keys-generate):
+
+```bash
+npx native-update keys generate --type rsa --size 4096
+```
+
+The private key goes in your CI secrets. Signing is required here, and [this page explains what the device checks](/concepts/bundle-integrity-and-signing).
+
+## 3. Swap the calls
+
+Remove the Capgo calls from your boot code, then [initialize the plugin](/getting-started/quick-start#step-1--configure-the-plugin-30-sec) and confirm the boot. A bundle that never confirms reverts by itself after [two failed cold starts](/how-to/roll-back-bundle).
+
+```ts
+import { NativeUpdate } from 'native-update';
+
+await NativeUpdate.notifyAppReady();
+const result = await NativeUpdate.sync();
+```
+
+## 4. Rebuild your channels
+
+Your Capgo channels don't carry over. Recreate the ones you use, following [Manage release channels](/how-to/manage-channels). A percentage rollout is set per release, not per channel.
+
+## 5. Ship through the store, then release
+
+Remove Capgo's plugin, run `npx cap sync`, and ship that build through the store. From then on, releases go through the [CLI](/reference/cli/deploy):
+
+```bash
+export NATIVE_UPDATE_TOKEN=nu_pat_…
+npx native-update deploy ./dist --app com.example.app --rollout 5 --wait
+```
+
+Start small, watch the dashboard, then widen. Keep your Capgo account until the old store build has aged out.
+
+## The facts, dated
+
+<CompareFacts slug="capgo" />
