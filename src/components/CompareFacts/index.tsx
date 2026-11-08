@@ -81,8 +81,11 @@ export function CheckedLine({ slug }: { slug: string }) {
   );
 }
 
-/** The dated fact table: their prices, ours from the plan rows, and every feature row with its source. */
-export function CompareFacts({ slug }: { slug: string }) {
+/**
+ * The dated fact table: their prices, ours from the plan rows, and the feature rows with their sources.
+ * `hideNotStated` drops the rows the rival's pages did not state; the page then says once which those were.
+ */
+export function CompareFacts({ slug, hideNotStated = false }: { slug: string; hideNotStated?: boolean }) {
   const rival = find(slug);
   const w = words();
   const priceText = (price: Price) => {
@@ -153,6 +156,7 @@ export function CompareFacts({ slug }: { slug: string }) {
         <tbody>
           {data.features.map((feature) => {
             const theirs = rival.features[feature.key];
+            if (hideNotStated && theirs.status === 'not-stated') return null;
             return (
               <tr key={feature.key}>
                 <td>{feature.label}</td>
