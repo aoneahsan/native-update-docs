@@ -22,9 +22,9 @@ Stay if the open source stack is why you chose Capgo. Native Update's plugin and
 
 You need a Capacitor 8 project and Node 24.16 or newer. Check the [requirements](/getting-started/installation) first, since older Capacitor versions aren't supported.
 
-## 1. Install the plugin
+## 1. Install the plugin on a staging build
 
-Add `native-update`, then try the steps below on a staging build before your production app.
+Try every step below on staging before your production app.
 
 ```bash
 yarn add native-update
@@ -41,7 +41,7 @@ npx native-update keys generate --type rsa --size 4096
 
 The private key goes in your CI secrets. Signing is required here, and [this page explains what the device checks](/concepts/bundle-integrity-and-signing).
 
-## 3. Swap the calls
+## 3. Take out Capgo's boot code
 
 Remove the Capgo calls from your boot code, then [initialize the plugin](/getting-started/quick-start#step-1--configure-the-plugin-30-sec) and confirm the boot. A bundle that never confirms reverts by itself after [two failed cold starts](/how-to/roll-back-bundle).
 

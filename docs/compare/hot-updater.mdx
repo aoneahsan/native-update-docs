@@ -1,7 +1,7 @@
 ---
 title: "Hot Updater and Native Update"
 sidebar_label: "Hot Updater"
-description: "Hot Updater is a self-hosted OTA updater for React Native and Expo. Native Update serves Capacitor only today, so there is no move to make. Dated facts."
+description: "Hot Updater runs React Native and Expo updates on your own cloud account. Our plugin is Capacitor-only for now; the self-hosting option for Capacitor is linked."
 keywords: [hot updater alternative, self hosted react native ota]
 last_update:
   date: 2026-11-07
@@ -14,13 +14,13 @@ import {CheckedLine, CompareFacts, RivalLink} from '@site/src/components/Compare
 
 <CheckedLine slug="hot-updater" />
 
-Hot Updater runs the update backend on your own cloud account, with no vendor in the path. Its users pay their own cloud bills and run it themselves.
+Hot Updater runs the update backend on your own cloud account, on Supabase, Cloudflare, AWS, Firebase, Vercel or Azure, with no vendor in the path. Its users pay their own cloud bills and run it themselves.
 
-## What this means for you
+## Nothing to migrate
 
-Native Update serves Capacitor only today. React Native, Flutter and native packages are not available yet, so there's no migration to walk through and we won't pretend otherwise.
+Hot Updater apps are React Native or Expo, and we can't serve either yet. Native Update is a Capacitor plugin today.
 
-Your current app stays where it is. This page is useful in one case: your next app, or a rewrite, is Capacitor. Then start with [Installation](/getting-started/installation), ship [your first update](/tutorials/first-ota-update), and read [how signing works](/concepts/bundle-integrity-and-signing).
+If owning the backend is the reason you chose Hot Updater, the same option exists for a Capacitor app here: [Backend overview](/backend/overview) explains running your own server against our [API contract](/backend/api-contract). It's real work, and that page says how much.
 
 ## The facts, dated
 

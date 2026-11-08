@@ -1,7 +1,7 @@
 ---
 title: "Expo EAS Update and Native Update"
 sidebar_label: "Expo EAS Update"
-description: "EAS Update is built for Expo and React Native apps. Native Update serves Capacitor only today, so there is no move to make. Dated prices and feature rows."
+description: "EAS Update is wired into the Expo toolchain for React Native. Expo apps stay on Expo; running a Capacitor app beside one is covered. Dated prices."
 keywords: [eas update alternative, expo updates capacitor]
 last_update:
   date: 2026-11-07
@@ -16,11 +16,11 @@ import {CheckedLine, CompareFacts, RivalLink} from '@site/src/components/Compare
 
 EAS Update ships updates to React Native apps built with `expo-updates`, and its branches, channels and rollbacks are wired into the Expo toolchain you already build with. If your app is on Expo, that's the right tool.
 
-## What this means for you
+## Expo apps stay on Expo
 
-Native Update serves Capacitor only today. React Native, Flutter and native packages are not available yet, so there's no migration to walk through and we won't pretend otherwise.
+We have nothing to offer an Expo app. `native-update` is a Capacitor plugin, and our React Native work hasn't shipped.
 
-Your current app stays where it is. This page is useful in one case: your next app, or a rewrite, is Capacitor. Then start with [Installation](/getting-started/installation), ship [your first update](/tutorials/first-ota-update), and read [how signing works](/concepts/bundle-integrity-and-signing).
+Teams that run Expo for one product and Capacitor for another can use both side by side. On the Capacitor app, [channels](/how-to/manage-channels) play the part EAS branches do, and a rollout percentage is set on each release.
 
 ## The facts, dated
 

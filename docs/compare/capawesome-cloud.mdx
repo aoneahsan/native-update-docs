@@ -18,7 +18,7 @@ Capawesome Cloud signs bundles with an RSA key pair too, so the release flow wil
 
 If you host bundles on your own CDN through Capawesome and want to keep that shape, read [Backend overview](/backend/overview) first. On Native Update that means running your own server against the [API contract](/backend/api-contract), which is more work than a storage setting.
 
-## 1. Add the plugin and a key
+## 1. A fresh key pair, then the plugin
 
 ```bash
 yarn add native-update
@@ -26,9 +26,9 @@ npx cap sync
 npx native-update keys generate --type rsa --size 4096
 ```
 
-Requirements are on the [installation page](/getting-started/installation). Create your app on [the dashboard](https://nativeupdate.aoneahsan.com/login) and copy its API key.
+Check the [installation page](/getting-started/installation) for versions. On [the dashboard](https://nativeupdate.aoneahsan.com/login), add the app and copy the API key it gives you.
 
-## 2. Swap the live update calls
+## 2. Replace the Capawesome live update code
 
 Take the Capawesome live update calls out of your boot code and follow the [Quick Start](/getting-started/quick-start). The two calls that matter:
 
@@ -43,7 +43,7 @@ Your other Capawesome plugins are unaffected. If you use its App Update or App R
 
 Dev, staging, production and any customer tracks become [channels](/how-to/manage-channels). Rollouts start at the percentage you pass per release.
 
-## 4. Ship the store build, then release
+## 4. One store build, then OTA from CI
 
 The old plugin comes out in one store build. After that:
 

@@ -18,9 +18,9 @@ Ionic stopped selling Appflow to new customers in February 2025 and says existin
 
 Native Update replaces Appflow's live updates. It doesn't replace its cloud builds, so keep building your native app in your own CI or on your own machine.
 
-If your Appflow app is React Native, stop here: Native Update serves Capacitor only today, and React Native, Flutter and native packages are not available yet.
+If your Appflow app is React Native, stop here: our only package is the Capacitor plugin, and there's no React Native version yet.
 
-## 1. Add the plugin and a key
+## 1. Install, and make a signing key
 
 ```bash
 yarn add native-update
@@ -28,9 +28,9 @@ npx cap sync
 npx native-update keys generate --type rsa --size 4096
 ```
 
-Capacitor 8 is required; [the installation page](/getting-started/installation) lists the rest. Create your app on [the dashboard](https://nativeupdate.aoneahsan.com/login).
+Capacitor 8 is required; [the installation page](/getting-started/installation) lists the rest. Register the app on [the dashboard](https://nativeupdate.aoneahsan.com/login) once the plugin is in.
 
-## 2. Swap the live update calls
+## 2. Remove Appflow's live update code
 
 Replace the Appflow live update code in your boot path with the [Quick Start](/getting-started/quick-start) setup. Bundles here must be signed, and [the device checks the signature](/concepts/bundle-integrity-and-signing) before a bundle can run.
 
