@@ -39,6 +39,7 @@ const config: Config = {
   // Rich Results, Perplexity, ChatGPT, and Claude extract structured
   // entity data when citing this documentation.
   headTags: [
+    { tagName: 'meta', attributes: { name: 'yandex-verification', content: 'bfb02722189028cf' } },
     // NOTE: no global rel=canonical here — Docusaurus already emits a correct
     // per-page canonical from `url`; a global one would override it on every
     // page (pre-existing SEO bug removed 2026-07-14).
