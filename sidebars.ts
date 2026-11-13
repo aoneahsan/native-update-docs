@@ -170,6 +170,13 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'White-label & licensing',
+      collapsed: true,
+      link: { type: 'doc', id: 'white-label/overview' },
+      items: ['white-label/delivery', 'white-label/setup', 'white-label/updates', 'white-label/verify', 'white-label/faq'],
+    },
+    {
+      type: 'category',
       label: 'Moving to Native Update',
       collapsed: true,
       items: [

@@ -108,6 +108,16 @@ Run an app's whole lifecycle over HTTP from CI, scripts, or agents. Distinct fro
 - [Security model](https://nativeupdate-docs.aoneahsan.com/concepts/security-model): threat model + in-scope vs out-of-scope.
 - [Error handling philosophy](https://nativeupdate-docs.aoneahsan.com/concepts/error-handling-philosophy): fail-closed on correctness, fail-open on availability.
 
+## White-label & licensing
+
+- [White-label and licensing](https://nativeupdate-docs.aoneahsan.com/white-label/overview): run Native Update under your own name and domain, hosted by us, or buy the source of every repository outright.
+- [What is delivered](https://nativeupdate-docs.aoneahsan.com/white-label/delivery): the dashboard and update server, and the native-update plugin and CLI pointed at your server.
+- [Setup](https://nativeupdate-docs.aoneahsan.com/white-label/setup): from payment to your customers' first release.
+- [Updates and renewals](https://nativeupdate-docs.aoneahsan.com/white-label/updates): included months, renewals, and what happens without one.
+- [Verify a license](https://nativeupdate-docs.aoneahsan.com/white-label/verify): the license file every deployment serves and how a check reads.
+- [Questions](https://nativeupdate-docs.aoneahsan.com/white-label/faq): source code, hosting, exclusivity and payment.
+- Prices and checkout: https://nativeupdate.aoneahsan.com/white-label/pricing (read live from the licensing service; not repeated in the docs).
+
 ## About the project
 
 - [About Native Update](https://nativeupdate-docs.aoneahsan.com/about): what Native Update is, the license, and how to contact the team.
