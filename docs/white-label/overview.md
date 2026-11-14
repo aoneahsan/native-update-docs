@@ -22,6 +22,7 @@ There are two ways to get it:
 | Source code | Not included | Every repository that builds Native Update |
 | Others can buy it | Yes, until a buyout | No: we stop selling it |
 | Updates | Included months, then renewals | Included months, then renewals |
+| Royalty | None | 7% of its gross revenue, paid quarterly for as long as it earns |
 | Changes only you need | Custom work, quoted separately | Custom work, quoted separately |
 
 Prices, the bundle discount and the renewal plans are on the

@@ -21,6 +21,12 @@ The source of every repository that builds Native Update: the plugin (`src/`, `a
 the server (`backend/`), the website and dashboard (`website/`) and the docs site. After a buyout we stop selling
 Native Update to anyone else; licenses sold before keep their terms.
 
+## Is there anything to pay after a buyout?
+
+Yes, a royalty of 7% of the gross revenue Native Update earns, not counting sales tax or VAT you collect. You pay it
+every quarter with a revenue statement, for as long as it earns revenue, and it's still owed if you sell it on. The
+[license terms](https://nativeupdate.aoneahsan.com/white-label/license-terms) say the same.
+
 ## Can it run on our own servers?
 
 With a license, we host it. To run it yourself you need the code, which comes with the buyout.
@@ -40,8 +46,9 @@ apps use the plugin as usual.
 
 ## How do I pay?
 
-By card through Polar, the merchant of record, on a checkout page for the exact total from the
-[pricing page](https://nativeupdate.aoneahsan.com/white-label/pricing).
+By Wise bank transfer, from our payment page, for the exact total from the
+[pricing page](https://nativeupdate.aoneahsan.com/white-label/pricing). We confirm the transfer and email your license
+key.
 
 ## Can you change it for us?
 

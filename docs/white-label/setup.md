@@ -10,9 +10,9 @@ last_update:
 
 # Setting up a white-label deployment
 
-1. **Pay on the pricing page.** Checkout runs on Polar for the exact total. When the payment is confirmed, the license
-   email arrives with your license key and its certificate. The thank-you page says whether the payment went
-   through; the email is the record.
+1. **Pay on the pricing page.** You pay by Wise bank transfer for the exact total and send us the transfer reference.
+   Once we've confirmed the transfer, the license email arrives with your license key and its certificate. The
+   thank-you page says where the order stands; the email is the record.
 2. **Confirm the details.** We write to confirm the domains, your logo, your product name and your colors. Send the
    logo as SVG if you have one.
 3. **Point your DNS.** We send the records for the dashboard and update domains. They stay in your DNS, under your
