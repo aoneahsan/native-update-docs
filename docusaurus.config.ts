@@ -157,7 +157,7 @@ const config: Config = {
         docs: {
           sidebarPath: './sidebars.ts',
           // `docs/` is BOTH the published content dir and the home of the
-          // fixed-path internal file docs/MANUAL-TASKS.md. Keep the path (the
+          // fixed-path internal files docs/MANUAL-TASKS.md and docs/PACKAGES.md. Keep the paths (the
           // global rule fixes it) but never publish it — this repo is public.
           // NOTE: `exclude` REPLACES the plugin defaults, so they are restated.
           exclude: [
@@ -166,6 +166,7 @@ const config: Config = {
             '**/*.test.{js,jsx,ts,tsx}',
             '**/__tests__/**',
             'MANUAL-TASKS.md',
+            'PACKAGES.md',
           ],
           routeBasePath: '/',
           editUrl: 'https://github.com/aoneahsan/native-update-docs/edit/main/',

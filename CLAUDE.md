@@ -9,7 +9,9 @@ Public Docusaurus documentation for the `native-update` Capacitor plugin. This i
 - Last fleet context review: 2026-10-14. Next routine review: 2026-11-13. The workspace tracker is authoritative; a material tree change or a proven stale instruction may trigger an earlier review.
 - Read `../native-update/docs/docs-site/tracker.json` for the completed ten-batch authoring flow. That seven-day batch cooldown is separate from this fleet context review.
 - Verify API descriptions against the sibling product's source. Never invent a capability, method, version, or statistic.
-- This repository uses Yarn 4.18.1, Node >=18, and `yarn.lock`. `package.json` pins the package manager.
+- This repository uses Yarn 4.18.1, Node 26.13.1 LTS (`.nvmrc`, `engines >=26.13.1`), and `yarn.lock`. `package.json` pins the package manager. Packages: `docs/PACKAGES.md` (excluded from the site).
+
+<!-- fleet:node-26-13-1 v1 --> Node 26.13.1 LTS (.nvmrc), packages latest — 2026-11-16
 
 ## Release and deploy
 
