@@ -1,0 +1,48 @@
+%% D009: evidence contract first; numeric examples are optional editorial choices.
+%% aoneahsan-cccs-seo-content-writing — full flow
+flowchart TD
+    trigger([Page content for search]) --> where{Where does the page's<br/>content LIVE?}
+    where -->|hardcoded at component call sites| extract[Extract it into ONE typed record<br/>per page. Both the page AND the<br/>build must be able to read it]
+    where -->|a crawler-only copy| kill[DELETE the copy. Two texts kept in<br/>step by hand drift on the first edit]
+    where -->|one typed record| consumers
+    extract --> drift[Ship the DRIFT ASSERTION:<br/>it fails when a section stops<br/>reading the table.<br/>Pre-approved required-minimum test]
+    kill --> extract
+    drift --> consumers
+
+    consumers[Five consumers, one source:<br/>page · prerendered head ·<br/>noscript body · sitemap · feed]
+    consumers --> fields{Is every contract<br/>field present?}
+    fields -->|no| degrade[Degrade to templated metadata<br/>WITH a warning. The build never<br/>breaks on incomplete enrichment]
+    fields -->|yes| unique
+    degrade --> unique
+
+    unique{Are distinctTitle and<br/>distinctDescription unique<br/>across the site?}
+    unique -->|no| fixmeta[Write an accurate unique title<br/>and useful page description.<br/>Diagnose Google states independently.<br/>Lengths are editorial previews,<br/>not eligibility rules]
+    unique -->|yes| floor
+    fixmeta --> floor
+
+    floor{Programmatic page —<br/>tool, location, template?}
+    floor -->|yes| content[purpose-appropriate original content:<br/>direct intro · relevant use cases ·<br/>how it works · examples ·<br/>real questions · useful tips]
+    floor -->|no| structure
+    content --> structure
+
+    structure[Answer-first structure:<br/>sections answer their headings ·<br/>headings follow topic changes ·<br/>lists and links serve the reader ·<br/>one h1]
+    structure --> honesty{🔴 Honesty gates}
+    honesty --> h1[No invented statistic,<br/>study or testimonial]
+    h1 --> h2[No keyword stuffing]
+    h2 --> h3[No claim a later decision<br/>falsified — grep for the CLAIM,<br/>not the diff]
+    h3 --> h4[lastUpdated is REAL —<br/>never bumped without content]
+
+    h4 --> scale{More pages than one<br/>session can write?}
+    scale -->|yes| batch[Numbered batch files + an index,<br/>one tracker JSON, ONE batch per<br/>prompt, gates per batch, resumable]
+    scale -->|no| verify
+    batch --> verify
+
+    verify[Verify in the BUILT output —<br/>grep the generated HTML for the<br/>headings and the noscript body]
+    verify --> done([Record the per-project<br/>'SEO Last applied' date])
+
+    classDef gateNode fill:#fff4e6,stroke:#d97706,color:#7c2d12
+    classDef terminal fill:#ecfdf5,stroke:#059669,color:#064e3b
+    classDef warn fill:#fef2f2,stroke:#dc2626,color:#7f1d1d
+    class where,fields,unique,floor,scale,honesty gateNode
+    class trigger,done terminal
+    class kill,drift,fixmeta warn

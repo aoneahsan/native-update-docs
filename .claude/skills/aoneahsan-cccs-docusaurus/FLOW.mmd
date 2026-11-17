@@ -1,0 +1,63 @@
+%% aoneahsan-cccs-docusaurus — full flow
+flowchart TD
+    trigger([Docs site work]) --> notebook{Is the project<br/>ahsan-notebook?}
+    notebook -->|yes| exempt[/"STOP — not a docs site.<br/>Private personal project:<br/>stays private on Firebase,<br/>never public, never GH Pages.<br/>Its auth gate + pagefind + Capacitor<br/>are NOT a template"/]
+
+    notebook -->|no| sitetype{New site,<br/>or changing<br/>its domain?}
+
+    sitetype -->|yes| ladder[Find the parent project's DEPLOYED domain:<br/>1 project-live-urls.json liveUrl<br/>2 PROJECT-DEPLOYMENT-STATUS.md custom domain<br/>3 project CLAUDE.md / AGENTS.md<br/>4 .env / firebase.json / capacitor.config.ts<br/>5 sibling docs static/CNAME]
+    ladder --> neverfolder[/"NEVER derive from the repo folder name —<br/>learnquest-ai deploys to learnqai.aoneahsan.com"/]
+    neverfolder --> probe[PROBE it with curl —<br/>read the HTTP status code]
+    probe --> probed{Resolves?<br/>Sources agree?}
+    probed -->|"000, or sources disagree,<br/>or no deployed site at all"| ask[/"ASK THE OWNER.<br/>List every candidate + its probe result,<br/>recommend one. NEVER invent a domain"/]
+    probed -->|"200 or 301 confirmed"| derive{Subdomain<br/>or apex?}
+    derive -->|"subdomain sub.base.tld"| sub[sub-docs.base.tld<br/>-docs on the FIRST label only]
+    derive -->|"apex name.tld"| apex[docs.name.tld]
+    sub --> writeback
+    apex --> writeback[Write back to all 4:<br/>project-live-urls.json docsUrl,<br/>static/CNAME, config url,<br/>parent project Links block]
+    writeback --> scaffold[Baseline: future.v4 + faster,<br/>onBrokenLinks throw, mermaid,<br/>search-local, PWA + ideal-image<br/>+ client-redirects, env-gated analytics]
+    scaffold --> ghsetup[Public repo + CONTRIBUTING + ruleset.<br/>No workflows: verified local build<br/>published by hand to gh-pages.<br/>NO firebase.json and NO .firebaserc]
+    ghsetup --> task
+
+    sitetype -->|no| task{What are you doing?}
+
+    task -->|adding a page| fm[Front matter FIRST:<br/>title + description + tags.<br/>Without them the page is unsearchable<br/>and ships an empty meta description]
+    fm --> place[Place by CONTENT TYPE in a<br/>nested topic folder — never by extension]
+    place --> sidebar{New category?}
+    sidebar -->|yes| updatesidebar[Update sidebars.ts in the SAME change —<br/>an orphaned page is one nobody finds]
+    sidebar -->|no| links
+    updatesidebar --> links[Relative internal links<br/>so the build validates them]
+
+    task -->|moving or renaming<br/>a page| redirect[Add a client redirect.<br/>NEVER delete a URL — bookmarks and<br/>search indexes still point at it]
+
+    task -->|changing appearance| swizzle{Can Infima vars or<br/>config do it?}
+    swizzle -->|yes| configonly[custom.css variables light + dark,<br/>or docusaurus.config.ts.<br/>NEVER edit plugin output]
+    swizzle -->|no| doswizzle[Swizzle the component —<br/>prefer the safe or wrapper variant]
+
+    task -->|publishing API docs| agents[Second audience: AI coding agents]
+    agents --> raw[Raw markdown + JSON viewable AND<br/>downloadable, llms.txt in static/,<br/>OpenAPI where there is an API,<br/>an AI-integration page written FOR an agent]
+
+    links --> secrets
+    redirect --> secrets
+    configonly --> secrets
+    doswizzle --> secrets
+    raw --> secrets
+
+    secrets[SECRETS SWEEP — the repo is PUBLIC.<br/>git ls-files for env, secret and key shapes<br/>must return nothing]
+    secrets --> build[yarn build — zero warnings]
+    build --> warnings{Broken links?}
+    warnings -->|yes| fixlinks[Fix them — the build IS the link checker]
+    fixlinks --> build
+    warnings -->|no| serve[yarn serve — verify search on the<br/>REAL build]
+    serve --> visual{Light AND dark,<br/>320 to 1920px?}
+    visual -->|no| fixui[Fix — a docs site is a product surface]
+    fixui --> serve
+    visual -->|yes| ghdeploy([Verified local build pushed by hand<br/>to the gh-pages branch — GitHub Pages])
+    ghdeploy --> dns[/"Owner-only, into docs/MANUAL-TASKS.md:<br/>Hostinger DNS to aoneahsan.github.io,<br/>Settings then Pages custom domain + HTTPS"/]
+
+    classDef gateNode fill:#fff4e6,stroke:#d97706,color:#7c2d12
+    classDef terminal fill:#ecfdf5,stroke:#059669,color:#064e3b
+    classDef stopNode fill:#fef2f2,stroke:#dc2626,color:#7f1d1d
+    class notebook,sitetype,task,sidebar,swizzle,warnings,visual,probed,derive gateNode
+    class trigger,ghdeploy terminal
+    class exempt,ask,neverfolder,secrets,dns stopNode

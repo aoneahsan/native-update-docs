@@ -1,0 +1,58 @@
+%% D009: evidence contract first; numeric examples are optional editorial choices.
+%% aoneahsan-cccs-react-seo — full flow
+flowchart TD
+    trigger([SEO work, or 'we are not ranking']) --> assume{Is the assumption<br/>'we need better SEO'?}
+    assume -->|yes| stop[STOP. Diagnose the FUNNEL first.<br/>Most SEO problems are indexing problems]
+    assume -->|no| f1
+    stop --> f1
+
+    f1{1. Is it INDEXED?}
+    f1 -->|check| gsc["GSC Pages and URL Inspection.<br/>site: is not exhaustive"]
+    gsc --> reason{Which reason?}
+    reason -->|Crawled - not indexed| thin[Crawled, not indexed.<br/>Inspect rendering, directives,<br/>canonical and content evidence]
+    reason -->|Discovered - not indexed| authority[Inspect availability, discovery paths,<br/>crawl evidence and reporting delay<br/>before choosing a fix]
+    reason -->|Soft 404| real[Give it real content,<br/>or return a real 404]
+    reason -->|indexed fine| f4
+
+    f1 -->|not indexed| f2{2. Is it CRAWLABLE?}
+    f2 -->|no| robots{Is robots.txt blocking it —<br/>including the JS files<br/>the page needs?}
+    robots -->|yes| unblock[Unblock. Note: Disallow where<br/>noindex was meant blocks the crawl,<br/>so Google never SEES the noindex]
+    robots -->|no| f3
+    unblock --> f3
+    f2 -->|yes| f3
+
+    f3{3. Is it RENDERABLE?}
+    f3 --> livetest["URL Inspection to TEST LIVE URL<br/>to View Tested Page —<br/>read the HTML as Googlebot sees it"]
+    livetest --> hascontent{Is the content THERE?}
+    hascontent -->|no| prerender[NOTHING else matters until this<br/>is fixed. This is the empirical test<br/>that SPA prerendering works —<br/>see postbuild-seo-html]
+    hascontent -->|yes| f4
+
+    thin --> floor
+    f4{4. Now optimise for RANKING}
+    f4 --> floor[Per-page page-purpose acceptance]
+    floor --> u1[Accurate, concise and unique title]
+    u1 --> u2[Useful page summary — preserve<br/>normal punctuation and escape HTML correctly]
+    u2 --> u3[One h1 · no skipped levels ·<br/>descriptive alt · intended canonical ·<br/>useful contextual links]
+    u3 --> u4{Programmatic page?}
+    u4 -->|yes| content[purpose-appropriate original content:<br/>direct intro and only the sections<br/>the reader needs]
+    u4 -->|no| kw
+    content --> kw
+    kw[Do NOT chase keyword counts —<br/>write for the reader]
+
+    kw --> robotsfile[/🔴 robots.txt/]
+    robotsfile --> trap{Naming any crawler<br/>explicitly?}
+    trap -->|yes| repeat[REPEAT the private-route Disallow<br/>list inside EVERY named group.<br/>A crawler obeys only its own group<br/>and ignores * — so allowlisting<br/>GPTBot exposes /admin to it]
+    trap -->|no| submit
+    repeat --> submit
+
+    authority --> submit
+    real --> submit
+    submit[Submit: GSC + Bing + Yandex.<br/>Verification tokens go to<br/>docs/seo-verification.md for the OWNER]
+    submit --> done([Monitor the indexed count weekly])
+
+    classDef gateNode fill:#fff4e6,stroke:#d97706,color:#7c2d12
+    classDef terminal fill:#ecfdf5,stroke:#059669,color:#064e3b
+    classDef warn fill:#fef2f2,stroke:#dc2626,color:#7f1d1d
+    class assume,f1,reason,f2,robots,f3,hascontent,f4,u4,trap gateNode
+    class trigger,done terminal
+    class stop,prerender,repeat,robotsfile warn

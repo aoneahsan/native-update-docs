@@ -1,0 +1,55 @@
+%% D009: evidence contract first; numeric examples are optional editorial choices.
+%% aoneahsan-cccs-react-aeo — full flow
+flowchart TD
+    trigger([AI-search / answer-engine work]) --> which{Which engine<br/>is the target?}
+
+    which -->|Google AI Overviews<br/>or AI Mode| google[/🔴 Google's official position/]
+    google --> g1[No special AI text file is required]
+    g1 --> g2[Structured data NOT required<br/>for generative features]
+    g2 --> g3[No chunking. No special writing style]
+    g3 --> g4[Generative features run on CORE<br/>Search ranking — so AEO IS SEO here]
+    g4 --> redirect[Do the SEO work instead:<br/>indexed, snippet-eligible,<br/>genuinely useful content]
+
+    which -->|ChatGPT, Perplexity,<br/>Copilot| other[Check each engine's official guidance]
+    which -->|featured snippets,<br/>PAA, voice| serp[Classic SERP features —<br/>structure demonstrably helps]
+
+    other --> honest{Is the tactic<br/>evidence-backed?}
+    serp --> honest
+    honest -->|no source cited a study| frame[Frame it honestly: cheap, low-risk,<br/>plausible — NOT a mechanism.<br/>Do not promise AI visibility]
+    frame --> tactics
+
+    tactics[Tactics worth doing anyway —<br/>they improve the page for humans too]
+    tactics --> t1[Answer first: each section opens by<br/>answering its heading directly]
+    t1 --> t2[Answer the page's main question directly;<br/>use a definition only when it helps]
+    t2 --> t3[Headings mirror real queries,<br/>some phrased as questions]
+    t3 --> t4[Use lists and comparison tables<br/>when they clarify the answer]
+    t4 --> t5[Add subheadings where the topic changes]
+    t5 --> t6{Is the content GENUINELY a FAQ,<br/>a procedure, or an article?}
+    t6 -->|yes| schema[Add FAQPage / HowTo / Article]
+    t6 -->|no| noschema[Do NOT add schema that misdescribes<br/>the page — wrong schema is worse<br/>than none]
+    schema --> t7
+    noschema --> t7
+    t7[Specific generated facts over vague<br/>claims — a build-time number<br/>cannot go stale]
+    t7 --> t8[Author + credentials + visible lastUpdated]
+
+    t8 --> entity[Entity consistency —<br/>the underrated factor]
+    entity --> e1{Do name, domain, contact and<br/>identifiers match EVERYWHERE?}
+    e1 -->|no| fixentity[Fix against the links-and-identifiers<br/>source of truth. Record any search<br/>or citation effect as measured evidence]
+    e1 -->|yes| places
+    fixentity --> places
+    places[Claim Bing Places —<br/>the Copilot-facing surface]
+
+    places --> llms{Adding llms.txt?}
+    llms -->|yes| keep[Keep it — generating it is free.<br/>But document it as SPECULATIVE,<br/>non-Google surface area.<br/>Never claim it helps Google]
+    llms -->|no| measure
+    keep --> measure
+
+    redirect --> measure
+    measure([Measurement is MANUAL: test target<br/>prompts monthly in ChatGPT, Perplexity<br/>and AI Overviews. Record current tool and sample limitations])
+
+    classDef gateNode fill:#fff4e6,stroke:#d97706,color:#7c2d12
+    classDef terminal fill:#ecfdf5,stroke:#059669,color:#064e3b
+    classDef warn fill:#fef2f2,stroke:#dc2626,color:#7f1d1d
+    class which,honest,t6,e1,llms gateNode
+    class trigger,measure terminal
+    class google,frame warn

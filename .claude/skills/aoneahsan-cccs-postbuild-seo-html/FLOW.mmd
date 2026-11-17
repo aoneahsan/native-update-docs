@@ -1,0 +1,47 @@
+%% D009: evidence contract first; numeric examples are optional editorial choices.
+%% aoneahsan-cccs-postbuild-seo-html — full flow
+flowchart TD
+    trigger([SPA needs to be indexable]) --> verify{Does a crawler actually<br/>see an empty page?}
+    verify -->|check| test["GSC URL Inspection to TEST LIVE URL,<br/>or curl the URL and read the body"]
+    test --> empty{Body is an empty<br/>root div?}
+    empty -->|no| already[Already prerendered —<br/>Docusaurus and SSR frameworks<br/>do this. Nothing to build]
+    empty -->|yes| build[Add a post-build generator:<br/>vite build then tsx postbuild-seo.ts]
+
+    build --> s1[1. Derive from the APP's own data:<br/>route table + content registry.<br/>Synthesise category pages by grouping.<br/>No hand-maintained page list]
+    s1 --> s2[2. Write crawler artefacts to BOTH<br/>public/ and dist/ — sitemap, robots,<br/>feed, llms.txt]
+    s2 --> s3[3. Rewrite dist/index.html]
+    s3 --> ph[Substitute live placeholders:<br/>__TOOL_COUNT__, __DATE_MODIFIED__ —<br/>counts follow the build; dates follow real changes]
+    ph --> skel[Inject an above-the-fold skeleton<br/>into #root — React replaces the<br/>children on first render, so it is<br/>a paint-fast LCP placeholder]
+    skel --> s4[4. Emit one HTML file per route]
+
+    s4 --> assets{Are the SPA's script and<br/>stylesheet tags re-injected?}
+    assets -->|no| critical[MUST BE. Scrape them from the built<br/>index.html. Without this the pages<br/>are dead alternates that drift and<br/>look like cloaking]
+    assets -->|yes| noscript
+    critical --> noscript
+
+    noscript[Render the page's REAL content as<br/>semantic HTML inside noscript —<br/>this is what GPTBot, ClaudeBot and<br/>PerplexityBot actually read]
+    noscript --> content{Is there per-page<br/>unique content?}
+    content -->|no| templated[Templated metadata only.<br/>Record content limitations; indexing unknown]
+    content -->|yes| model[Content contract: distinctTitle,<br/>distinctDescription, intro, useCases,<br/>howItWorks, examples, faq, tips,<br/>keywords, lastUpdated, author]
+    model --> distinct[distinctTitle + distinctDescription<br/>describe the page.<br/>Do not guarantee inclusion]
+    distinct --> batches[Author in NUMBERED BATCH files<br/>merged by an index — enrichment<br/>is resumable across sessions]
+    batches --> graceful{Content module missing<br/>or throwing?}
+    graceful -->|yes| warn[Warn and fall back to templated<br/>metadata. The build NEVER breaks<br/>because enrichment is incomplete]
+    graceful -->|no| og
+    warn --> og
+    templated --> og
+
+    og[OG assets]
+    og --> svg[Author the SVG master.<br/>Export PNG. Parallel og/svg/ and<br/>og/png/ trees]
+    svg --> ref[HTML references ONLY the PNG —<br/>social scrapers do not render SVG]
+    ref --> map[Map many pages onto few images<br/>by category, with a guarded fallback]
+
+    map --> done([Re-run the live test:<br/>the body now has real content])
+    already --> done
+
+    classDef gateNode fill:#fff4e6,stroke:#d97706,color:#7c2d12
+    classDef terminal fill:#ecfdf5,stroke:#059669,color:#064e3b
+    classDef warn fill:#fef2f2,stroke:#dc2626,color:#7f1d1d
+    class verify,empty,assets,content,graceful gateNode
+    class trigger,done terminal
+    class critical warn

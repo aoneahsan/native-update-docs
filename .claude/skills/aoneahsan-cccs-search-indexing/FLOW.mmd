@@ -1,0 +1,57 @@
+%% D009: evidence contract first; numeric examples are optional editorial choices.
+%% aoneahsan-cccs-search-indexing — full flow
+flowchart TD
+    trigger([Indexing work, or<br/>'why can nobody find this page?']) --> owned{Do we OWN the<br/>properties?}
+    owned -->|no| props[GSC as a DOMAIN property via DNS TXT<br/>+ Bing + Yandex.<br/>A URL-prefix property splits www,<br/>https and subdomains apart]
+    owned -->|yes| canon
+    props --> tokens[Verification tokens go to<br/>docs/seo-verification.md FOR THE OWNER.<br/>🔴 Never guessed into HTML — a wrong<br/>token fails silently]
+    tokens --> canon
+
+    canon{🔴 Is the canonical<br/>self-referential on EVERY page,<br/>in the BUILT output?}
+    canon -->|one hardcoded canonical| fixcanon[Every page is telling the engine to<br/>index a DIFFERENT page.<br/>GSC: 'Alternate page with proper<br/>canonical tag' — inspect Google-selected canonical]
+    canon -->|set only at runtime| prerender[Check the target crawler's current rendering.<br/>Put the intended canonical in the<br/>representation being verified]
+    canon -->|yes| state
+    fixcanon --> verify1[grep the canonical out of<br/>dist/**/index.html — source and<br/>dev server prove nothing]
+    prerender --> verify1
+    verify1 --> state
+
+    state{What does the GSC<br/>Pages report say?}
+    state -->|Crawled - currently not indexed| content[Cause unknown.<br/>Inspect technical and content evidence<br/>before choosing a fix]
+    state -->|Discovered - not indexed| budget[Inspect discovery, availability,<br/>crawl evidence and reporting delay<br/>before choosing a fix]
+    state -->|Alternate page with canonical| fixcanon
+    state -->|Soft 404| real[Real content, or a real 404]
+    state -->|indexed| push
+
+    content --> push
+    budget --> push
+    real --> push
+
+    push{Pushing changes?}
+    push -->|Bing / Yandex / Seznam| indexnow[IndexNow, CHANGED URLs only.<br/>Repeated unchanged submissions<br/>waste requests]
+    push -->|Google| noapi[No general Google Indexing API for these pages.<br/>Request Indexing is manual<br/>and rate-limited]
+    indexnow --> suppress
+    noapi --> suppress
+
+    suppress{Suppressing a page?}
+    suppress -->|'do not list it'| noindex[noindex — 🔴 and do NOT also<br/>Disallow it, or the engine never<br/>SEES the noindex and it stays<br/>may remain indexed]
+    suppress -->|'it is a duplicate'| canonical[canonical — a hint, and a<br/>Google may choose another canonical]
+    suppress -->|'save crawl budget'| disallow[Disallow — says NOTHING<br/>about indexing]
+    suppress -->|weak public page| never[Choose from evidence and intent:<br/>improve, consolidate, redirect,<br/>remove or noindex]
+    noindex --> monitor
+    canonical --> monitor
+    disallow --> monitor
+    never --> content
+
+    monitor[On the recorded cadence:<br/>indexed count, queries and reasons<br/>with like-for-like scope]
+    monitor --> drop{Indexed count FELL?}
+    drop -->|yes| incident[Investigate reporting lag and recent<br/>canonical, robots, route, intent,<br/>deployment and rendering changes]
+    drop -->|no| record
+    incident --> record
+    record([Record 'SEO Last applied' in the<br/>project CLAUDE.md, or the pass<br/>silently never runs again])
+
+    classDef gateNode fill:#fff4e6,stroke:#d97706,color:#7c2d12
+    classDef terminal fill:#ecfdf5,stroke:#059669,color:#064e3b
+    classDef warn fill:#fef2f2,stroke:#dc2626,color:#7f1d1d
+    class owned,canon,state,push,suppress,drop gateNode
+    class trigger,record terminal
+    class fixcanon,tokens,noindex,never warn
