@@ -3,6 +3,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2.4] - 2026-11-19
+
+Android native fixes, found and proven on a physical phone. They are in native code, so consumers need a new app build
+(store or sideload); an OTA bundle cannot carry them.
+
+### Fixed
+
+- **Android OTA never started for a flat `configure({ config })` without `maxBundleSize`.** Optional fields were read with
+  org.json getters that throw on a missing key, so configuration failed and OTA stayed off. Every optional field is now
+  read null-safely (ISSUE-14).
+- **A failed update check read as "no update".** The native check now logs why it failed and `checkForUpdate()` rejects
+  `NETWORK_ERROR`, as on the web.
+- **`applyUpdate()` could not find a downloaded bundle on Android.** `list()` returned its bundles as a string; it is an
+  array again, so a bundle is applied and is not downloaded twice (ISSUE-15).
+- **The applied bundle's own `configure()` was refused as locked.** A repeated, identical configuration now resolves; a
+  changed one is still refused until `reset()` (ISSUE-16).
+- **An applied bundle was lost on every cold start.** The bundle path is now stored where Capacitor restores it, and a
+  bundle recorded against an older native binary is retired after a store update (ISSUE-17).
+- **Old bundles stayed on the device forever.** After a healthy boot only the active bundle, its rollback target and a
+  newer staged download are kept; `delete({ keepVersions })` never removes the active or rollback bundle (ISSUE-18).
+- **In-app review results now carry the typed names** `displayed` and `canRequest` on Android and iOS; `shown` and
+  `allowed` remain for one minor release (ISSUE-11).
+
 ## [4.2.3] - 2026-11-16
 
 ### Changed
