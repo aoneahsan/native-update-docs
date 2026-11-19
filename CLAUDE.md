@@ -17,7 +17,7 @@ Public Docusaurus documentation for the `native-update` Capacitor plugin. This i
 
 - The product `package.json` is the version source. After a plugin release, run `yarn sync:from-plugin` here and commit its generated version and page changes. Current checked-in `plugin-version.json` follows the product (4.2.0 on 2026-10-26).
 - Run `yarn typecheck` and `yarn build`. Preview the built site with `yarn serve` before pushing visible changes.
-- A push to `main` runs `.github/workflows/deploy-pages.yml` and deploys GitHub Pages. The custom domain is carried by `static/CNAME`; see `DEPLOY.md`. Confirm the Actions run before calling the deploy complete.
+- Deploy is manual: publish the local `build/` to the `gh-pages` branch (GitHub Pages serves it; no Actions). Steps in `DEPLOY.md`. The custom domain is carried by `static/CNAME`; see `DEPLOY.md`. Confirm the live site serves the new build before calling the deploy complete.
 - Do not put secrets in this public repository.
 
 **Last updated:** 2026-10-21. Package/docs release maintenance completed for plugin 4.1.1; local build and desktop/mobile Chrome gates passed. Next routine fleet maintenance is eligible 2026-11-20.
