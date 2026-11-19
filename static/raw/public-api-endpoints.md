@@ -155,6 +155,7 @@ filter.
   "file_size": 2438012,
   "release_notes": "Bug fixes",
   "min_native_version": null,
+  "payload_type": "web_bundle",
   "rollout_percentage": 100,
   "mandatory": false,
   "promoted_from_id": null,
@@ -186,6 +187,7 @@ curl -X POST \
 | `channel` | yes | `production` · `staging` · `development` |
 | `release_notes` | no | ≤ 5000 characters |
 | `min_native_version` | no | Minimum native app version |
+| `payload_type` | no | `web_bundle` (default): Capacitor or React Native code. `assets`: files a native Android or Flutter app reads, never code. A device is only offered a build its SDK can apply. |
 | `rollout_percentage` | no | 1–100, default 100 |
 | `mandatory` | no | `true` forces the update on eligible devices. Default `false` |
 | `signature` | no | Base64 detached signature of the bundle bytes, RSA-SHA256 (**4.1.0+**) |

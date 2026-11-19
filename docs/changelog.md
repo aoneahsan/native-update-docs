@@ -12,6 +12,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.3.0] - 2026-11-19
+
+The update protocol learns which SDK is asking. Groundwork for the native Android, Flutter and React Native SDKs that
+share this licence and backend (`docs/protocol/CLIENT-PROTOCOL.md`).
+
+### Added
+
+- **Every update check sends `X-Client-Sdk: capacitor` and `X-Sdk-Version`** (web, Android and iOS). The server uses
+  them to offer only builds this plugin can run.
+- **`payloadType` on the update-check response** (server field; a Capacitor app is only ever offered `web_bundle`).
+- **CLI `deploy --payload-type <web_bundle|assets>`** (default `web_bundle`) and the matching `payload_type` field on the
+  Management API upload (OpenAPI 1.2.0).
+
+### Server
+
+- Builds carry a `payload_type`. An `assets` build is never offered to a Capacitor or React Native client, and a web
+  bundle is never offered to a native Android, Flutter or iOS SDK (`PAYLOAD_NOT_SUPPORTED`). A client older than the
+  header is treated as Capacitor, so every existing app keeps receiving its web bundles.
+- The device record keeps the reporting SDK and its version.
+
 ## [4.2.4] - 2026-11-19
 
 Android native fixes, found and proven on a physical phone. They are in native code, so consumers need a new app build
