@@ -149,7 +149,7 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Other frameworks',
       collapsed: true,
-      items: ['frameworks/native-android', 'frameworks/react-native'],
+      items: ['frameworks/native-android', 'frameworks/react-native', 'frameworks/flutter'],
     },
     {
       type: 'category',
