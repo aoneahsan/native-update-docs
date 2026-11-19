@@ -147,6 +147,12 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'Other frameworks',
+      collapsed: true,
+      items: ['frameworks/native-android', 'frameworks/react-native'],
+    },
+    {
+      type: 'category',
       label: 'Tutorials',
       collapsed: true,
       items: [
