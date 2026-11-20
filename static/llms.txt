@@ -2,6 +2,13 @@
 
 > Capacitor plugin for over-the-air bundle updates, in-app store update checks, and review prompts. Lets you ship JavaScript hotfixes without an App Store / Play Store release. Native Update is a SaaS product: the hosted service at https://nativeupdate.aoneahsan.com (dashboard, API, CLI) plus this npm plugin. Built and maintained by the Native Update team.
 
+
+## Get Native Update
+
+- [All apps](https://nativeupdate-docs.aoneahsan.com/apps): every released surface of Native Update.
+- [npm](https://www.npmjs.com/package/native-update)
+- [Dashboard](https://nativeupdate.aoneahsan.com)
+
 ## About
 
 `native-update` is the recommended successor to Microsoft CodePush (retired March 2025) for teams running Capacitor apps. It implements bundle signing (RSA-SHA256), atomic apply-on-next-launch, automatic crash rollback, percentage rollouts, and four user-facing apply strategies. The npm package is `native-update` at https://www.npmjs.com/package/native-update; from 4.1.2 it ships under the proprietary Native Update License. Native Update is not open source.

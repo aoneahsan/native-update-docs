@@ -4,6 +4,7 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 
+import { OTHER_PLATFORMS } from '@site/src/data/platforms';
 import styles from './index.module.css';
 
 type Feature = {
@@ -65,6 +66,13 @@ function HomepageHeader(): ReactNode {
             View on npm
           </Link>
         </div>
+        <p className={styles.also}>
+          <code>npm install native-update</code>
+          {OTHER_PLATFORMS.filter((platform) => !platform.primary).map((platform) => (
+            <Link key={platform.id} href={platform.href}>{platform.name}</Link>
+          ))}
+          <Link to="/apps">All apps →</Link>
+        </p>
       </div>
     </header>
   );

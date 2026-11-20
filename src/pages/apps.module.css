@@ -1,0 +1,8 @@
+/** `/apps` cards, in the docs site's Infima tokens. */
+.lead { max-width: 42rem; font-size: 1.15rem; color: var(--ifm-color-emphasis-700); }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.25rem; margin-top: 2rem; }
+.card { display: flex; flex-direction: column; gap: .75rem; padding: 1.5rem; border: 1px solid var(--ifm-color-emphasis-300); border-radius: var(--ifm-card-border-radius); background: var(--ifm-card-background-color); }
+.card :global(.button) { align-self: flex-start; margin-top: auto; }
+.kicker { font-size: .8rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--ifm-color-primary-darker); }
+.title { margin: 0; font-size: 1.35rem; }
+.here { margin-top: auto; font-weight: 700; color: var(--ifm-color-primary-darker); }

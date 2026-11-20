@@ -6,6 +6,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 // the private plugin repo). Never hardcode the version anywhere in this repo.
 import pluginVersion from './plugin-version.json';
 import sitePages, { withLastmod } from './plugins/site-pages';
+import { OTHER_PLATFORMS } from './src/data/platforms';
 
 /** The blog's route: the blog plugin's `routeBasePath` below, with its leading slash. */
 const BLOG_PATH = '/blog';
@@ -285,15 +286,26 @@ const config: Config = {
           position: 'right',
         },
         {
-          href: 'https://www.npmjs.com/package/native-update',
-          label: 'npm',
+          type: 'dropdown',
+          label: 'Get Native Update',
           position: 'right',
+          items: [
+            ...OTHER_PLATFORMS.map((platform) => ({ label: platform.name, href: platform.href })),
+            { label: 'All apps', to: '/apps' },
+          ],
         },
       ],
     },
     footer: {
       style: 'dark',
       links: [
+        {
+          title: 'Get Native Update',
+          items: [
+            ...OTHER_PLATFORMS.map((platform) => ({ label: platform.name, href: platform.href })),
+            { label: 'All apps', to: '/apps' },
+          ],
+        },
         {
           title: 'Documentation',
           items: [
@@ -305,8 +317,6 @@ const config: Config = {
         {
           title: 'Project',
           items: [
-            { label: 'npm package', href: 'https://www.npmjs.com/package/native-update' },
-            { label: 'Marketing site', href: 'https://nativeupdate.aoneahsan.com' },
           ],
         },
         {
