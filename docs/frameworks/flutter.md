@@ -19,7 +19,7 @@ install. From 1.1.0, an app you distribute outside Google Play can also take upd
 
 | Package | `native_update` |
 |---|---|
-| Version | 1.1.0 |
+| Version | 1.1.1 |
 | Android | minSdk 26; fully supported |
 | iOS | foundation only: in-app review works, and asset updates answer `UNAVAILABLE_ON_IOS` for now |
 
@@ -27,7 +27,7 @@ install. From 1.1.0, an app you distribute outside Google Play can also take upd
 
 ```yaml
 dependencies:
-  native_update: ^1.1.0
+  native_update: ^1.1.1
 ```
 
 Set the Android app's `minSdk` to 26 or higher. The plugin declares the INTERNET permission itself.
@@ -95,7 +95,8 @@ Play does not allow apps to download code, so this is for apps you hand out your
 enterprise rollout, a test group. A build installed from Google Play never asks for a code patch and never loads
 one, even with the switch on. iOS does not take them.
 
-1. Make `MainActivity` extend `NativeUpdateFlutterActivity`. It picks the Dart code to run before the Flutter engine
+1. Make `MainActivity` extend `NativeUpdateFlutterActivity`, or `NativeUpdateFlutterFragmentActivity` when it must be a
+   `FlutterFragmentActivity` (as `local_auth` requires). It picks the Dart code to run before the Flutter engine
    starts, so a bad patch can never stop the app from starting.
 2. Put the configuration in `android/app/src/main/AndroidManifest.xml`, inside `<application>`:
 
