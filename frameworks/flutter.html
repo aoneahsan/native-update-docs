@@ -20,8 +20,8 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Native Update Documentation","url":"https://nativeupdate-docs.aoneahsan.com","description":"Documentation for Native Update: the native-update Capacitor plugin and the hosted service for over-the-air bundle updates, in-app store update checks, and review prompts.","inLanguage":"en-US","publisher":{"@type":"Organization","name":"Native Update","url":"https://nativeupdate.aoneahsan.com"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"native-update","applicationCategory":"DeveloperApplication","operatingSystem":"Android, iOS, Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"url":"https://www.npmjs.com/package/native-update","sameAs":"https://nativeupdate.aoneahsan.com","author":{"@type":"Organization","name":"Native Update","url":"https://nativeupdate.aoneahsan.com"},"description":"Capacitor plugin for over-the-air bundle updates, in-app store update checks, and platform-native review prompts.","softwareVersion":"4.4.0","license":"https://nativeupdate.aoneahsan.com/terms"}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Native Update","url":"https://nativeupdate.aoneahsan.com","sameAs":["https://www.npmjs.com/package/native-update"]}</script><link rel="stylesheet" href="/assets/css/styles.62272bdc.css">
-<script src="/assets/js/runtime~main.c1ad0125.js" defer="defer"></script>
-<script src="/assets/js/main.1418e7bf.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.a9738037.js" defer="defer"></script>
+<script src="/assets/js/main.4272a210.js" defer="defer"></script>
 </head>
 <body>
 <svg style="display: none;"><defs>
@@ -33,9 +33,9 @@ account, licence and dashboard as the Capacitor plugin.</p>
 <p><strong>What it updates:</strong> an <em>asset bundle</em>, a ZIP of files your app reads (images, JSON config, copy), on every
 install. From 1.1.0, an app you distribute outside Google Play can also take updates to its Dart code
 (<a href="#dart-code-updates-sideloaded-android-builds" class="">below</a>). A build installed from Google Play never asks for one.</p>
-<table><thead><tr><th>Package</th><th><code>native_update</code></th></tr></thead><tbody><tr><td>Version</td><td>1.1.0</td></tr><tr><td>Android</td><td>minSdk 26; fully supported</td></tr><tr><td>iOS</td><td>foundation only: in-app review works, and asset updates answer <code>UNAVAILABLE_ON_IOS</code> for now</td></tr></tbody></table>
+<table><thead><tr><th>Package</th><th><code>native_update</code></th></tr></thead><tbody><tr><td>Version</td><td>1.1.1</td></tr><tr><td>Android</td><td>minSdk 26; fully supported</td></tr><tr><td>iOS</td><td>foundation only: in-app review works, and asset updates answer <code>UNAVAILABLE_ON_IOS</code> for now</td></tr></tbody></table>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="install">Install<a href="#install" class="hash-link" aria-label="Direct link to Install" title="Direct link to Install" translate="no">​</a></h2>
-<div class="language-yaml codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-yaml codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">dependencies</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">native_update</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> ^1.1.0</span><br></div></code></pre></div></div>
+<div class="language-yaml codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-yaml codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">dependencies</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">native_update</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> ^1.1.1</span><br></div></code></pre></div></div>
 <p>Set the Android app&#x27;s <code>minSdk</code> to 26 or higher. The plugin declares the INTERNET permission itself.</p>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="start-it">Start it<a href="#start-it" class="hash-link" aria-label="Direct link to Start it" title="Direct link to Start it" translate="no">​</a></h2>
 <p>Call <code>init</code> in <code>main()</code>, before any screen reads an updated file:</p>
@@ -57,7 +57,8 @@ enterprise rollout, a test group. A build installed from Google Play never asks 
 one, even with the switch on. iOS does not take them.</p>
 <ol>
 <li class="">
-<p>Make <code>MainActivity</code> extend <code>NativeUpdateFlutterActivity</code>. It picks the Dart code to run before the Flutter engine
+<p>Make <code>MainActivity</code> extend <code>NativeUpdateFlutterActivity</code>, or <code>NativeUpdateFlutterFragmentActivity</code> when it must be a
+<code>FlutterFragmentActivity</code> (as <code>local_auth</code> requires). It picks the Dart code to run before the Flutter engine
 starts, so a bad patch can never stop the app from starting.</p>
 </li>
 <li class="">
