@@ -19,7 +19,7 @@ install. From 1.1.0, an app you distribute outside Google Play can also take upd
 
 | Package | `native_update` |
 |---|---|
-| Version | 1.1.1 |
+| Version | 1.2.0 |
 | Android | minSdk 26; fully supported |
 | iOS | foundation only: in-app review works, and asset updates answer `UNAVAILABLE_ON_IOS` for now |
 
@@ -27,7 +27,7 @@ install. From 1.1.0, an app you distribute outside Google Play can also take upd
 
 ```yaml
 dependencies:
-  native_update: ^1.1.1
+  native_update: ^1.2.0
 ```
 
 Set the Android app's `minSdk` to 26 or higher. The plugin declares the INTERNET permission itself.
@@ -137,6 +137,9 @@ How it behaves:
   that bundle is never offered to that device again.
 - **New binary:** a store or sideload update retires bundles made for the older build. With code updates on, any
   APK install retires them.
+- **Delta downloads (1.2.0+):** when the device runs a version the server still holds, it downloads a small `NUDELTA/1`
+  patch and rebuilds the new bundle from the current one, then checks it exactly like a full download. Any problem
+  falls back to the full download.
 
 ## Play in-app update and review
 

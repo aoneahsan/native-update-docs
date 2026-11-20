@@ -4,7 +4,7 @@ title: React Native
 description: Signed over-the-air JavaScript bundle updates with rollback, plus Google Play in-app update and in-app review, for React Native 0.80+ apps with native-update-react-native.
 keywords: [react native ota, react native code push alternative, react native bundle update, hermes ota update, native-update-react-native]
 last_update:
-  date: 2026-11-19
+  date: 2026-11-20
   author: Native Update team
 ---
 
@@ -15,7 +15,7 @@ licence and dashboard as the Capacitor plugin.
 
 | Package | `native-update-react-native` |
 |---|---|
-| Version | 1.1.0 |
+| Version | 1.2.0 |
 | React Native | 0.80 or newer, New Architecture (TurboModule) |
 | Android | minSdk 26 |
 | iOS | not yet: the package links on Android only |
@@ -96,6 +96,9 @@ modules its binary has, so a release that adds or changes native code goes throu
   previous one, and that bundle is never offered to that device again.
 - **New binary:** a store update retires bundles made for the older build.
 - **Payload safety:** the server only offers a React Native app JavaScript bundles, never a native asset set.
+- **Delta downloads (1.2.0+):** when the device runs a version the server still holds, it downloads a small `NUDELTA/1`
+  patch and rebuilds the new bundle from the current one, then checks it exactly like a full download. Any problem
+  falls back to the full download.
 
 ## Play in-app update and review
 

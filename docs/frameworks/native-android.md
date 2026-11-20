@@ -4,7 +4,7 @@ title: Native Android (Kotlin and Java)
 description: Signed over-the-air asset updates, Google Play in-app update and in-app review for native Kotlin or Java Android apps with com.aoneahsan:native-update-android.
 keywords: [native android ota, kotlin asset updates, android in-app update library, play in-app review kotlin, native-update-android]
 last_update:
-  date: 2026-11-19
+  date: 2026-11-20
   author: Native Update team
 ---
 
@@ -19,7 +19,7 @@ For code changes, ship a store release; the library's Play in-app update helper 
 
 | Package | `com.aoneahsan:native-update-android` |
 |---|---|
-| Version | 1.1.0 |
+| Version | 1.2.0 |
 | Android | minSdk 26, compiled against API 36, Java 21 |
 | Dependencies | kotlinx-coroutines, androidx.activity, Play app-update and review. No HTTP library. |
 
@@ -47,7 +47,7 @@ dependencyResolutionManagement {
 
 // app/build.gradle.kts
 dependencies {
-    implementation("com.aoneahsan:native-update-android:1.1.0")
+    implementation("com.aoneahsan:native-update-android:1.2.0")
 }
 ```
 
@@ -124,6 +124,9 @@ library is never offered a web bundle.
   that bundle is never offered to that device again.
 - **New binary:** a store or sideload update retires bundles made for the older build.
 - **Disk:** after a healthy start, only the active bundle, its rollback target and a staged download are kept.
+- **Delta downloads (1.2.0+):** when the device runs a version the server still holds, it downloads a small `NUDELTA/1`
+  patch and rebuilds the new bundle from the current one, then checks it exactly like a full download. Any problem
+  falls back to the full download.
 
 ## Play in-app update and review
 
