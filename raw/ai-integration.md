@@ -105,7 +105,7 @@ if (eligibility.canRequest) {
 |--------|-------------|---------|
 | `sync(options?)` | Check and apply updates | `Promise<SyncResult>` |
 | `download(options)` | Download specific version | `Promise<BundleInfo>` |
-| `set(bundle)` | Set active bundle | `Promise<void>` |
+| `set({ ...bundle, applyOn? })` | Make a bundle the app's bundle: `'now'` (default) switches at once, `'next-start'` (4.4.5+) stages it for the next cold start | `Promise<void>` |
 | `reload()` | Reload app with current bundle | `Promise<void>` |
 | `reset()` | Reset to original bundle | `Promise<void>` |
 | `current()` | Get current bundle info | `Promise<BundleInfo>` |
