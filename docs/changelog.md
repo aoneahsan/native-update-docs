@@ -12,6 +12,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.4.2] - 2026-11-20
+
+### Changed
+
+- **`deploy --ota-tag` and `ota-tag` pick the tag's version by themselves.** When `package.json` is not above the
+  native `versionName` (from `android/app/build.gradle` or `--native-version`), the tag hangs from that
+  `versionName`'s next patch: an app whose web version (1.1.11) runs apart from its binary (1.3.0) publishes
+  `1.3.1-nu1`, the version its next store release must carry. 4.4.1 refused instead. An explicit `--version` is still
+  refused when it is not above the native version.
+
+### Server (marker `2026.11.20.3`)
+
+- Uploads accept an OTA tag (`1.16.1-nu2`, up to 50 characters); 4.4.1's `--ota-tag` uploads were answered 422
+  before this marker. The channel head is chosen with `version_compare`, so a store version stays above its own tags.
+  The dashboard's upload form accepts tags too.
+
 ## [4.4.1] - 2026-11-20
 
 OTA version tags. A web fix can now ship over the air as `<version>-nu<N>` (for example `1.16.1-nu2`), so an app can

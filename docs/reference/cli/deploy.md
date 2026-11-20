@@ -82,8 +82,10 @@ npx native-update ota-tag --app com.example.app                               # 
 
 A tag sorts **below** its own version (`1.16.1-nu3` < `1.16.1`), so the store release of `1.16.1` supersedes every
 OTA build of it. That is also why the version must be above the `versionName` your devices run: a phone on
-`1.16.0` is never offered `1.16.0-nu1`, and `--ota-tag` refuses it with the fix (bump the patch). The minimum native
-version defaults to that `versionName`, so a bundle never reaches an older binary missing a plugin its code calls.
+`1.16.0` is never offered `1.16.0-nu1`. Without `--version`, a `package.json` version that is not above it moves to
+that `versionName`'s next patch (native `1.3.0` → `1.3.1-nu1`, the version your next store release carries); an
+explicit `--version` is refused instead. The minimum native version defaults to that `versionName`, so a bundle
+never reaches an older binary missing a plugin its code calls. Tag uploads need server marker `2026.11.20.3` or later.
 Use `ota-tag` when you sign bundles yourself, so `bundle create --version` and `deploy --version` get the same tag.
 
 ### Always use `--wait` in CI
