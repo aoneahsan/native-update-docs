@@ -3,6 +3,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.4.4] - 2026-11-20
+
+### Fixed
+
+- **`deploy --ota-tag` and `ota-tag` read the right `versionName`** (ISSUE-20). The CLI took the first
+  `versionName "…"` anywhere in `android/app/build.gradle`, so a comment (ClearHire: `versionName "1.12.0"` in a
+  history note) or an error-message string set the wrong `--min-native` and the wrong tag version. It now reads only a
+  `versionName` statement at the start of a line, outside comments, follows `versionName appVersionName` to
+  `appVersionName = "3.30.0"`, and accepts only a plain `x.y.z`.
+
+## [4.4.3] - 2026-11-20
+
+### Changed
+
+- **Android logs a delta rebuild:** `NativeUpdate: Built <bundle> from a <n>-byte patch` when an update arrived as a
+  `NUDELTA/1` patch instead of a full download. Proven on a phone against the live server (33 KB and 77 KB patches
+  for a 326 KB bundle). A missing line means the full download was used.
+- The React Capacitor example now calls `notifyAppReady()` after `configure()`; without it every bundle rolled back
+  after two starts.
+
 ## [4.4.2] - 2026-11-20
 
 ### Changed
