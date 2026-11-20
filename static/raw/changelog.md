@@ -3,6 +3,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.4.1] - 2026-11-20
+
+OTA version tags. A web fix can now ship over the air as `<version>-nu<N>` (for example `1.16.1-nu2`), so an app can
+show that its running build came over the air and is still owed a store release.
+
+### Added
+
+- **CLI `deploy --ota-tag nu`** publishes as `<package.json version>-nu<N>`. N counts the OTA builds already in the
+  channel on that version and starts again at 1 when the version changes. `--min-native` now defaults to the
+  `versionName` in `android/app/build.gradle`, so a bundle never reaches an older binary that lacks the plugins its
+  web code calls. A version that is not above that `versionName` is refused with the fix (bump the patch): devices
+  on `1.16.0` are never offered `1.16.0-nu1`, because a tag sorts below its own version.
+- **CLI `deploy --dry-run`** prints the version, channel and minimum native version and uploads nothing.
+- **CLI `ota-tag`** prints only the next tag, for scripts that sign the bundle locally and must stamp the same
+  version into `bundle create`.
+- **`compareVersions`** is exported: the plugin's one version order, for apps that compare versions themselves.
+
+### Fixed
+
+- **One version order everywhere** (`src/core/version-order.ts`, Android `VersionOrder.kt`). JavaScript compared
+  pre-release tags as text, so `1.16.1-nu10` sorted below `1.16.1-nu9` and `checkForUpdate()` would have reported
+  the tenth OTA build as no update. Several helpers split `1.16.1-nu1` on dots and read `1-nu1` as 0. Android ignored
+  the tag altogether, so after a cold start a downloaded `-nu2` waiting to switch could be pruned as "not newer" than
+  the running `-nu1`. The server's PHP `version_compare` already ordered these correctly; nothing changes there.
+
 ## [4.4.0] - 2026-11-20
 
 Dart code updates for Flutter apps. The Capacitor plugin itself is unchanged; this release carries the CLI and the

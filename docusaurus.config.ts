@@ -339,9 +339,9 @@ const config: Config = {
       additionalLanguages: ['bash', 'json', 'typescript', 'kotlin', 'swift', 'php', 'yaml', 'diff'],
     },
     announcementBar: {
-      id: 'v4-4-flutter-code-updates',
+      id: 'v4-4-1-ota-version-tags',
       content:
-        `native-update v${pluginVersion.version}: Flutter apps you distribute outside Google Play can now take Dart code updates. <a href="/frameworks/flutter#dart-code-updates-sideloaded-android-builds">How it works</a>`,
+        'native-update 4.4.1 numbers each over-the-air build (1.16.1-nu1, -nu2…), so a phone shows which update it runs and what still needs a store release. <a href="/reference/cli/deploy#ota-version-tags">How tags work</a>',
       backgroundColor: '#0ea5e9',
       textColor: '#ffffff',
       isCloseable: true,

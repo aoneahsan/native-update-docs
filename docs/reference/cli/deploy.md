@@ -59,11 +59,32 @@ npx native-update deploy ./dist \
 | `-c, --channel <c>` | `production` | `production` · `staging` · `development` |
 | `-n, --notes <text>` | — | Release notes |
 | `-r, --rollout <n>` | 100 | Initial rollout percentage |
-| `--min-native <v>` | — | Minimum native app version |
+| `--min-native <v>` | — (with `--ota-tag`: `versionName` in `android/app/build.gradle`) | Minimum native app version |
 | `--payload-type <type>` | `web_bundle` | `web_bundle` (Capacitor, React Native) · `assets` (files a native Android or Flutter app reads) · `dart_aot` (a Flutter code patch from [`bundle flutter-patch`](./bundle-flutter-patch.md)) |
 | `--runtime-keys <keys>` | sibling `.runtime-keys` | `dart_aot` only: comma-separated engine hashes the patch runs on |
 | `--signature <file>` | sibling `.sig` | Detached signature from [`bundle sign`](./bundle-sign.md); without one the server signs with the app's stored key |
 | `-w, --wait` | off | Block until the release is live |
+| `--ota-tag <prefix>` | — | Publish as `<version>-<prefix><N>`; see [OTA version tags](#ota-version-tags) |
+| `--native-version <v>` | `versionName` in `android/app/build.gradle` | The binary version devices run, for `--ota-tag` |
+| `--dry-run` | off | Print version, channel and minimum native version; upload nothing |
+
+### OTA version tags
+
+`--ota-tag nu` publishes the `package.json` version with a counter: `1.16.1-nu1`, then `1.16.1-nu2` for the next
+fix on the same version, and `1.16.2-nu1` once the version moves. An app that shows `NativeUpdate.current()` can
+tell its users (and you) that the running build came over the air and is still owed a store release.
+
+```bash
+npx native-update deploy ./dist --app com.example.app --ota-tag nu --wait
+npx native-update deploy ./dist --app com.example.app --ota-tag nu --dry-run   # prints 1.16.1-nu3
+npx native-update ota-tag --app com.example.app                               # prints the tag only
+```
+
+A tag sorts **below** its own version (`1.16.1-nu3` < `1.16.1`), so the store release of `1.16.1` supersedes every
+OTA build of it. That is also why the version must be above the `versionName` your devices run: a phone on
+`1.16.0` is never offered `1.16.0-nu1`, and `--ota-tag` refuses it with the fix (bump the patch). The minimum native
+version defaults to that `versionName`, so a bundle never reaches an older binary missing a plugin its code calls.
+Use `ota-tag` when you sign bundles yourself, so `bundle create --version` and `deploy --version` get the same tag.
 
 ### Always use `--wait` in CI
 
