@@ -12,6 +12,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.4.5] - 2026-11-20
+
+### Added
+- `set()` takes `applyOn: 'next-start'`: the bundle is staged and loads at the next cold start, so a reload never
+  interrupts someone mid-task. `notifyAppReady()` in the same process no longer confirms a staged bundle that has not
+  run; its own first boot does, and two unconfirmed starts still roll it back. Default stays `'now'`. Proven on Android
+  (Growthify, 2026-11-20: staged on start 1 with no reload, running and confirmed from start 2).
+- iOS: `next-start` leaves the running WebView alone. Restoring an applied bundle at a cold start on iOS is still open
+  and will be proven on a Mac.
+
 ## [4.4.4] - 2026-11-20
 
 ### Fixed

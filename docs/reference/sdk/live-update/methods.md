@@ -185,10 +185,23 @@ Returns the number of active downloads. Useful for "do not start another downloa
 ### `set(bundle)`
 
 ```typescript
-set(bundle: BundleInfo): Promise<void>
+set(bundle: SetBundleOptions): Promise<void>
+// SetBundleOptions = BundleInfo & { applyOn?: 'now' | 'next-start' }
 ```
 
-Mark a downloaded bundle as the active one. The web view is **not** reloaded — this is the building block, not the trigger. Pair with `reload()` for an immediate switch, or just leave it for the next restart.
+Makes a downloaded, verified bundle the app's bundle.
+
+- `applyOn: 'now'` (the default) switches the web view to it at once, so whatever the user was doing reloads.
+- `applyOn: 'next-start'` (4.4.5+) stages it. The running app is untouched; the bundle loads at the next cold start, and that
+  start's `notifyAppReady()` confirms it. Two unconfirmed starts roll it back.
+
+```typescript
+const bundle = await NativeUpdate.downloadUpdate();
+await NativeUpdate.set({ ...bundle, applyOn: 'next-start' });
+```
+
+Proven on Android. On iOS, `next-start` leaves the running app alone; restoring the bundle at a cold start is still
+being verified on a device.
 
 ---
 
