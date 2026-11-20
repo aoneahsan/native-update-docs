@@ -15,7 +15,7 @@ licence and dashboard as the Capacitor plugin.
 
 | Package | `native-update-react-native` |
 |---|---|
-| Version | 1.0.1 |
+| Version | 1.1.0 |
 | React Native | 0.80 or newer, New Architecture (TurboModule) |
 | Android | minSdk 26 |
 | iOS | not yet: the package links on Android only |

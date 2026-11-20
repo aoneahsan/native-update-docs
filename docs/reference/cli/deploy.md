@@ -4,7 +4,7 @@ title: CLI — deploy & remote commands
 description: Deploy a bundle from CI or your terminal with an access token — deploy, apps list, builds list/promote/rollout/status/delete, jobs status, and token info.
 keywords: [native-update deploy, ota ci deploy, native-update cli access token, promote build cli, rollout cli]
 last_update:
-  date: 2026-07-16
+  date: 2026-11-20
   author: Native Update team
 ---
 
@@ -60,6 +60,9 @@ npx native-update deploy ./dist \
 | `-n, --notes <text>` | — | Release notes |
 | `-r, --rollout <n>` | 100 | Initial rollout percentage |
 | `--min-native <v>` | — | Minimum native app version |
+| `--payload-type <type>` | `web_bundle` | `web_bundle` (Capacitor, React Native) · `assets` (files a native Android or Flutter app reads) · `dart_aot` (a Flutter code patch from [`bundle flutter-patch`](./bundle-flutter-patch.md)) |
+| `--runtime-keys <keys>` | sibling `.runtime-keys` | `dart_aot` only: comma-separated engine hashes the patch runs on |
+| `--signature <file>` | sibling `.sig` | Detached signature from [`bundle sign`](./bundle-sign.md); without one the server signs with the app's stored key |
 | `-w, --wait` | off | Block until the release is live |
 
 ### Always use `--wait` in CI

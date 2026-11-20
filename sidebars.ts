@@ -109,6 +109,7 @@ const sidebars: SidebarsConfig = {
         'reference/cli/bundle-create',
         'reference/cli/bundle-sign',
         'reference/cli/bundle-verify',
+        'reference/cli/bundle-flutter-patch',
         'reference/cli/server-start',
         'reference/cli/monitor',
         'reference/cli/backend-create',

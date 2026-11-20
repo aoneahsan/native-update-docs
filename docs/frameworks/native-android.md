@@ -19,7 +19,7 @@ For code changes, ship a store release; the library's Play in-app update helper 
 
 | Package | `com.aoneahsan:native-update-android` |
 |---|---|
-| Version | 1.0.1 |
+| Version | 1.1.0 |
 | Android | minSdk 26, compiled against API 36, Java 21 |
 | Dependencies | kotlinx-coroutines, androidx.activity, Play app-update and review. No HTTP library. |
 
@@ -47,7 +47,7 @@ dependencyResolutionManagement {
 
 // app/build.gradle.kts
 dependencies {
-    implementation("com.aoneahsan:native-update-android:1.0.1")
+    implementation("com.aoneahsan:native-update-android:1.1.0")
 }
 ```
 

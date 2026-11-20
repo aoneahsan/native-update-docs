@@ -339,9 +339,9 @@ const config: Config = {
       additionalLanguages: ['bash', 'json', 'typescript', 'kotlin', 'swift', 'php', 'yaml', 'diff'],
     },
     announcementBar: {
-      id: 'v3-1-latest',
+      id: 'v4-4-flutter-code-updates',
       content:
-        `native-update v${pluginVersion.version} — one shared wire-contract for update checks, refreshed docs, new home at nativeupdate-docs.aoneahsan.com.`,
+        `native-update v${pluginVersion.version}: Flutter apps you distribute outside Google Play can now take Dart code updates. <a href="/frameworks/flutter#dart-code-updates-sideloaded-android-builds">How it works</a>`,
       backgroundColor: '#0ea5e9',
       textColor: '#ffffff',
       isCloseable: true,

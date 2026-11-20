@@ -3,6 +3,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.4.0] - 2026-11-20
+
+Dart code updates for Flutter apps. The Capacitor plugin itself is unchanged; this release carries the CLI and the
+protocol for the Flutter SDK 1.1.0 (`native_update` on pub.dev).
+
+### Added
+
+- **CLI `bundle flutter-patch <release.apk>`** turns a release APK into a Dart code patch (`lib/<abi>/libapp.so`) and
+  writes the engine it fits beside it (`.runtime-keys`: the SHA-256 of that APK's `libflutter.so`).
+- **CLI `deploy --payload-type dart_aot`** uploads that patch. `--runtime-keys` overrides the engine list; by default
+  the sibling `.runtime-keys` file is read.
+
+### Server (marker `2026.11.20.1`)
+
+- Builds can be `dart_aot`. One is offered only to a Flutter app that asks for code updates and runs one of the
+  build's engines; a different engine gets `RUNTIME_MISMATCH`, and no other SDK is ever offered one.
+
+### Proven on a phone (live server)
+
+- A patch loads on the next cold start; a patch that never confirms its start rolls back after two starts and is
+  not offered again (`ROLLED_BACK`); a wrong engine key and a forged signature are both refused; installing a new
+  APK, even one that keeps its version fields, sets the patch aside.
+
 ## [4.3.0] - 2026-11-19
 
 The update protocol learns which SDK is asking. Groundwork for the native Android, Flutter and React Native SDKs that
