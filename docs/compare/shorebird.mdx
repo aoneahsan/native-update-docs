@@ -1,10 +1,10 @@
 ---
 title: "Shorebird and Native Update"
 sidebar_label: "Shorebird"
-description: "Shorebird patches compiled Dart in Flutter apps. Native Update ships web bundles to Capacitor apps only today, so there is no move to make. Dated prices and rows."
+description: "Shorebird patches compiled Dart on every platform. Native Update ships signed files to Flutter apps on Android and Dart code to sideloaded builds. Dated prices and rows."
 keywords: [shorebird alternative, flutter code push, capacitor ota]
 last_update:
-  date: 2026-11-07
+  date: 2026-11-20
   author: Native Update team
 ---
 
@@ -16,11 +16,11 @@ import {CheckedLine, CompareFacts, RivalLink} from '@site/src/components/Compare
 
 Shorebird patches compiled Dart in Flutter apps, and its free Hobby plan covers 5,000 patch installs a month. A web-bundle updater like ours can't do that, because a Capacitor bundle is HTML, CSS and JavaScript and a Flutter release isn't.
 
-## Flutter apps belong on Shorebird
+## Two different Flutter jobs
 
-Our Flutter package doesn't exist yet, so there's no path from Shorebird to us. Keep patching with it.
+Shorebird patches the Dart code of apps installed from the App Store and Google Play. We don't load downloaded code in an app that came from Google Play, and our Flutter package doesn't update iOS apps yet, so for those installs Shorebird is the tool.
 
-If you're choosing a stack for a new app and live updates matter, [how OTA updates work](/concepts/how-ota-updates-work) shows exactly which layer a Capacitor update can replace and which still needs a store build.
+The [Flutter SDK](/frameworks/flutter) does two other things. It replaces the files a Flutter app reads (images, config, copy) on every Android install, signed and checked on each cold start. And for an app you hand out yourself (a direct APK, an enterprise rollout, a test group) it can replace the Dart code too: [`bundle flutter-patch`](/reference/cli/bundle-flutter-patch) turns a release APK into a patch that only runs on the exact Flutter engine it was built for.
 
 ## The facts, dated
 

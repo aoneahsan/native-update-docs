@@ -1,10 +1,10 @@
 ---
 title: "Revopush and Native Update"
 sidebar_label: "Revopush"
-description: "Revopush keeps the CodePush SDK calls for React Native apps leaving App Center. For a Capacitor or Cordova app off CodePush, our migration guide is linked."
+description: "Revopush keeps the CodePush SDK calls for React Native apps leaving App Center. Our React Native SDK is a different API, on Android; the CodePush guide is linked."
 keywords: [revopush alternative, codepush react native]
 last_update:
-  date: 2026-11-07
+  date: 2026-11-20
   author: Native Update team
 ---
 
@@ -14,11 +14,11 @@ import {CheckedLine, CompareFacts, RivalLink} from '@site/src/components/Compare
 
 <CheckedLine slug="revopush" />
 
-Revopush is a CodePush-compatible service, so a React Native app coming off Microsoft's retired App Center can keep the same SDK calls, Expo projects included. That's a job we can't do for you.
+Revopush is a CodePush-compatible service, so a React Native app coming off Microsoft's retired App Center can keep the same SDK calls, Expo projects included. Keeping those calls is something we can't do: our SDK has its own API.
 
 ## Coming off App Center
 
-For a React Native app, Revopush or another service in [the list](/compare) is the move. We only have a Capacitor plugin right now.
+For a React Native app on Android that can change a few calls, the [React Native SDK](/frameworks/react-native) is the move: a signed bundle loaded at start, rollback after two unconfirmed starts, and the Play update and review flows. If the app must keep its CodePush calls, or needs iOS updates today, Revopush is the one.
 
 If the app you took off App Center was Capacitor or Cordova, that's different: [Migrate from CodePush](/how-to/migrate-from-codepush) maps each CodePush call to ours and runs both plugins side by side until the old one can go.
 

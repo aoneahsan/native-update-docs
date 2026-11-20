@@ -1,10 +1,10 @@
 ---
 title: "Appcircle CodePush and Native Update"
 sidebar_label: "Appcircle CodePush"
-description: "Appcircle CodePush is OTA inside a React Native CI/CD platform, on Kubernetes or OpenShift if you want. Why there is no move to us, with dated facts."
+description: "Appcircle CodePush is OTA inside a React Native CI/CD platform, on Kubernetes or OpenShift if you want. Our React Native SDK releases after any pipeline, on Android. Dated facts."
 keywords: [appcircle codepush alternative, enterprise react native ota]
 last_update:
-  date: 2026-11-07
+  date: 2026-11-20
   author: Native Update team
 ---
 
@@ -16,11 +16,11 @@ import {CheckedLine, CompareFacts, RivalLink} from '@site/src/components/Compare
 
 Appcircle puts React Native OTA updates inside the same platform that builds and distributes the app, and it runs on Kubernetes or OpenShift if your company wants it in-house. Rollout percentages and rollbacks sit next to the build pipeline. We don't build apps at all, and we don't serve React Native.
 
-## Why there's no move here
+## Keeping the pipeline, changing the updater
 
-A React Native app has nowhere to land with us yet. Our plugin is for Capacitor, and React Native, Flutter and native packages are planned, not shipped. Keep Appcircle for the app you have.
+Appcircle builds and distributes; we don't. If you want to keep its pipeline and move only the live updates, a React Native app on Android can: the [React Native SDK](/frameworks/react-native) loads a signed bundle, and a [`deploy`](/reference/cli/deploy) step after the build publishes it. iOS isn't ready yet, so an app that needs iOS updates keeps Appcircle's.
 
-The one case where this page matters: a separate product your company writes in Capacitor. That team can start at [Installation](/getting-started/installation) without touching the Appcircle pipeline, and [how OTA updates work](/concepts/how-ota-updates-work) explains what a web bundle can and can't change.
+[How OTA updates work](/concepts/how-ota-updates-work) explains what a bundle can and can't change.
 
 ## The facts, dated
 

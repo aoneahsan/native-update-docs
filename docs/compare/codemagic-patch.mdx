@@ -1,10 +1,10 @@
 ---
 title: "Codemagic Patch and Native Update"
 sidebar_label: "Codemagic Patch"
-description: "Codemagic Patch is React Native OTA from the Codemagic build service, hosted or run with Docker Compose. A Capacitor-only plugin can't take that app. Dated prices."
+description: "Codemagic Patch is React Native OTA from the Codemagic build service, hosted or self-run. Our React Native SDK takes the release step after any build, on Android. Dated prices."
 keywords: [codemagic patch alternative, react native ota self hosted]
 last_update:
-  date: 2026-11-07
+  date: 2026-11-20
   author: Native Update team
 ---
 
@@ -16,11 +16,11 @@ import {CheckedLine, CompareFacts, RivalLink} from '@site/src/components/Compare
 
 Codemagic Patch is OTA for React Native, including Expo apps, from the team behind the Codemagic build service. It comes hosted, with the first 100K MAU free, or as a Docker Compose install you run yourself.
 
-## Where that leaves you
+## After the Codemagic build
 
-Building on Codemagic with React Native is a setup we can't join. There is no React Native package from us today, only the Capacitor plugin, so stay with Patch.
+Keep building on Codemagic. Our [React Native SDK](/frameworks/react-native) doesn't care where the native build happens; it adds a release step after it, with [`deploy`](/reference/cli/deploy), and loads the signed bundle on Android. Expo apps and apps that need iOS updates today should stay with Patch: we haven't tested Expo, and the SDK's iOS side isn't ready.
 
-Nothing about Codemagic stops a Capacitor app from using us later: the plugin doesn't care where the native build happens. Read [Installation](/getting-started/installation) for the Capacitor 8 requirement, and [the CI guide](/how-to/ci-cd-github-actions) for how a release step fits after your build.
+[The CI guide](/how-to/ci-cd-github-actions) shows where that release step sits after a build.
 
 ## The facts, dated
 

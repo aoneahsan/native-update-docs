@@ -4,7 +4,7 @@ title: Introduction
 description: native-update is a Capacitor plugin that ships over-the-air JavaScript bundle updates, in-app store update prompts, and native review prompts to mobile apps without rebuilding or resubmitting them.
 keywords: [capacitor, native-update, OTA, live updates, hot reload, app updates, in-app updates, app review, code-push alternative]
 last_update:
-  date: 2026-08-05
+  date: 2026-11-20
   author: Native Update team
 ---
 
@@ -13,6 +13,8 @@ last_update:
 **`native-update` is a Capacitor plugin that ships over-the-air (OTA) JavaScript bundle updates, in-app store update prompts, and native review prompts to mobile apps — without rebuilding or resubmitting them.** It is a single SDK that wraps the four most-asked-for production update flows for hybrid mobile apps, and it talks to the hosted Native Update service or to your own server that implements the documented HTTP contract.
 
 The package lives on npm at [`native-update`](https://www.npmjs.com/package/native-update) and is built and maintained by the Native Update team. From 4.1.2 it ships under the proprietary Native Update License; earlier versions keep the license they were published with.
+
+Not on Capacitor? The same account, plans and dashboard serve the [React Native SDK](/frameworks/react-native), the [Flutter SDK](/frameworks/flutter) and the [native Android SDK](/frameworks/native-android). They run on Android today; their iOS side isn't ready yet.
 
 ## What it does
 

@@ -1,7 +1,7 @@
 {
   "product": "Native Update",
   "variant": "product",
-  "lastChecked": "2026-11-07",
+  "lastChecked": "2026-11-20",
   "productLines": [
     {
       "key": "mobile-app-updates",
@@ -120,13 +120,13 @@
         "status": "yes"
       },
       "react-native": {
-        "status": "no"
+        "status": "partial"
       },
       "flutter": {
-        "status": "no"
+        "status": "partial"
       },
       "native-android-ios": {
-        "status": "no"
+        "status": "partial"
       },
       "free-plan": {
         "status": "yes"
@@ -178,7 +178,7 @@
       "line": "mobile-app-updates",
       "officialUrl": "https://capgo.app",
       "whatItIs": "Hosted live updates for Capacitor apps, with an open source stack you can run yourself.",
-      "lastChecked": "2026-11-07",
+      "lastChecked": "2026-11-20",
       "prices": [
         {
           "plan": "Solo",
@@ -186,7 +186,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://capgo.app/pricing/",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "$146 billed yearly; 2,000 MAU, 100 GiB/month"
         },
         {
@@ -195,7 +195,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://capgo.app/pricing/",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "$396 billed yearly; 10,000 MAU"
         },
         {
@@ -204,7 +204,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://capgo.app/pricing/",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "$998 billed yearly; 100,000 MAU"
         },
         {
@@ -213,7 +213,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://capgo.app/pricing/",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "from $249/mo; 1,000,000+ MAU"
         },
         {
@@ -222,7 +222,7 @@
           "currency": "USD",
           "period": "once",
           "source": "https://capgo.app/pricing/",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "$5 prepaid credits valid 12 months; no subscription"
         }
       ],
@@ -314,7 +314,7 @@
       "line": "mobile-app-updates",
       "officialUrl": "https://capawesome.io/cloud/",
       "whatItIs": "Live updates for Capacitor, Ionic and Cordova apps from the Capawesome plugin team.",
-      "lastChecked": "2026-11-07",
+      "lastChecked": "2026-11-20",
       "prices": [
         {
           "plan": "Starter",
@@ -322,7 +322,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://capawesome.io/pricing/",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "$90 yearly; 1K MAU, 100 GB transfer"
         },
         {
@@ -331,7 +331,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://capawesome.io/pricing/",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "$290 yearly; 10K MAU, 1 TB"
         },
         {
@@ -340,7 +340,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://capawesome.io/pricing/",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "$790 yearly; 50K MAU, 3 TB"
         },
         {
@@ -349,7 +349,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://capawesome.io/pricing/",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "$2,490 yearly; 250K MAU, 10 TB"
         },
         {
@@ -358,7 +358,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://capawesome.io/pricing/",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "Quote only"
         }
       ],
@@ -452,7 +452,7 @@
       "line": "mobile-app-updates",
       "officialUrl": "https://ionic.io/appflow",
       "whatItIs": "Ionic's hosted build and live update service, no longer sold to new customers.",
-      "lastChecked": "2026-11-07",
+      "lastChecked": "2026-11-20",
       "prices": [
         {
           "plan": "All plans",
@@ -460,7 +460,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://ionic.io/blog/important-announcement-the-future-of-ionics-commercial-products",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "Quote only; new customer sales discontinued 2025-02-11, existing customers keep access through 2027-12-31"
         }
       ],
@@ -544,7 +544,7 @@
       "line": "mobile-app-updates",
       "officialUrl": "https://expo.dev/eas-update",
       "whatItIs": "Expo's hosted update service for React Native apps built with expo-updates.",
-      "lastChecked": "2026-11-07",
+      "lastChecked": "2026-11-20",
       "prices": [
         {
           "plan": "Free",
@@ -552,7 +552,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://expo.dev/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "1,000 MAU included"
         },
         {
@@ -561,7 +561,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://expo.dev/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "plus usage; 3,000 MAU included, then $0.005 per MAU tiered down"
         },
         {
@@ -570,7 +570,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://expo.dev/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "plus usage; 50,000 MAU included"
         },
         {
@@ -579,7 +579,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://expo.dev/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "Quote only"
         }
       ],
@@ -653,7 +653,7 @@
         }
       },
       "strongerThere": "Choose EAS Update if your app is built on Expo: branches, channels, percentage rollouts and rollbacks are already wired into the toolchain you use for builds.",
-      "strongerHere": "Choose Native Update if your app is Capacitor, you want signed bundles on every plan rather than from $199, and you want 50,000 MAU at a flat $9.99 instead of a base fee plus per-MAU usage.",
+      "strongerHere": "Choose Native Update if your app is Capacitor, or React Native on Android, and you want signed bundles on every plan rather than from $199, and 50,000 MAU at a flat $9.99 instead of a base fee plus per-MAU usage.",
       "changeLog": [
         {
           "on": "2026-11-07",
@@ -667,7 +667,7 @@
       "line": "mobile-app-updates",
       "officialUrl": "https://shorebird.dev",
       "whatItIs": "Code push for Flutter apps, from people who worked on Flutter.",
-      "lastChecked": "2026-11-07",
+      "lastChecked": "2026-11-20",
       "prices": [
         {
           "plan": "Hobby",
@@ -675,7 +675,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://shorebird.dev/pricing/",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "5,000 patch installs/month"
         },
         {
@@ -684,7 +684,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://shorebird.dev/pricing/",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "$240 billed yearly; 50,000 patch installs/month, $1 per 2,500 over"
         },
         {
@@ -693,7 +693,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://shorebird.dev/pricing/",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "$4,800 billed yearly; 1,000,000 patch installs/month"
         },
         {
@@ -702,7 +702,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://shorebird.dev/pricing/",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "Quote only"
         }
       ],
@@ -777,8 +777,8 @@
           "checkedOn": "2026-11-07"
         }
       },
-      "strongerThere": "Choose Shorebird if your app is Flutter: it patches compiled Dart, which no web-bundle updater can do, and its free plan covers 5,000 patch installs a month.",
-      "strongerHere": "Choose Native Update if your app is Capacitor and you want percentage rollouts as a dashboard setting rather than logic you write, plus the store update flow and review prompt in the same plugin.",
+      "strongerThere": "Choose Shorebird if your Flutter app needs code patches on iOS or on installs from Google Play: its site says it ships the same fix to Android, iOS, macOS, Windows and Linux, designed for App Store and Google Play compliance, and its free plan covers 5,000 patch installs a month.",
+      "strongerHere": "Choose Native Update if your Flutter app is on Android and you want signed file updates on every install, Dart code updates for the copies you hand out yourself, percentage rollouts as a dashboard setting, and the Play update flow and review prompt in the same package.",
       "changeLog": [
         {
           "on": "2026-11-07",
@@ -792,7 +792,7 @@
       "line": "mobile-app-updates",
       "officialUrl": "https://revopush.org",
       "whatItIs": "A CodePush-compatible hosted update service for React Native.",
-      "lastChecked": "2026-11-07",
+      "lastChecked": "2026-11-20",
       "prices": [
         {
           "plan": "Starter",
@@ -800,7 +800,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://revopush.org/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "up to 1K MAU, 10 GB egress"
         },
         {
@@ -809,7 +809,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://revopush.org/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "up to 50K MAU, 100 GB egress; yearly toggle says save 10%, amounts not shown"
         },
         {
@@ -818,7 +818,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://revopush.org/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "up to 300K MAU"
         },
         {
@@ -827,7 +827,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://revopush.org/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "up to 500K MAU"
         },
         {
@@ -836,7 +836,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://revopush.org/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "up to 1M MAU"
         },
         {
@@ -845,7 +845,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://revopush.org/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "Quote only"
         }
       ],
@@ -917,7 +917,7 @@
         }
       },
       "strongerThere": "Choose Revopush if you are moving a React Native app off Microsoft CodePush and want to keep the same SDK calls, with a free 1K MAU tier and flat MAU bands above it.",
-      "strongerHere": "Choose Native Update if your app is Capacitor and you want automatic rollback on a failed start, delta updates and the in-app update and review flows from one package.",
+      "strongerHere": "Choose Native Update if your React Native app ships on Android and you want automatic rollback on a failed start, bundles signed and verified on the device, and the Play update and review flows from one package.",
       "changeLog": [
         {
           "on": "2026-11-07",
@@ -931,7 +931,7 @@
       "line": "mobile-app-updates",
       "officialUrl": "https://codepushgo.com",
       "whatItIs": "Hosted live updates for React Native with channels and encrypted bundles.",
-      "lastChecked": "2026-11-07",
+      "lastChecked": "2026-11-20",
       "prices": [
         {
           "plan": "Solo",
@@ -939,7 +939,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://codepushgo.com/pricing/",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "billed yearly $146; 2,000 MAU; monthly-billing price not shown"
         },
         {
@@ -948,7 +948,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://codepushgo.com/pricing/",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "billed yearly $396; 10,000 MAU"
         },
         {
@@ -957,7 +957,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://codepushgo.com/pricing/",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "billed yearly $998; 100,000 MAU"
         },
         {
@@ -966,7 +966,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://codepushgo.com/pricing/",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "from, billed yearly $2,490"
         }
       ],
@@ -1036,7 +1036,7 @@
         }
       },
       "strongerThere": "Choose CodePushGo if you ship React Native and want development, beta and production channels with encrypted bundle delivery at $12 a month billed yearly.",
-      "strongerHere": "Choose Native Update if your app is Capacitor and you want a stated free plan, signed bundles verified on the device, and a rollout percentage you set per release.",
+      "strongerHere": "Choose Native Update if your app is Capacitor, or React Native on Android, and you want a stated free plan, signed bundles verified on the device, and a rollout percentage you set per release.",
       "changeLog": [
         {
           "on": "2026-11-07",
@@ -1050,7 +1050,7 @@
       "line": "mobile-app-updates",
       "officialUrl": "https://cresc.dev",
       "whatItIs": "Flat-rate OTA updates for React Native, priced by daily queries rather than users.",
-      "lastChecked": "2026-11-07",
+      "lastChecked": "2026-11-20",
       "prices": [
         {
           "plan": "Free",
@@ -1058,7 +1058,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://cresc.dev/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "1K queries/day, 3 apps"
         },
         {
@@ -1067,7 +1067,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://cresc.dev/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "10K queries/day, 5 apps"
         },
         {
@@ -1076,7 +1076,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://cresc.dev/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "100K queries/day, 10 apps"
         },
         {
@@ -1085,7 +1085,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://cresc.dev/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "1M queries/day, 50 apps"
         },
         {
@@ -1094,7 +1094,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://cresc.dev/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "10M queries/day"
         },
         {
@@ -1103,7 +1103,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://cresc.dev/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "100M queries/day"
         }
       ],
@@ -1167,7 +1167,7 @@
         }
       },
       "strongerThere": "Choose Cresc if you ship React Native and prefer a flat monthly price with no overage, metered by daily update checks instead of monthly active users.",
-      "strongerHere": "Choose Native Update if your app is Capacitor and you want rollout, rollback, signing and channels stated plainly on the plan, plus the store update and review flows.",
+      "strongerHere": "Choose Native Update if your app is Capacitor, or React Native on Android, and you want rollout, rollback, signing and channels stated plainly on the plan, plus the store update and review flows.",
       "changeLog": [
         {
           "on": "2026-11-07",
@@ -1181,7 +1181,7 @@
       "line": "mobile-app-updates",
       "officialUrl": "https://stalliontech.io",
       "whatItIs": "Hosted OTA updates for React Native with a 10,000 MAU free plan.",
-      "lastChecked": "2026-11-07",
+      "lastChecked": "2026-11-20",
       "prices": [
         {
           "plan": "Free",
@@ -1189,7 +1189,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://stalliontech.io/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "10,000 MAU, 50 GB download/month"
         },
         {
@@ -1198,7 +1198,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://stalliontech.io/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "page shows $64 crossed out beside $51/month; 100,000 MAU, 2 TB download/month"
         },
         {
@@ -1207,7 +1207,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://stalliontech.io/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "Quote only; 1,000,000+ MAU"
         },
         {
@@ -1216,7 +1216,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://stalliontech.io/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "Quote only"
         }
       ],
@@ -1286,7 +1286,7 @@
         }
       },
       "strongerThere": "Choose Stallion if you ship React Native and want a free plan with 10,000 MAU, rollback logs and an on-premise option for later.",
-      "strongerHere": "Choose Native Update if your app is Capacitor and you want signed bundles, percentage rollouts and channels as named features, with the in-app update and review flows included.",
+      "strongerHere": "Choose Native Update if your app is Capacitor, or React Native on Android, and you want signed bundles, percentage rollouts and channels as named features, with the in-app update and review flows included.",
       "changeLog": [
         {
           "on": "2026-11-07",
@@ -1300,7 +1300,7 @@
       "line": "mobile-app-updates",
       "officialUrl": "https://codemagic.io/patch",
       "whatItIs": "Codemagic's OTA update service for React Native, offered hosted and self-hosted.",
-      "lastChecked": "2026-11-07",
+      "lastChecked": "2026-11-20",
       "prices": [
         {
           "plan": "Hosted Patch",
@@ -1308,7 +1308,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://codemagic.io/pricing/",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "first 100K MAU free, then $99/month per additional 100K MAU"
         },
         {
@@ -1317,7 +1317,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://codemagic.io/patch",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "Quote only; price not stated on the Patch page"
         }
       ],
@@ -1391,7 +1391,7 @@
         }
       },
       "strongerThere": "Choose Codemagic Patch if you ship React Native, already build on Codemagic, and want 100K MAU free on the hosted service or a Docker Compose install you run yourself.",
-      "strongerHere": "Choose Native Update if your app is Capacitor and you want bundles signed and verified on the device, delta updates, and the store update and review flows in the same plugin.",
+      "strongerHere": "Choose Native Update if your app is Capacitor, or React Native on Android, and you want bundles signed and verified on the device and the store update and review flows in the same package.",
       "changeLog": [
         {
           "on": "2026-11-07",
@@ -1405,7 +1405,7 @@
       "line": "mobile-app-updates",
       "officialUrl": "https://appcircle.io/codepush",
       "whatItIs": "An OTA update module inside the Appcircle CI/CD platform for React Native, hosted or self-hosted.",
-      "lastChecked": "2026-11-07",
+      "lastChecked": "2026-11-20",
       "prices": [
         {
           "plan": "Starter",
@@ -1413,7 +1413,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://appcircle.io/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "Quote only; listed as Always Free, annual licensing, no amounts published"
         },
         {
@@ -1422,7 +1422,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://appcircle.io/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "Quote only"
         }
       ],
@@ -1494,7 +1494,7 @@
         }
       },
       "strongerThere": "Choose Appcircle CodePush if your React Native team wants OTA updates, rollout percentages and rollbacks inside the same platform that builds and distributes the app, including on Kubernetes or OpenShift.",
-      "strongerHere": "Choose Native Update if your app is Capacitor and you want a published price, signed bundles and the in-app update and review flows without adopting a whole CI/CD platform.",
+      "strongerHere": "Choose Native Update if your app is Capacitor, or React Native on Android, and you want a published price, signed bundles and the in-app update and review flows without adopting a whole CI/CD platform.",
       "changeLog": [
         {
           "on": "2026-11-07",
@@ -1508,7 +1508,7 @@
       "line": "mobile-app-updates",
       "officialUrl": "https://appsonair.com",
       "whatItIs": "A mobile toolkit with CodePush-style releases, build distribution, force update and push, with SDKs for Android, iOS, Flutter and React Native.",
-      "lastChecked": "2026-11-07",
+      "lastChecked": "2026-11-20",
       "prices": [
         {
           "plan": "Free",
@@ -1516,7 +1516,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://appsonair.com/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "10 CodePush releases/month, 1,000 bundle downloads/month, 1 app"
         },
         {
@@ -1525,7 +1525,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://appsonair.com/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "Quote only: the page shows more than one monthly figure for this plan; 500,000 bundle downloads/month"
         },
         {
@@ -1534,7 +1534,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://appsonair.com/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "Quote only: the page shows more than one monthly figure for this plan; 2,000,000 bundle downloads/month"
         },
         {
@@ -1543,7 +1543,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://appsonair.com/pricing",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "Quote only"
         }
       ],
@@ -1615,7 +1615,7 @@
         }
       },
       "strongerThere": "Choose AppsOnAir if you want one SDK across native, Flutter and React Native that also distributes test builds, forces a critical update and sends push, with a free tier to start.",
-      "strongerHere": "Choose Native Update if your app is Capacitor and you want signed bundles, automatic rollback, percentage rollouts and a plan price that is stated once and plainly.",
+      "strongerHere": "Choose Native Update if your app is Capacitor, or React Native, Flutter or native on Android, and you want signed bundles, automatic rollback, percentage rollouts and a plan price that is stated once and plainly.",
       "changeLog": [
         {
           "on": "2026-11-07",
@@ -1629,7 +1629,7 @@
       "line": "mobile-app-updates",
       "officialUrl": "https://hot-updater.dev",
       "whatItIs": "A self-hosted OTA updater for React Native that runs on your own cloud account.",
-      "lastChecked": "2026-11-07",
+      "lastChecked": "2026-11-20",
       "prices": [
         {
           "plan": "Self-hosted",
@@ -1637,7 +1637,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://github.com/gronxb/hot-updater",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "MIT license with a condition for hosted resale; you pay your own cloud bills"
         }
       ],
@@ -1705,7 +1705,7 @@
         }
       },
       "strongerThere": "Choose Hot Updater if you ship React Native or Expo, want no vendor in the path, and are happy to run the update backend on Supabase, Cloudflare, AWS, Firebase, Vercel or Azure yourself.",
-      "strongerHere": "Choose Native Update if your app is Capacitor and you want a hosted service with a free plan, signed and verified bundles, and the in-app update and review flows without running your own backend.",
+      "strongerHere": "Choose Native Update if your app is Capacitor, or React Native on Android, and you want a hosted service with a free plan, signed and verified bundles, and the in-app update and review flows without running your own backend.",
       "changeLog": [
         {
           "on": "2026-11-07",
@@ -1719,7 +1719,7 @@
       "line": "mobile-app-updates",
       "officialUrl": "https://github.com/microsoft/code-push-server",
       "whatItIs": "The standalone CodePush server Microsoft published when App Center retired; archived and read-only.",
-      "lastChecked": "2026-11-07",
+      "lastChecked": "2026-11-20",
       "prices": [
         {
           "plan": "Self-hosted",
@@ -1727,7 +1727,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://github.com/microsoft/code-push-server",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "MIT; repository archived 2025-05-20; hosted App Center CodePush retired 2025-03-31"
         }
       ],
@@ -1793,7 +1793,7 @@
         }
       },
       "strongerThere": "Choose code-push-server if you still run the React Native CodePush client and want to keep it working on your own infrastructure at no license cost.",
-      "strongerHere": "Choose Native Update if you want a maintained service: the repository is archived, while Native Update ships a plugin with signing, rollback, rollouts and the store flows.",
+      "strongerHere": "Choose Native Update if you want a maintained service: the repository is archived, while Native Update ships SDKs for Capacitor and, on Android, React Native, with signing, rollback, rollouts and the store flows.",
       "changeLog": [
         {
           "on": "2026-11-07",
@@ -1807,7 +1807,7 @@
       "line": "mobile-app-updates",
       "officialUrl": "https://capawesome.io/plugins/app-update/",
       "whatItIs": "Two free MIT Capacitor plugins: one runs the Play in-app update flow, the other the native review dialog.",
-      "lastChecked": "2026-11-07",
+      "lastChecked": "2026-11-20",
       "prices": [
         {
           "plan": "Plugins",
@@ -1815,7 +1815,7 @@
           "currency": "USD",
           "period": "month",
           "source": "https://registry.npmjs.org/@capawesome%2Fcapacitor-app-update",
-          "checkedOn": "2026-11-07",
+          "checkedOn": "2026-11-20",
           "note": "MIT on npm; no live update service in these two packages"
         }
       ],
@@ -1890,6 +1890,29 @@
           "what": "First checked"
         }
       ]
+    }
+  ],
+  "changeLog": [
+    {
+      "date": "2026-11-20",
+      "change": "Our side: React Native, Flutter and native Android SDKs shipped (Android; iOS not yet), so those rows read Partly and each React Native / Flutter rival's 'choose Native Update if' line names them. Shorebird's 'choose them if' line now quotes its home page (https://shorebird.dev, opened 2026-11-20): 'Ship the same fix to Android, iOS, macOS, Windows and Linux, designed for App Store and Google Play compliance.'",
+      "rivals": [
+        "expo-eas-update",
+        "shorebird",
+        "revopush",
+        "codepushgo",
+        "cresc",
+        "stallion",
+        "codemagic-patch",
+        "appcircle-codepush",
+        "appsonair",
+        "hot-updater",
+        "code-push-server"
+      ]
+    },
+    {
+      "date": "2026-11-20",
+      "change": "14-day refresh: every price source re-opened; all 50 plan names and amounts still match their pages, as do the prose numbers (CodePushGo $12, Stallion 10,000 MAU, Shorebird 5,000 patch installs, Revopush 1K MAU, Codemagic 100K MAU, Appflow access to December 31, 2027, hot-updater and Capawesome MIT, code-push-server archived). All 34 feature sources answered 200; feature rows keep their 2026-11-07 check date because their wording was not re-read row by row."
     }
   ]
 }

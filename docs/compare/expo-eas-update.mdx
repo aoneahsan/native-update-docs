@@ -1,10 +1,10 @@
 ---
 title: "Expo EAS Update and Native Update"
 sidebar_label: "Expo EAS Update"
-description: "EAS Update is wired into the Expo toolchain for React Native. Expo apps stay on Expo; running a Capacitor app beside one is covered. Dated prices."
+description: "EAS Update is wired into the Expo toolchain for React Native. Our React Native SDK serves bare React Native on Android; Expo apps stay on Expo. Dated prices."
 keywords: [eas update alternative, expo updates capacitor]
 last_update:
-  date: 2026-11-07
+  date: 2026-11-20
   author: Native Update team
 ---
 
@@ -18,9 +18,9 @@ EAS Update ships updates to React Native apps built with `expo-updates`, and its
 
 ## Expo apps stay on Expo
 
-We have nothing to offer an Expo app. `native-update` is a Capacitor plugin, and our React Native work hasn't shipped.
+EAS Update is built into `expo-updates`, and we haven't tested our SDK in an Expo app, so an Expo project is better off where it is.
 
-Teams that run Expo for one product and Capacitor for another can use both side by side. On the Capacitor app, [channels](/how-to/manage-channels) play the part EAS branches do, and a rollout percentage is set on each release.
+A bare React Native app on Android is another matter. The [React Native SDK](/frameworks/react-native) swaps the bundle the app loads for a signed one from Native Update, rolls back a bundle that never confirms its start, and runs the Play update and review flows. Releases go out with [`deploy`](/reference/cli/deploy) and a rollout percentage, the way EAS branches and channels work for you now. On iOS the SDK isn't ready, so an app that needs iOS updates today stays where it is.
 
 ## The facts, dated
 

@@ -1,10 +1,10 @@
 ---
 title: "CodePushGo and Native Update"
 sidebar_label: "CodePushGo"
-description: "CodePushGo encrypts React Native bundles across dev, beta and production channels. We have no React Native package yet, so this page compares only. Dated facts."
+description: "CodePushGo encrypts React Native bundles across dev, beta and production channels. Our React Native SDK signs them instead, on Android. Dated facts."
 keywords: [codepushgo alternative, react native live updates]
 last_update:
-  date: 2026-11-07
+  date: 2026-11-20
   author: Native Update team
 ---
 
@@ -16,11 +16,11 @@ import {CheckedLine, CompareFacts, RivalLink} from '@site/src/components/Compare
 
 CodePushGo sells hosted live updates for React Native, with development, beta and production channels and encrypted delivery, at $12 a month billed yearly. If that's your stack, compare it with the other React Native services in [the list](/compare), not with us.
 
-## No React Native package yet
+## Signed, not encrypted
 
-We'd have to turn you away today. Our only package is the Capacitor plugin; the React Native one is planned and not published.
+A React Native app on Android can move: the [React Native SDK](/frameworks/react-native) loads a signed bundle from Native Update and keeps the one built into the APK as the fallback. On iOS it isn't ready yet, so an app that needs iOS updates stays on CodePushGo.
 
-One difference is worth knowing for a future Capacitor app. CodePushGo encrypts bundles so only your app can read them. We sign them, and the device refuses a bundle whose signature or checksum doesn't match; [signing and integrity](/concepts/bundle-integrity-and-signing) covers what that does and doesn't protect.
+The difference worth knowing before you move: CodePushGo encrypts bundles so only your app can read them. We sign them, and the device refuses a bundle whose signature or checksum doesn't match; [signing and integrity](/concepts/bundle-integrity-and-signing) covers what that does and doesn't protect. Development, staging and production channels exist here too.
 
 ## The facts, dated
 

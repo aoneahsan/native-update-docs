@@ -108,8 +108,8 @@ export default function Home(): ReactNode {
   const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
-      title={`${siteConfig.title} — Capacitor OTA + In-App Updates`}
-      description="Documentation for native-update: OTA bundle updates, in-app store update prompts, app review prompts, and background updates for Capacitor apps."
+      title={`${siteConfig.title} — OTA + In-App Updates for Capacitor, React Native, Flutter and Android`}
+      description="Documentation for Native Update: OTA updates, in-app store update prompts and review prompts for Capacitor apps, and for React Native, Flutter and native Android apps on Android."
     >
       <HomepageHeader />
       <main>

@@ -18,7 +18,7 @@ const BLOG_PATH = '/blog';
 
 const config: Config = {
   title: 'Native Update Docs',
-  tagline: 'OTA bundle updates, in-app store updates, and review prompts for Capacitor apps.',
+  tagline: 'OTA updates, in-app store updates and review prompts for Capacitor, React Native, Flutter and Android apps.',
   favicon: 'img/favicon.svg',
 
   // Production URL — served from GitHub Pages (custom domain).
@@ -76,7 +76,7 @@ const config: Config = {
         name: 'Native Update Documentation',
         url: 'https://nativeupdate-docs.aoneahsan.com',
         description:
-          'Documentation for Native Update: the native-update Capacitor plugin and the hosted service for over-the-air bundle updates, in-app store update checks, and review prompts.',
+          'Documentation for Native Update: the Capacitor plugin, the React Native, Flutter and native Android SDKs, and the hosted service for over-the-air updates, in-app store update checks and review prompts.',
         inLanguage: 'en-US',
         publisher: {
           '@type': 'Organization',
@@ -234,7 +234,7 @@ const config: Config = {
   themeConfig: {
     image: 'img/social-card.png',
     metadata: [
-      { name: 'description', content: 'Documentation for native-update — Capacitor plugin for over-the-air bundle updates, in-app store update checks, and review prompts. Maintained by the Native Update team.' },
+      { name: 'description', content: 'Documentation for Native Update — the Capacitor plugin and the React Native, Flutter and native Android SDKs for over-the-air updates, in-app store update checks, and review prompts. Maintained by the Native Update team.' },
       { name: 'keywords', content: 'capacitor, native-update, OTA, live updates, hot reload, app updates, in-app updates, app review, code-push alternative, mobile updates, capacitor ota, capacitor live update, capacitor hot reload, capacitor over-the-air, capacitor update plugin' },
       { name: 'author', content: 'Native Update team' },
       { name: 'robots', content: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' },
