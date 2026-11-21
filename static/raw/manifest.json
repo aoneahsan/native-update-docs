@@ -3,7 +3,7 @@
     "name": "public-api-overview",
     "path": "/raw/public-api-overview.md",
     "title": "Public API — Overview",
-    "bytes": 5454
+    "bytes": 5763
   },
   {
     "name": "public-api-endpoints",
@@ -22,6 +22,48 @@
     "path": "/raw/ai-integration.md",
     "title": "AI Integration Guide",
     "bytes": 24013
+  },
+  {
+    "name": "developers-index",
+    "path": "/raw/developers-index.md",
+    "title": "Native Update for developers",
+    "bytes": 2584
+  },
+  {
+    "name": "developers-access-tokens",
+    "path": "/raw/developers-access-tokens.md",
+    "title": "Access tokens and app keys",
+    "bytes": 4353
+  },
+  {
+    "name": "developers-api",
+    "path": "/raw/developers-api.md",
+    "title": "The Public Management API",
+    "bytes": 2265
+  },
+  {
+    "name": "developers-assistants",
+    "path": "/raw/developers-assistants.md",
+    "title": "Connect Claude, ChatGPT, Claude Code or Cursor",
+    "bytes": 6029
+  },
+  {
+    "name": "developers-webhooks",
+    "path": "/raw/developers-webhooks.md",
+    "title": "Webhooks",
+    "bytes": 14969
+  },
+  {
+    "name": "developers-two-step-sign-in",
+    "path": "/raw/developers-two-step-sign-in.md",
+    "title": "Two-step sign-in",
+    "bytes": 3642
+  },
+  {
+    "name": "developers-changelog",
+    "path": "/raw/developers-changelog.md",
+    "title": "Developer changelog",
+    "bytes": 1951
   },
   {
     "name": "changelog",

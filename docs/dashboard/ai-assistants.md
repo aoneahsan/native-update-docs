@@ -10,7 +10,8 @@ last_update:
 
 # AI assistants and Speak
 
-The dashboard has two assistants under **Assistants** in the sidebar. Both take typed text or your voice.
+The dashboard has two assistants under **Assistants** in the sidebar. Both take typed text or your voice. To work
+with Native Update from Claude, ChatGPT, Claude Code or Cursor instead, see [AI apps (MCP)](/developers/assistants).
 
 ## Release notes writer
 

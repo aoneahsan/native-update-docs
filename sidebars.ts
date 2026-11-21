@@ -118,6 +118,20 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'Developers',
+      collapsed: true,
+      link: { type: 'doc', id: 'developers/index' },
+      items: [
+        'developers/access-tokens',
+        'developers/api',
+        'developers/assistants',
+        'developers/webhooks',
+        'developers/two-step-sign-in',
+        'developers/changelog',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Public API',
       collapsed: true,
       items: [

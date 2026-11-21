@@ -312,6 +312,8 @@ const config: Config = {
             { label: 'Introduction', to: '/intro' },
             { label: 'Installation', to: '/getting-started/installation' },
             { label: 'Quick Start', to: '/getting-started/quick-start' },
+            { label: 'Developers', to: '/developers' },
+            { label: 'Two-step sign-in', to: '/developers/two-step-sign-in' },
           ],
         },
         {

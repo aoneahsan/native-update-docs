@@ -33,7 +33,7 @@ or CI.
 
 ## Create a token
 
-1. Open the dashboard → **Access Tokens** → **New token**.
+1. Open the dashboard → **Access tokens** (in the Developer area) → **New token**.
 2. Name it after where it will live (`GitHub Actions — mobile app`).
 3. **Choose its reach.** Tick the specific apps it may manage, or turn on
    **All apps** to cover every app you own — the ones you have now *and* any you
@@ -42,11 +42,11 @@ or CI.
    them. Everything else — read, upload, publish, promote, rollout, mint keys,
    rotate a signing key, back up a keystore — is always allowed.
 
-Copy the token from that page whenever you need it again, or **Rotate** to issue
-a new secret — rotating stops the old one immediately. Reveal is rate limited to
-**10 per minute**, on its own budget: ordinary dashboard browsing does not spend
-it. A token minted before recoverable storage has no copy to show — rotate it,
-and store the new secret this time.
+You can show the token again from that page within 10 minutes of a sign-in,
+with a code from your authenticator app when two-step sign-in is on — the
+[10-minute rule](/developers/access-tokens#ten-minute-rule). **Rotate** issues a
+new secret and stops the old one immediately. A token minted before recoverable
+storage has no copy to show — rotate it, and store the new secret this time.
 
 :::note Access tokens are the one thing this API cannot touch
 Creating, rotating, and deleting a token stays in the dashboard, always — there
@@ -127,5 +127,8 @@ Exceeding either returns **429** with a `Retry-After` header.
 
 - [Endpoints](/public-api/endpoints) — every route, with curl examples
 - [Queued jobs](/public-api/async-jobs) — why uploads return 202, and how to poll
-- [OpenAPI spec](https://nativeupdate-docs.aoneahsan.com/openapi/public-api.json) — machine-readable
+- [OpenAPI spec](https://nativeupdate-docs.aoneahsan.com/openapi/public-api.json) — machine-readable; the backend also
+  serves the document it generates from its own routes at
+  [`openapi.json`](https://nativeupdatebe.aoneahsan.com/api/public/v1/openapi.json)
+- [Developers](/developers) — access tokens, AI apps over MCP, webhooks and two-step sign-in
 - [AI integration guide](/ai-integration) — condensed reference for coding agents

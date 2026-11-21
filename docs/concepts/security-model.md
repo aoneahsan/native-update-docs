@@ -122,6 +122,7 @@ Apps in financial, health, or government verticals usually have explicit complia
 - [Architecture](./architecture) — the diagrams showing the trust boundaries this model enforces.
 - [SDK Reference → Security → Overview](/reference/sdk/security/overview) — the runtime API for inspecting the security state on-device.
 - [How-to: Rotate signing keys](/how-to/rotate-signing-keys) — the operational practice the model assumes you follow.
+- [Two-step sign-in](/developers/two-step-sign-in) — the code after Google that guards your account, and what still asks for one.
 
 ## Maintained by
 
