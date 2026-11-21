@@ -20,8 +20,9 @@ export NATIVE_UPDATE_TOKEN=nu_pat_…
 export NU=https://nativeupdatebe.aoneahsan.com/api/public/v1
 ```
 
-`{app}` accepts the numeric id **or** the string `app_id` (`com.example.app`).
-Use `app_id` in CI — it survives re-creating an app.
+`{app}` accepts the numeric id **or** the app's `app_id`, an id Native Update generates when the app is made
+(for example `07a6b603-fefc-4d0d-941e-8989a59ca780`). Use `app_id` in CI: it is stable for the life of the app. A new
+app gets a new `app_id`. The `com.example.app` style value is the app's `bundle_id`.
 
 ## Token
 
@@ -39,7 +40,7 @@ curl -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" $NU/token
   "name": "GitHub Actions",
   "permissions": ["manage"],
   "all_apps": false,
-  "apps": [{ "id": 12, "app_id": "com.example.app", "name": "Example" }],
+  "apps": [{ "id": 12, "app_id": "07a6b603-fefc-4d0d-941e-8989a59ca780", "name": "Example" }],
   "last_used_at": "2026-07-16T09:12:44+00:00",
   "expires_at": null,
   "created_at": "2026-07-16T08:00:00+00:00"
@@ -63,13 +64,13 @@ curl -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" "$NU/apps?per_page=50"
 ### `GET /apps/{app}`
 
 ```bash
-curl -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" $NU/apps/com.example.app
+curl -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" $NU/apps/07a6b603-fefc-4d0d-941e-8989a59ca780
 ```
 
 ```json
 { "data": {
   "id": 12,
-  "app_id": "com.example.app",
+  "app_id": "07a6b603-fefc-4d0d-941e-8989a59ca780",
   "bundle_id": "com.example.app",
   "name": "Example",
   "platform": "android",
@@ -109,7 +110,7 @@ auto-attaches the new app to itself, so you can manage it immediately.
 curl -X PATCH -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"name":"Example (renamed)","platform":"android"}' \
-  $NU/apps/com.example.app
+  $NU/apps/07a6b603-fefc-4d0d-941e-8989a59ca780
 ```
 
 Edits `name`, `platform`, and `description`. **`bundle_id` is immutable** — it
@@ -121,7 +122,7 @@ Needs a token with **`apps.delete`**; otherwise 403 `TOKEN_PERMISSION_DENIED`.
 
 ```bash
 curl -X DELETE -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" \
-  $NU/apps/com.example.app
+  $NU/apps/07a6b603-fefc-4d0d-941e-8989a59ca780
 ```
 
 ```json
@@ -138,7 +139,7 @@ Newest first. Filter with `channel` and `status`.
 
 ```bash
 curl -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" \
-  "$NU/apps/com.example.app/builds?channel=production&status=active"
+  "$NU/apps/07a6b603-fefc-4d0d-941e-8989a59ca780/builds?channel=production&status=active"
 ```
 
 | Param | Values |
@@ -187,7 +188,7 @@ curl -X POST \
   -F "release_notes=Bug fixes" \
   -F "rollout_percentage=10" \
   -F "signature=$(python3 -c 'import json,sys;print(json.load(open("bundle.sig"))["signature"])')" \
-  $NU/apps/com.example.app/builds
+  $NU/apps/07a6b603-fefc-4d0d-941e-8989a59ca780/builds
 ```
 
 | Field | Required | Notes |
@@ -242,7 +243,7 @@ and a way to re-ship a version you already patched.
 curl -X PATCH -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"status":"paused"}' \
-  $NU/apps/com.example.app/builds/42
+  $NU/apps/07a6b603-fefc-4d0d-941e-8989a59ca780/builds/42
 ```
 
 | Field | Values |
@@ -268,7 +269,7 @@ at the same stored bundle.
 curl -X POST -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"target_channel":"production"}' \
-  $NU/apps/com.example.app/builds/42/promote
+  $NU/apps/07a6b603-fefc-4d0d-941e-8989a59ca780/builds/42/promote
 ```
 
 Returns **201** with the new build (`promoted_from_id` points back at the
@@ -280,7 +281,7 @@ source). Promoting into its own channel returns 422 `ALREADY_IN_CHANNEL`.
 curl -X PATCH -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"rollout_percentage":25}' \
-  $NU/apps/com.example.app/builds/42/rollout
+  $NU/apps/07a6b603-fefc-4d0d-941e-8989a59ca780/builds/42/rollout
 ```
 
 | Field | Values |
@@ -298,7 +299,7 @@ Needs a token with **`builds.delete`**; otherwise 403
 
 ```bash
 curl -X DELETE -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" \
-  $NU/apps/com.example.app/builds/42
+  $NU/apps/07a6b603-fefc-4d0d-941e-8989a59ca780/builds/42
 ```
 
 Deletion is permanent, and the stored bundle is cleaned up in the background.
@@ -317,7 +318,7 @@ Lists the app's keys with safe fields only — never the secret.
 
 ```bash
 curl -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" \
-  $NU/apps/com.example.app/api-keys
+  $NU/apps/07a6b603-fefc-4d0d-941e-8989a59ca780/api-keys
 ```
 
 ```json
@@ -344,7 +345,7 @@ curl -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" \
 curl -X POST -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"name":"production"}' \
-  $NU/apps/com.example.app/api-keys
+  $NU/apps/07a6b603-fefc-4d0d-941e-8989a59ca780/api-keys
 ```
 
 ```json
@@ -395,7 +396,7 @@ curl -X PATCH -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" \
         "android": [{ "package_name": "com.example.app", "sha256": ["AB:CD:…"] }],
         "ios": [{ "bundle_id": "com.example.app" }]
       }' \
-  $NU/apps/com.example.app/api-keys/6/restrictions
+  $NU/apps/07a6b603-fefc-4d0d-941e-8989a59ca780/api-keys/6/restrictions
 ```
 
 | Field | Notes |
@@ -431,7 +432,7 @@ fingerprint are ever returned — the private key never leaves the server.
 
 ```bash
 curl -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" \
-  $NU/apps/com.example.app/signing-key
+  $NU/apps/07a6b603-fefc-4d0d-941e-8989a59ca780/signing-key
 ```
 
 No key yet — this is a `200`, not a 404:
@@ -461,7 +462,7 @@ Configured:
 curl -X POST -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"name":"release"}' \
-  $NU/apps/com.example.app/signing-key
+  $NU/apps/07a6b603-fefc-4d0d-941e-8989a59ca780/signing-key
 ```
 
 Returns **201**. If the app already has a signing key, **409
@@ -473,7 +474,7 @@ Returns **201**. If the app already has a signing key, **409
 curl -X POST -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"name":"release-2027"}' \
-  $NU/apps/com.example.app/signing-key/rotate
+  $NU/apps/07a6b603-fefc-4d0d-941e-8989a59ca780/signing-key/rotate
 ```
 
 Returns **200** with the new public key. With no active key to rotate, **409
@@ -489,7 +490,7 @@ only ever streamed back through the API — never a public URL.
 
 ```bash
 curl -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" \
-  $NU/apps/com.example.app/keystore
+  $NU/apps/07a6b603-fefc-4d0d-941e-8989a59ca780/keystore
 ```
 
 No backup:
@@ -518,7 +519,7 @@ Uploading again replaces the previous backup.
 ```bash
 curl -X POST -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" \
   -F "file=@./example-release.zip" \
-  $NU/apps/com.example.app/keystore
+  $NU/apps/07a6b603-fefc-4d0d-941e-8989a59ca780/keystore
 ```
 
 Returns **201** with the metadata above. A non-zip file is **422
@@ -532,7 +533,7 @@ storage, so no public link is ever exposed.
 ```bash
 curl -H "Authorization: Bearer $NATIVE_UPDATE_TOKEN" \
   -o keystore.zip \
-  $NU/apps/com.example.app/keystore/download
+  $NU/apps/07a6b603-fefc-4d0d-941e-8989a59ca780/keystore/download
 ```
 
 With no backup, **404 `KEYSTORE_NOT_FOUND`**.
