@@ -1,15 +1,54 @@
+import { existsSync, readdirSync } from 'node:fs';
+import path from 'node:path';
 import { themes as prismThemes } from 'prism-react-renderer';
-import type { Config } from '@docusaurus/types';
+import type { Config, PluginConfig } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import type { Options as BlogPluginOptions } from '@docusaurus/plugin-content-blog';
 // Plugin version single source of truth: the ROOT native-update package.json,
 // mirrored into this committed file by `yarn sync:from-plugin` (CI cannot read
 // the private plugin repo). Never hardcode the version anywhere in this repo.
 import pluginVersion from './plugin-version.json';
 import sitePages, { withLastmod } from './plugins/site-pages';
 import { OTHER_PLATFORMS } from './src/data/platforms';
+import { POSTS_DESCRIPTION, POSTS_PATH, POSTS_TITLE } from './src/data/posts';
 
 /** The blog's route: the blog plugin's `routeBasePath` below, with its leading slash. */
 const BLOG_PATH = '/blog';
+
+// The posts blog (posts/, served at /posts) loads only once posts/ holds a post, so the site never ships an empty
+// posts page, feed or Posts link. The release notes stay the default blog instance, in blog/ at /blog.
+const POSTS_DIR = path.join(__dirname, 'posts');
+const HAS_POSTS = existsSync(POSTS_DIR) && readdirSync(POSTS_DIR).some((name) => name.endsWith('.md') || name.endsWith('.mdx'));
+
+const POSTS_BLOG: PluginConfig = [
+  '@docusaurus/plugin-content-blog',
+  {
+    id: 'posts',
+    path: 'posts',
+    routeBasePath: POSTS_PATH.slice(1),
+    blogTitle: POSTS_TITLE,
+    blogDescription: POSTS_DESCRIPTION,
+    blogSidebarTitle: 'Recent posts',
+    blogSidebarCount: 10,
+    postsPerPage: 10,
+    showReadingTime: false,
+    // A post's last update comes from git: shown under the post, and its sitemap lastmod.
+    showLastUpdateTime: true,
+    showLastUpdateAuthor: false,
+    // Every author is defined once, in posts/authors.yml; a tag needs a posts/tags.yml first.
+    onInlineAuthors: 'throw',
+    onInlineTags: 'throw',
+    onUntruncatedBlogPosts: 'throw',
+    feedOptions: {
+      type: ['rss', 'atom'],
+      xslt: true,
+      title: POSTS_TITLE,
+      description: POSTS_DESCRIPTION,
+      copyright: `Copyright © ${new Date().getFullYear()} Native Update.`,
+      language: 'en-US',
+    },
+  } satisfies BlogPluginOptions,
+];
 
 // ---------------------------------------------------------------------------
 // Native Update — Documentation site config
@@ -147,7 +186,14 @@ const config: Config = {
     '@docusaurus/theme-mermaid',
     [
       '@easyops-cn/docusaurus-search-local',
-      { hashed: true, indexBlog: true, docsRouteBasePath: '/', blogRouteBasePath: BLOG_PATH },
+      {
+        hashed: true,
+        indexBlog: true,
+        docsRouteBasePath: '/',
+        // The posts blog joins the index once it is loaded (HAS_POSTS).
+        blogDir: HAS_POSTS ? ['blog', 'posts'] : 'blog',
+        blogRouteBasePath: HAS_POSTS ? [BLOG_PATH, POSTS_PATH] : BLOG_PATH,
+      },
     ],
   ],
 
@@ -206,10 +252,22 @@ const config: Config = {
           lastmod: 'date',
           changefreq: null,
           priority: null,
-          ignorePatterns: ['/tags/**', `${BLOG_PATH}/tags/**`, `${BLOG_PATH}/archive`, `${BLOG_PATH}/authors/**`, '/search'],
-          // A page git cannot date (the blog list, a category index, /sitemap, /feed) takes the newest date it lists.
+          ignorePatterns: [
+            '/tags/**',
+            `${BLOG_PATH}/tags/**`,
+            `${BLOG_PATH}/archive`,
+            `${BLOG_PATH}/authors/**`,
+            `${POSTS_PATH}/tags`,
+            `${POSTS_PATH}/tags/**`,
+            `${POSTS_PATH}/archive`,
+            `${POSTS_PATH}/authors`,
+            `${POSTS_PATH}/authors/**`,
+            `${POSTS_PATH}/page/**`,
+            '/search',
+          ],
+          // A page git cannot date (a blog list, a category index, /sitemap, /feed) takes the newest date it lists.
           createSitemapItems: async ({ defaultCreateSitemapItems, ...params }) =>
-            withLastmod(await defaultCreateSitemapItems(params), BLOG_PATH),
+            withLastmod(await defaultCreateSitemapItems(params), BLOG_PATH, HAS_POSTS ? POSTS_PATH : undefined),
         },
       } satisfies Preset.Options,
     ],
@@ -217,7 +275,8 @@ const config: Config = {
 
   // `/sitemap` and `/feed` for people, and `/feed.xml` beside `/sitemap.xml` for machines.
   plugins: [
-    sitePages({ blogPath: BLOG_PATH }),
+    sitePages({ blogPath: BLOG_PATH, postsPath: HAS_POSTS ? POSTS_PATH : undefined }),
+    ...(HAS_POSTS ? [POSTS_BLOG] : []),
     [
       '@docusaurus/plugin-client-redirects',
       {
@@ -280,6 +339,7 @@ const config: Config = {
           label: 'Quick Start',
           position: 'left',
         },
+        ...(HAS_POSTS ? [{ to: POSTS_PATH, label: 'Posts', position: 'left' as const }] : []),
         {
           to: '/about',
           label: 'About',
@@ -317,16 +377,12 @@ const config: Config = {
           ],
         },
         {
-          title: 'Project',
-          items: [
-          ],
-        },
-        {
           title: 'Site',
           // Files written after the pages are built (feeds, sitemap, llms.txt) are invisible to the link checker,
           // so they use `pathname://`, which links to the file as it is without routing.
           items: [
             { label: 'Releases', to: BLOG_PATH },
+            ...(HAS_POSTS ? [{ label: 'Posts', to: POSTS_PATH }] : []),
             { label: 'Feed', to: '/feed' },
             { label: 'Sitemap', to: '/sitemap' },
             { label: 'feed.xml', href: 'pathname:///feed.xml' },

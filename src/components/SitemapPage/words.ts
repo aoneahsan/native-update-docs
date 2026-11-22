@@ -43,6 +43,14 @@ export function sitemapWords() {
       label: translate({ id: 'docs.sitemap.file.atom.label', message: 'Atom feed' }),
       hint: translate({ id: 'docs.sitemap.file.atom.hint', message: 'The same posts in Atom.' }),
     },
+    postsRss: {
+      label: translate({ id: 'docs.sitemap.file.posts_rss.label', message: 'Posts RSS feed' }),
+      hint: translate({ id: 'docs.sitemap.file.posts_rss.hint', message: 'The team’s posts, for your feed-reader app.' }),
+    },
+    postsAtom: {
+      label: translate({ id: 'docs.sitemap.file.posts_atom.label', message: 'Posts Atom feed' }),
+      hint: translate({ id: 'docs.sitemap.file.posts_atom.hint', message: 'The team’s posts in Atom.' }),
+    },
     llms: {
       label: translate({ id: 'docs.sitemap.file.llms.label', message: 'llms.txt' }),
       hint: translate({
@@ -59,6 +67,7 @@ export function sitemapWords() {
     }),
     groupDocs: translate({ id: 'docs.sitemap.group.docs', message: 'Docs' }),
     groupPosts: translate({ id: 'docs.sitemap.group.posts', message: 'Release notes' }),
+    groupTeamPosts: translate({ id: 'docs.sitemap.group.team_posts', message: 'Posts from the team' }),
     emptyTitle: translate({ id: 'docs.sitemap.empty.title', message: 'No pages match “{query}”' }),
     emptyBody: translate({
       id: 'docs.sitemap.empty.body',

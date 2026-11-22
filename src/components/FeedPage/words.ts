@@ -16,6 +16,15 @@ export function feedWords() {
       message: 'Native Update release notes, newest first, with RSS and Atom links for your feed-reader app.',
     }),
     intro: translate({ id: 'docs.feed.intro', message: 'Every Native Update release post, newest first.' }),
+    introWithPosts: translate({
+      id: 'docs.feed.intro_with_posts',
+      message: 'Every Native Update release post, newest first, then the team’s posts.',
+    }),
+    metaDescriptionWithPosts: translate({
+      id: 'docs.feed.meta.description_with_posts',
+      message:
+        'Native Update release notes and the team’s posts, newest first, with RSS and Atom links for your feed-reader app.',
+    }),
     rssHeading: translate({ id: 'docs.feed.rss.heading', message: 'Follow by RSS' }),
     rssBody: translate({
       id: 'docs.feed.rss.body',
@@ -32,6 +41,13 @@ export function feedWords() {
     atomLabel: translate({ id: 'docs.feed.atom.label', message: 'Atom feed' }),
     atomHint: translate({ id: 'docs.feed.atom.hint', message: 'The same posts in Atom.' }),
     read: translate({ id: 'docs.feed.item.read', message: 'Read the post' }),
+    postsHeading: translate({ id: 'docs.feed.posts.heading', message: 'Posts from the team' }),
+    postsBody: translate({
+      id: 'docs.feed.posts.body',
+      message: 'One part of the release path per post, newest first. They have their own RSS and Atom links.',
+    }),
+    postsRssLabel: translate({ id: 'docs.feed.posts.rss_label', message: 'Posts RSS feed' }),
+    postsAtomLabel: translate({ id: 'docs.feed.posts.atom_label', message: 'Posts Atom feed' }),
     emptyTitle: translate({ id: 'docs.feed.empty.title', message: 'No posts yet' }),
     emptyBody: translate({
       id: 'docs.feed.empty.body',

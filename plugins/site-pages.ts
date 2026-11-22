@@ -42,18 +42,28 @@ export type SiteGroup =
       readonly pages: readonly SitePage[];
     };
 
+/** A blog instance as both pages show it: its list page and its listed posts, newest first. */
+export interface SiteBlog {
+  readonly page: SitePage;
+  readonly posts: readonly SitePost[];
+}
+
 /** What `/sitemap` and `/feed` draw, written once per build. */
 export interface SitePagesData {
   readonly groups: readonly SiteGroup[];
-  /** The blog's list page. */
+  /** The release notes blog's list page. */
   readonly blog: SitePage;
-  /** Every listed post, newest first. */
+  /** Every listed release post, newest first. */
   readonly posts: readonly SitePost[];
+  /** The posts blog (`id: 'posts'`), or null until it has a post and is loaded. */
+  readonly postsBlog: SiteBlog | null;
 }
 
 export interface SitePagesOptions {
   /** The blog's route from the site root, with a leading slash: the blog plugin's `routeBasePath`. */
   readonly blogPath: string;
+  /** The posts blog's route, with a leading slash, when that instance is loaded. */
+  readonly postsPath?: string;
 }
 
 type DocsVersion = DocsContent['loadedVersions'][number];
@@ -156,21 +166,13 @@ function docsGroups(version: DocsVersion): SiteGroup[] {
 }
 
 /**
- * Collects what both pages draw from the docs and blog plugins' content.
+ * A blog instance's listed posts.
  *
- * @param allContent - every plugin's loaded content
- * @param blogPermalink - the blog list page's permalink
- * @returns the groups, the blog's list page and the posts, newest first
- * @throws when the docs or blog plugin is off: both pages list their pages
+ * @param blog - one blog plugin instance's loaded content
+ * @returns its listed posts, newest first
  */
-function collect(allContent: AllContent, blogPermalink: string): SitePagesData {
-  const docs = allContent[DOCS_PLUGIN]?.['default'] as DocsContent | undefined;
-  const blog = allContent[BLOG_PLUGIN]?.['default'] as BlogContent | undefined;
-  if (docs === undefined || blog === undefined) {
-    throw new Error('site-pages: /sitemap and /feed list the docs and the blog, so both plugins (id "default") must be on.');
-  }
-  const version = docs.loadedVersions.find((loaded) => loaded.isLast) ?? docs.loadedVersions[0];
-  const posts = blog.blogPosts
+function listedPosts(blog: BlogContent): SitePost[] {
+  return blog.blogPosts
     .filter((post) => !post.metadata.unlisted)
     .map(({ metadata }) => ({
       permalink: metadata.permalink,
@@ -180,10 +182,45 @@ function collect(allContent: AllContent, blogPermalink: string): SitePagesData {
       date: metadata.date.toISOString().slice(0, 10),
     }))
     .sort((a, b) => b.date.localeCompare(a.date));
+}
+
+/**
+ * Collects what both pages draw from the docs and blog plugins' content.
+ *
+ * @param allContent - every plugin's loaded content
+ * @param blogPermalink - the release notes list page's permalink
+ * @param postsPermalink - the posts blog's list page's permalink, when that instance is loaded
+ * @returns the groups, the release notes' list page and posts, and the posts blog
+ * @throws when the docs or blog plugin is off, or the posts blog is expected and missing: both pages list their pages
+ */
+function collect(allContent: AllContent, blogPermalink: string, postsPermalink: string | undefined): SitePagesData {
+  const docs = allContent[DOCS_PLUGIN]?.['default'] as DocsContent | undefined;
+  const blog = allContent[BLOG_PLUGIN]?.['default'] as BlogContent | undefined;
+  if (docs === undefined || blog === undefined) {
+    throw new Error('site-pages: /sitemap and /feed list the docs and the blog, so both plugins (id "default") must be on.');
+  }
+  const postsBlog =
+    postsPermalink === undefined ? undefined : (allContent[BLOG_PLUGIN]?.['posts'] as BlogContent | undefined);
+  if (postsPermalink !== undefined && postsBlog === undefined) {
+    throw new Error('site-pages: postsPath is set, so the posts blog (blog plugin id "posts") must be on.');
+  }
+  const version = docs.loadedVersions.find((loaded) => loaded.isLast) ?? docs.loadedVersions[0];
   return {
     groups: version === undefined ? [] : docsGroups(version),
     blog: { permalink: blogPermalink, title: blog.blogTitle, description: blog.blogDescription, tags: [] },
-    posts,
+    posts: listedPosts(blog),
+    postsBlog:
+      postsPermalink === undefined || postsBlog === undefined
+        ? null
+        : {
+            page: {
+              permalink: postsPermalink,
+              title: postsBlog.blogTitle,
+              description: postsBlog.blogDescription,
+              tags: [],
+            },
+            posts: listedPosts(postsBlog),
+          },
   };
 }
 
@@ -274,17 +311,19 @@ export function rootFeed({
 
 /**
  * Gives every sitemap URL a lastmod. A page dated by git keeps its own date; a page that lists others takes the newest
- * date of what it lists: `/sitemap` every page, `/feed` and the blog's list pages the posts, and any other page (a
- * category index) the pages under its path.
+ * date of what it lists: `/sitemap` every page, each blog's list pages its own posts, `/feed` the posts of both, and
+ * any other page (a category index) the pages under its path.
  *
  * @param items - the sitemap plugin's entries (`lastmod` as `YYYY-MM-DD`)
- * @param blogPath - the blog's route from the site root, with a leading slash
+ * @param blogPath - the release notes' route from the site root, with a leading slash
+ * @param postsPath - the posts blog's route, with a leading slash, when that instance is loaded
  * @returns the same entries, each with a lastmod
  * @throws naming the URL, when an entry is still undated
  */
 export function withLastmod<Item extends { readonly url: string; readonly lastmod?: string | null }>(
   items: readonly Item[],
-  blogPath: string
+  blogPath: string,
+  postsPath?: string
 ): Item[] {
   const dated = items.flatMap((item) =>
     item.lastmod ? [{ path: new URL(item.url).pathname, lastmod: item.lastmod }] : []
@@ -294,6 +333,7 @@ export function withLastmod<Item extends { readonly url: string; readonly lastmo
       .filter((entry) => inside(entry.path))
       .reduce<string | undefined>((max, entry) => (max === undefined || entry.lastmod > max ? entry.lastmod : max), undefined);
   const isPost = (pathname: string): boolean => pathname.startsWith(`${blogPath}/`);
+  const isPostsPost = (pathname: string): boolean => postsPath !== undefined && pathname.startsWith(`${postsPath}/`);
 
   return items.map((item) => {
     if (item.lastmod) return item;
@@ -302,7 +342,9 @@ export function withLastmod<Item extends { readonly url: string; readonly lastmo
     if (pathname === '/sitemap') lastmod = newest(() => true);
     // `/apps` lists the released surfaces; it changes when their proof date does.
     else if (pathname === '/apps') lastmod = APPS_LASTMOD;
-    else if (pathname === '/feed' || pathname === blogPath || isPost(pathname)) lastmod = newest(isPost);
+    else if (pathname === '/feed') lastmod = newest((other) => isPost(other) || isPostsPost(other));
+    else if (pathname === blogPath || isPost(pathname)) lastmod = newest(isPost);
+    else if (pathname === postsPath || isPostsPost(pathname)) lastmod = newest(isPostsPost);
     else lastmod = newest((other) => other.startsWith(`${pathname}/`));
     if (lastmod === undefined) {
       throw new Error(`site-pages: ${item.url} has no lastmod, and no page it lists has one.`);
@@ -312,12 +354,13 @@ export function withLastmod<Item extends { readonly url: string; readonly lastmo
 }
 
 /**
- * The plugin, set up for this site's blog route.
+ * The plugin, set up for this site's blog routes.
  *
- * @param options.blogPath - the blog's route from the site root, e.g. `/blog`
+ * @param options.blogPath - the release notes' route from the site root, e.g. `/blog`
+ * @param options.postsPath - the posts blog's route, e.g. `/posts`, when that instance is loaded
  * @returns the plugin module Docusaurus loads
  */
-export default function sitePages({ blogPath }: SitePagesOptions): PluginModule {
+export default function sitePages({ blogPath, postsPath }: SitePagesOptions): PluginModule {
   return function sitePagesPlugin(context: LoadContext): Plugin {
     const base = context.baseUrl.replace(/\/$/, '');
     let hasPosts = false;
@@ -325,7 +368,7 @@ export default function sitePages({ blogPath }: SitePagesOptions): PluginModule 
       name: 'site-pages',
 
       async allContentLoaded({ allContent, actions }) {
-        const data = collect(allContent, `${base}${blogPath}`);
+        const data = collect(allContent, `${base}${blogPath}`, postsPath === undefined ? undefined : `${base}${postsPath}`);
         hasPosts = data.posts.length > 0;
         const site = await actions.createData('site-pages.json', JSON.stringify(data));
         actions.addRoute({

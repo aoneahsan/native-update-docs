@@ -113,14 +113,26 @@ export default function SitemapPage({ site }: SitemapPageProps): ReactNode {
     setText((current) => (current.trim() === query ? current : query));
   }, [query]);
 
+  const teamPosts = site.postsBlog !== null && site.postsBlog.posts.length > 0 ? site.postsBlog : null;
   const files: readonly MachineFile[] = [
     { path: '/sitemap.xml', ...words.sitemapXml },
     { path: '/feed.xml', ...words.feedXml },
     { path: `${site.blog.permalink}/rss.xml`, ...words.rss },
     { path: `${site.blog.permalink}/atom.xml`, ...words.atom },
+    ...(teamPosts === null
+      ? []
+      : [
+          { path: `${teamPosts.page.permalink}/rss.xml`, ...words.postsRss },
+          { path: `${teamPosts.page.permalink}/atom.xml`, ...words.postsAtom },
+        ]),
     { path: '/llms.txt', ...words.llms },
   ];
-  const feedPage: SitePage = { permalink: '/feed', title: feed.title, description: feed.metaDescription, tags: [] };
+  const feedPage: SitePage = {
+    permalink: '/feed',
+    title: feed.title,
+    description: teamPosts === null ? feed.metaDescription : feed.metaDescriptionWithPosts,
+    tags: [],
+  };
   const groups: readonly Group[] = [
     ...site.groups.map(
       (group): Group => ({
@@ -131,6 +143,16 @@ export default function SitemapPage({ site }: SitemapPageProps): ReactNode {
       })
     ),
     { key: 'posts', label: words.groupPosts, icon: 'posts', cards: [site.blog, feedPage, ...site.posts].map(cardOf) },
+    ...(teamPosts === null
+      ? []
+      : [
+          {
+            key: 'team-posts',
+            label: words.groupTeamPosts,
+            icon: 'posts' as const,
+            cards: [teamPosts.page, ...teamPosts.posts].map(cardOf),
+          },
+        ]),
   ];
 
   const asked = text.trim();

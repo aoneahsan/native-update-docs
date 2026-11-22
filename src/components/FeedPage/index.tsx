@@ -129,22 +129,24 @@ function FeedPost({
 }
 
 /**
- * `/feed`: what RSS is and the feed's link to copy, the Atom feed beside it, then every post newest first. Docusaurus
- * prerenders the page, so every post is in the HTML before any script runs.
+ * `/feed`: what RSS is and the feed's link to copy, the Atom feed beside it, then every release post newest first, and,
+ * once the posts blog has a post, the team's posts with their own feeds. Docusaurus prerenders the page, so every post
+ * is in the HTML before any script runs.
  */
 export default function FeedPage({ site }: FeedPageProps): ReactNode {
   const words = feedWords();
   const format = useDateFormat();
   const feedUrl = useBaseUrl(FEED_FILE, { absolute: true });
+  const hasTeamPosts = site.postsBlog !== null && site.postsBlog.posts.length > 0;
 
   return (
-    <Layout title={words.title} description={words.metaDescription}>
+    <Layout title={words.title} description={hasTeamPosts ? words.metaDescriptionWithPosts : words.metaDescription}>
       <main className={`container ${styles.page}`}>
         <header className={styles.header}>
           <h1 id="feed-title" className={styles.title}>
             {words.title}
           </h1>
-          <p className={styles.intro}>{words.intro}</p>
+          <p className={styles.intro}>{hasTeamPosts ? words.introWithPosts : words.intro}</p>
         </header>
 
         <section className={styles.follow} aria-labelledby="feed-rss">
@@ -172,6 +174,31 @@ export default function FeedPage({ site }: FeedPageProps): ReactNode {
             <h2 className={styles.emptyTitle}>{words.emptyTitle}</h2>
             <p className={styles.emptyText}>{words.emptyBody}</p>
           </div>
+        )}
+
+        {hasTeamPosts && site.postsBlog !== null && (
+          <section className={styles.postsBlog} aria-labelledby="feed-posts">
+            <div className={styles.follow}>
+              <h2 id="feed-posts" className={styles.followTitle}>
+                {words.postsHeading}
+              </h2>
+              <p>{words.postsBody}</p>
+              <p className={styles.atom}>
+                <Link to={`pathname://${site.postsBlog.page.permalink}/rss.xml`} target="_self" className={styles.atomLink}>
+                  {words.postsRssLabel}
+                </Link>
+                {' · '}
+                <Link to={`pathname://${site.postsBlog.page.permalink}/atom.xml`} target="_self" className={styles.atomLink}>
+                  {words.postsAtomLabel}
+                </Link>
+              </p>
+            </div>
+            <ol className={styles.posts} aria-labelledby="feed-posts">
+              {site.postsBlog.posts.map((post) => (
+                <FeedPost key={post.permalink} post={post} words={words} format={format} />
+              ))}
+            </ol>
+          </section>
         )}
       </main>
     </Layout>

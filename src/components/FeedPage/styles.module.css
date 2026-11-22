@@ -190,3 +190,8 @@
   --nu-cta-bg-hover: var(--ifm-color-primary-lighter);
   --nu-cta-ink: #0b1220;
 }
+
+/* The posts blog's part of the page, once it has a post: set apart from the release notes above it. */
+.postsBlog {
+  margin-top: 3rem;
+}
