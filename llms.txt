@@ -84,6 +84,18 @@ This `llms.txt` follows the [llmstxt.org](https://llmstxt.org) spec — a struct
 - [backend create](https://nativeupdate-docs.aoneahsan.com/reference/cli/backend-create): scaffold Express / Firebase / Vercel backend.
 - [deploy & remote commands](https://nativeupdate-docs.aoneahsan.com/reference/cli/deploy): manage apps and releases from CI with an access token (`NATIVE_UPDATE_TOKEN`) — `deploy --wait`, `token info`, `apps list|create|show|update|delete`, `apps keys list|create|show|rotate|reveal|revoke|deprecate|restrict|delete`, `apps signing show|create|rotate`, `apps keystore upload|info|download|delete`, `builds list|promote|rollout|status|delete`, `jobs status`.
 
+## Developers
+
+Reach your own Native Update apps from outside the dashboard: an access token and the API, an AI app over MCP, or webhooks to your own server. Every secret is shown again only within 10 minutes of a sign-in, plus an authenticator code when two-step sign-in is on.
+
+- [Overview](https://nativeupdate-docs.aoneahsan.com/developers): the three ways in and what guards them.
+- [Access tokens and app keys](https://nativeupdate-docs.aoneahsan.com/developers/access-tokens): `nu_app_` keys ship in the app and only check for updates; `nu_pat_` tokens manage your own apps over `/api/public/v1`; opt-in `builds.delete`, `apps.delete`, `keys.delete` (missing → `403 TOKEN_PERMISSION_DENIED`); the 10-minute rule.
+- [The API](https://nativeupdate-docs.aoneahsan.com/developers/api): base URL, limits, the error envelope, and the backend-generated OpenAPI 3.1 document at https://nativeupdatebe.aoneahsan.com/api/public/v1/openapi.json (Markdown: `openapi.md`).
+- [AI apps (MCP)](https://nativeupdate-docs.aoneahsan.com/developers/assistants): MCP server at https://nativeupdatebe.aoneahsan.com/mcp for Claude, ChatGPT, Claude Code and Cursor; OAuth 2.1 + PKCE S256 + Dynamic Client Registration at `/oauth/register`; nine permissions; tools per permission; deletes are only prepared and wait for the person's yes at `/developers/confirm/<ref>`; disconnecting ends access at once (401).
+- [Webhooks](https://nativeupdate-docs.aoneahsan.com/developers/webhooks): Standard Webhooks signing (`webhook-id`, `webhook-timestamp`, `webhook-signature`), twelve events (`build.*`, `app.*`, `api_key.*`, `webhook.test`) with sample bodies, Node and PHP verification with a test vector, retries, pause, refused addresses.
+- [Two-step sign-in](https://nativeupdate-docs.aoneahsan.com/developers/two-step-sign-in): authenticator app, ten recovery codes, opt-in 7-day remembered browser, admins always asked for a code, Nova included.
+- [Developer changelog](https://nativeupdate-docs.aoneahsan.com/developers/changelog): changes to these surfaces, newest first.
+
 ## Public API (access tokens)
 
 Run an app's whole lifecycle over HTTP from CI, scripts, or agents. Distinct from the device plane: `nu_pat_…` access tokens (user-level, server/CI only, no CORS) vs `nu_app_…` app API keys (in-app).
