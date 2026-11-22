@@ -1,6 +1,6 @@
 # Native Update Docs — AGENTS.md
 
-**Last Updated:** 2026-10-21
+**Last Updated:** 2026-11-22
 
 Public Docusaurus documentation for the `native-update` Capacitor plugin. This is a separate public Git repository on `main`; the private product repository is at `../native-update/`.
 
@@ -15,7 +15,8 @@ Public Docusaurus documentation for the `native-update` Capacitor plugin. This i
 
 ## Release and deploy
 
-- The product `package.json` is the version source. After a plugin release, run `yarn sync:from-plugin` here and commit its generated version and page changes. Current checked-in `plugin-version.json` is 4.1.1.
+- The product `package.json` is the version source. After a plugin release, run `yarn sync:from-plugin` here and commit its generated version and page changes. Current checked-in `plugin-version.json` follows the product (4.4.5 on 2026-11-20).
+- Release notes are the default blog, `blog/` at `/blog`. Posts from the team are a second blog instance, `posts/` at `/posts` (author `team` in `posts/authors.yml`, marker `<!-- truncate -->`, no tags). That instance, its `/posts/rss.xml` and `/posts/atom.xml`, its search entries, its `/feed` and `/sitemap` sections and the Posts links load only once `posts/` holds a post. Commit a post before building: its git date is its sitemap `lastmod`. `/feed.xml` stays the release notes.
 - Run `yarn typecheck` and `yarn build`. Preview the built site with `yarn serve` before pushing visible changes.
 - Deploy is manual: publish the local `build/` to the `gh-pages` branch (GitHub Pages serves it; no Actions). Steps in `DEPLOY.md`. The custom domain is carried by `static/CNAME`; see `DEPLOY.md`. Confirm the live site serves the new build before calling the deploy complete.
 - Do not put secrets in this public repository.
