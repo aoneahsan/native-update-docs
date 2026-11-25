@@ -8,6 +8,7 @@
  * - `postBuild` copies the blog's RSS feed to `/feed.xml` with its own self link, so the two never disagree.
  * - `withLastmod` gives every sitemap URL a date; the sitemap plugin's `createSitemapItems` calls it.
  */
+import { readdirSync, readFileSync } from 'node:fs';
 import { access, copyFile, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -15,6 +16,25 @@ import type { BlogContent } from '@docusaurus/plugin-content-blog';
 import type { LoadedContent as DocsContent } from '@docusaurus/plugin-content-docs';
 import type { AllContent, LoadContext, Plugin, PluginModule } from '@docusaurus/types';
 import { APPS_LASTMOD } from '../src/data/platforms';
+
+/**
+ * Docusaurus writes every route module's path into the client bundle, so the absolute path createData returns
+ * would publish this machine's folders and give each machine different chunk names. addRoute gets the alias.
+ */
+function generatedModule(generatedFilesDir: string, file: string): string {
+  return `@generated/${path.relative(generatedFilesDir, file).split(path.sep).join('/')}`;
+}
+
+/** Fails the build when any client bundle still carries this site's absolute path. */
+function assertNoLocalPaths(outDir: string, siteDir: string): void {
+  const jsDir = path.join(outDir, 'assets', 'js');
+  const forms = [siteDir.split(path.sep).join('/'), siteDir.split(path.sep).join('\\\\')];
+  for (const file of readdirSync(jsDir).filter((name) => name.endsWith('.js'))) {
+    const text = readFileSync(path.join(jsDir, file), 'utf8');
+    const found = forms.find((form) => text.includes(form));
+    if (found) throw new Error(`${file} carries the local path ${found}: pass createData paths to addRoute through generatedModule()`);
+  }
+}
 
 /** One page as its `/sitemap` card shows it: its own title, description and tag labels. */
 export interface SitePage {
@@ -370,7 +390,7 @@ export default function sitePages({ blogPath, postsPath }: SitePagesOptions): Pl
       async allContentLoaded({ allContent, actions }) {
         const data = collect(allContent, `${base}${blogPath}`, postsPath === undefined ? undefined : `${base}${postsPath}`);
         hasPosts = data.posts.length > 0;
-        const site = await actions.createData('site-pages.json', JSON.stringify(data));
+        const site = generatedModule(context.generatedFilesDir, await actions.createData('site-pages.json', JSON.stringify(data)));
         actions.addRoute({
           path: `${base}/sitemap`,
           component: '@site/src/components/SitemapPage',
@@ -386,6 +406,7 @@ export default function sitePages({ blogPath, postsPath }: SitePagesOptions): Pl
       },
 
       async postBuild({ outDir, siteConfig }) {
+        assertNoLocalPaths(outDir, context.siteDir);
         // With no post the blog writes no feed, so there is nothing to copy.
         if (!hasPosts) return;
         const rss = await readWrittenRss(path.join(outDir, blogPath, 'rss.xml'));
